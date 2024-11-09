@@ -9,8 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Calendar } from "@/components/ui/calendar"
 import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
@@ -18,18 +16,12 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 function JournalEntry() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const [date, setDate] = useState(startOfDay(new Date()))
-  const { register, handleSubmit, reset, setValue } = useForm()
-  const [level, setLevel] = useState(1)
+  const { register, handleSubmit, reset } = useForm()
   const [isLoading, setIsLoading] = useState(false)
   const supabase = createClientComponentClient()
-  const [user, setUser] = useState(null)
-  // Add the handleLogout function
-  // Add this near your other state declarations
   const [isFetching, setIsFetching] = useState(false)
-  const [userLevel, setUserLevel] = useState(1)
-  const [entriesCount, setEntriesCount] = useState(0)
 
   const fetchJournalEntry = async (date: Date) => {
     try {
@@ -40,25 +32,20 @@ function JournalEntry() {
       const { data } = await response.json()
       
       if (data) {
-        // Reset form with all nested fields
         reset({
-          // Gratitude section
           gratitude: {
             mundane: data.gratitude?.mundane || '',
             chance: data.gratitude?.chance || '',
             made_happen: data.gratitude?.made_happen || ''
           },
           
-          // Vent section
           vent: data.vent || '',
           
-          // Obligations section
           obligations: {
             bare_minimum: data.obligations?.bare_minimum || '',
             kaizen_goals: data.obligations?.kaizen_goals || ''
           },
           
-          // Mindset section
           mindset: {
             affirmation: data.mindset?.affirmation || '',
             reframe: {
@@ -69,7 +56,6 @@ function JournalEntry() {
             }
           },
           
-          // Reflections section
           reflections: {
             excited: data.reflections?.excited || '',
             drained: data.reflections?.drained || '',
@@ -83,7 +69,6 @@ function JournalEntry() {
             noFailure: data.reflections?.noFailure || ''
           },
           
-          // Trajectory section
           trajectory: {
             current: {
               against: data.trajectory?.current?.against || '',
@@ -97,7 +82,6 @@ function JournalEntry() {
             }
           },
           
-          // FFO section
           ffo: {
             fears: data.ffo?.fears || '',
             fixes: data.ffo?.fixes || '',
@@ -105,7 +89,6 @@ function JournalEntry() {
           }
         })
       } else {
-        // Clear all fields if no entry exists
         reset({
           gratitude: {
             mundane: '',
@@ -158,7 +141,7 @@ function JournalEntry() {
         })
       }
 
-      console.log('Fetched data:', data) // For debugging
+      console.log('Fetched data:', data)
     } catch (error) {
       console.error('Error fetching journal entry:', error)
     } finally {
@@ -178,16 +161,14 @@ function JournalEntry() {
     await fetchJournalEntry(newStartOfDay)
   }
 
-  // Add useEffect to fetch data when component mounts
   useEffect(() => {
     fetchJournalEntry(date)
-  }, []) // Only run on mount
+  }, [])
 
   const onSubmit = async (data: any) => {
     try {
       setIsLoading(true)
       
-      // Only include fields that exist in your table
       const journalData = {
         obligations: data.obligations || null,
         priorities: data.priorities || null,
@@ -223,6 +204,7 @@ function JournalEntry() {
       setIsLoading(false)
     }
   }
+
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut()
@@ -235,7 +217,7 @@ function JournalEntry() {
       alert('Error logging out')
     }
   }
-  // Single auth check on mount
+
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -244,7 +226,6 @@ function JournalEntry() {
           router.push('/login')
           return
         }
-        setUser(session.user)
       } catch (error) {
         console.error('Error checking auth status:', error)
         router.push('/login')
@@ -254,7 +235,7 @@ function JournalEntry() {
     }
 
     checkUser()
-  }, []) // Remove router and supabase from dependencies
+  }, [])
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">
@@ -267,11 +248,10 @@ function JournalEntry() {
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
-            
             <div>
               <CardTitle>Journal out of inspiration, not obligation - {format(date, 'MMMM d, yyyy')}</CardTitle>
               <div className="mt-2">
-                <Badge variant="secondary">Level {level}</Badge>
+                <Badge variant="secondary">Level 1</Badge>
               </div>
             </div>
           </div>
@@ -494,8 +474,6 @@ function JournalEntry() {
               </div>
             </div>
 
-            
-
             <div>
               <h2 className="text-xl font-semibold mb-2">Fears, Fixes, and Outcomes</h2>
               <div className="grid grid-cols-3 gap-4">
@@ -525,8 +503,6 @@ function JournalEntry() {
                 </div>
               </div>
             </div>
-
-            
 
             <Button 
               type="submit" 
