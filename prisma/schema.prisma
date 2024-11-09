@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JournalEntry {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  date      DateTime @db.Date
+  
+  // Gratitude section
+  gratitude Json? @default("{}")    // Stores mundane, chance, made_happen
+  
+  // Vent section
+  vent      String? @db.Text
+  
+  // Obligations section
+  obligations Json? @default("{}")  // Stores bare_minimum, kaizen_goals
+  
+  // Mindset section
+  mindset    Json? @default("{}")   // Stores affirmation and reframe data
+  
+  // Insights/Reflections section
+  reflections Json? @default("{}")  // Stores all reflection fields
+  
+  // Trajectory section
+  trajectory  Json? @default("{}")  // Stores current and longTerm data
+  
+  // Fears, Fixes, Outcomes section
+  ffo        Json? @default("{}")   // Stores fears, fixes, outcomes
+  
+  // Metadata
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  
+  // Indexes and constraints
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("journal_entries")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  journalEntries JournalEntry[]
+  // ... other user fields
+}
+
+model Attachment {
+  id            String       @id @default(cuid())
+  filename      String
+  path          String
+  journalEntry  JournalEntry @relation(fields: [journalEntryId], references: [id])
+  journalEntryId String
+  createdAt     DateTime     @default(now())
+}
