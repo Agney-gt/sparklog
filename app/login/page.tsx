@@ -41,12 +41,12 @@ export default function LoginPage() {
         window.location.href = data.url
       }
 
-    } catch (error) {
-      console.error('Error:', error)
+    } catch (err) {
+      console.error('Error:', err)
 
       // Log the response body if available
-      if (error.response) {
-        console.error('Response:', await error.response.text())
+      if ((err as any).response) {
+        console.error('Response:', await (err as any).response.text())
       }
 
       alert('Error logging in with Google')
