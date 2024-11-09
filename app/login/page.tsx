@@ -44,10 +44,7 @@ export default function LoginPage() {
     } catch (err) {
       console.error('Error:', err)
 
-      // Log the response body if available
-      if ((err as any).response) {
-        console.error('Response:', await (err as any).response.text())
-      }
+      
 
       alert('Error logging in with Google')
     } finally {
