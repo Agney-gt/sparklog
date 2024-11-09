@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     // Wait for cookies
     const cookieStore = await cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({ cookies: async () => cookieStore })
     
     // Get request data
     const body = await request.json()
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const cookieStore = await cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({ cookies: async () => cookieStore })
     
     const { searchParams } = new URL(request.url)
     const date = searchParams.get('date')
