@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   try {
     // Wait for cookies
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
     
     // Get request data
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
     // Prepare the entry data
     const entryData = {
-      user_id: user.id,
+      user_id: user?.id,
       date: formattedDate,
       gratitude: journalData.gratitude || {},
       vent: journalData.vent,
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies()
+    const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
     
     const { searchParams } = new URL(request.url)
@@ -85,7 +85,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase
       .from('journal_entries')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', user?.id)
       .eq('date', formattedDate)
       .single()
 

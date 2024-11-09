@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     console.error('Auth callback error:', error)
     // Redirect to login with error parameter
     return NextResponse.redirect(
-      new URL(`/login?error=auth-callback-error&t=${Date.now()}`, requestUrl.origin)
+      new URL(`/login?error=auth-callback-error&t=${Date.now()}`, request.url)
     )
   }
 } 
