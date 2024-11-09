@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { SessionProvider } from "next-auth/react"
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form'
 import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -62,6 +62,7 @@ type JournalFormData = {
     fixes: string;
     outcomes: string;
   };
+  date:string;
 }
 
 function JournalEntry() {
@@ -214,11 +215,10 @@ function JournalEntry() {
     fetchJournalEntry(date)
   }, [])
 
-  const onSubmit = async (data: JournalFormData) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
     try {
       setIsLoading(true);
-      
-      const journalData = {
+      const journalData: JournalFormData = {
         gratitude: data.gratitude || null,
         vent: data.vent || null,
         obligations: data.obligations || null,
