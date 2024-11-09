@@ -13,10 +13,59 @@ import { Badge } from "@/components/ui/badge"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+type JournalFormData = {
+  gratitude: {
+    mundane: string;
+    chance: string;
+    made_happen: string;
+  };
+  vent: string;
+  obligations: {
+    bare_minimum: string;
+    kaizen_goals: string;
+  };
+  mindset: {
+    affirmation: string;
+    reframe: {
+      objective: string;
+      meaning: string;
+      comfort: string;
+      positive: string;
+    };
+  };
+  reflections: {
+    excited: string;
+    drained: string;
+    learned: string;
+    value: string;
+    needle: string;
+    past_self: string;
+    fightToGetBack: string;
+    wouldntFightFor: string;
+    pareto: string;
+    noFailure: string;
+  };
+  trajectory: {
+    current: {
+      against: string;
+      towards: string;
+      actionable: string;
+    };
+    longTerm: {
+      past: string;
+      present: string;
+      future: string;
+    };
+  };
+  ffo: {
+    fears: string;
+    fixes: string;
+    outcomes: string;
+  };
+}
 
 function JournalEntry() {
   const router = useRouter()
-  const { data: session } = useSession()
   const [date, setDate] = useState(startOfDay(new Date()))
   const { register, handleSubmit, reset } = useForm()
   const [isLoading, setIsLoading] = useState(false)
@@ -165,22 +214,20 @@ function JournalEntry() {
     fetchJournalEntry(date)
   }, [])
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: JournalFormData) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       
       const journalData = {
-        obligations: data.obligations || null,
-        priorities: data.priorities || null,
-        recreation: data.recreation || null,
-        aspirations: data.aspirations || null,
         gratitude: data.gratitude || null,
-        insights: data.insights || null,
-        challenges: data.challenges || null,
-        emotions: data.emotions || null,
-        wins: data.wins || null,
-        date: date.toISOString()
-      }
+        vent: data.vent || null,
+        obligations: data.obligations || null,
+        mindset: data.mindset || null,
+        reflections: data.reflections || null,
+        trajectory: data.trajectory || null,
+        ffo: data.ffo || null,
+        date: new Date().toISOString(),
+      };
   
       const response = await fetch('/api/journal', {
         method: 'POST',
@@ -188,22 +235,23 @@ function JournalEntry() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(journalData),
-      })
+      });
   
-      const result = await response.json()
+      const result = await response.json();
   
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to save entry')
+        throw new Error(result.error || 'Failed to save entry');
       }
   
-      alert('Journal entry saved successfully!')
+      alert('Journal entry saved successfully!');
     } catch (error) {
-      console.error('Error saving entry:', error)
-      alert('Error saving journal entry')
+      console.error('Error saving entry:', error);
+      alert('Error saving journal entry');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+  
 
   const handleLogout = async () => {
     try {
