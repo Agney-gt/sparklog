@@ -28,7 +28,7 @@ interface HeaderProps {
   fetchJournalEntry: (date: Date) => Promise<void>;
 }
 
-export function Header({ date, setDate, handleLogout }: HeaderProps) {
+export function Header({ date, setDate, handleLogout, fetchJournalEntry }: HeaderProps) {
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
     fetchJournalEntry(newDate); // Fetch journal entry for the new date
@@ -126,6 +126,3 @@ export function Header({ date, setDate, handleLogout }: HeaderProps) {
 
 export default Header;
 
-function fetchJournalEntry(newDate: Date) {
-  throw new Error("Function not implemented.")
-}
