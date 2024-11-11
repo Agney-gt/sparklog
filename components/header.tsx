@@ -61,6 +61,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry, markedD
                     onSelect={(date) => date && handleDateChange(date)}
                     initialFocus
                     markedDates={markedDates}
+                    handleDateChange={handleDateChange}
                   />
                 </PopoverContent>
               </Popover>

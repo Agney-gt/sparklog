@@ -9,14 +9,17 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
-  markedDates?: string[]; // Add a prop for marked dates
+  markedDates?: string[];
+  handleDateChange: (date: Date) => void; // Add a prop for marked dates
 }
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  markedDates = [], // Default to an empty array
+  markedDates = [],
+  handleDateChange,
+   // Default to an empty array
   ...props
 }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined); // State for selected date
@@ -26,7 +29,10 @@ function Calendar({
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
     return markedDates.includes(formattedDate);
   };
-
+  const onDayClick = (date: Date) => {
+    setSelectedDate(date);
+    handleDateChange(date); // Use handleDateChange to update the date in the parent
+  };
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -66,7 +72,7 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      onDayClick={(date) => setSelectedDate(date)}
+      onDayClick={(date) => onDayClick(date)}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
