@@ -72,7 +72,11 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
           </Button>
         </div>
 
-        
+        <div className="container px-4 py-3 text-center">
+             <h1 className="text-2xl font-semibold tracking-tight">
+          Journal out of inspiration, not obligation
+        </h1>
+        </div>
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
@@ -113,10 +117,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
       </div>
 
       <div className="container px-4 py-3 text-center">
-      <div className="flex justify-center items-center">
-        <Image src="/sparklog.jpg" alt="Logo" className="h-16 w-16" width={16} height={16} />
-          </div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+             <h1 className="text-2xl font-semibold tracking-tight">
           Journal out of inspiration, not obligation
         </h1>
       </div>
