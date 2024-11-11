@@ -10,7 +10,8 @@ import { buttonVariants } from "@/components/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   markedDates?: string[];
-  handleDateChange: (date: Date) => void; // Add a prop for marked dates
+  fetchJournalEntry: (date: Date) => Promise<void>;
+  setDate: (date: Date) => void; // Add a prop for marked dates
 }
 
 function Calendar({
@@ -18,26 +19,25 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   markedDates = [],
-  handleDateChange,
+  setDate,
+  fetchJournalEntry,
    // Default to an empty array
   ...props
 }: CalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined); // State for selected date
-
+  const [selectedDate, setSelectedDate] = useState<Date>(); // State for selected date
+  const handleDateChange = (newDate: Date) => {
+    setDate(newDate);
+    fetchJournalEntry(newDate); // Fetch journal entry for the new date
+  };
   // Function to check if a date is marked
   const isMarkedDate = (date: Date) => {
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
     return markedDates.includes(formattedDate);
   };
-  const onDayClicks = (date: Date) => {
-    console.log("Selected date:", date)
-    setSelectedDate(date);
-    handleDateChange(date); // Use handleDateChange to update the date in the parent
-  };
+  
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -73,12 +73,15 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      onDayClick={(date) => onDayClicks(date)}
+      
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
         Day: ({ date }: DayProps) => (
-          <div className="relative" onClick={() => setSelectedDate(date)}>
+          <div className="relative" onClick={() => { 
+            setSelectedDate(date);
+            handleDateChange(date); // Call handleDateChange here
+          }}>
             <div className={cn("h-9 w-9 text-center", { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() })}>
               {date.getDate()}
               {isMarkedDate(date) && (
