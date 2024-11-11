@@ -99,7 +99,7 @@ export function WheelOfInspiration() {
           {segments.map((segment, index) => (
             <div
               key={index}
-              className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right bg-gradient-to-r ${segment.color} ${isSpinning ? '' : 'hover:opacity-80 transition-opacity'}`}
+              className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right bg-gradient-to-r ${segment.color} ${isSpinning ? '' : 'opacity-80 transition-opacity'}`}
               style={{
                 transform: `rotate(${index * 45}deg) skew(45deg)`,
               }}
@@ -118,25 +118,24 @@ export function WheelOfInspiration() {
         </div>
       </div>
       <Button
-        onClick={spinWheel}
-        disabled={isSpinning}
-        className="mt-32 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
-      >
-        {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
-      </Button>
-      {selectedSegment && (
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="mt-4">View Inspiration</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{selectedSegment}</DialogTitle>
-            </DialogHeader>
-            <p className="text-center py-4">{selectedQuote}</p>
-          </DialogContent>
-        </Dialog>
-      )}
+            onClick={spinWheel}
+            disabled={isSpinning}
+            className="mt-40 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
+          >
+            {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
+          </Button>
+
+          {selectedSegment && (
+            <Dialog open={!!selectedSegment}>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{selectedSegment}</DialogTitle>
+                </DialogHeader>
+                <p className="text-center py-4">{selectedQuote}</p>
+              </DialogContent>
+            </Dialog>
+          )}
+
     </div>
   )
 }
