@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -293,51 +294,31 @@ function JournalEntry() {
 
   return (
     <div className="container mx-auto p-4">
-      <Card className="w-full max-w-4xl mx-auto">
+      <Card className="w-full max-w-4xl mx-auto bg-gray-100">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
             <div>
-              <CardTitle>Journal out of inspiration, not obligation - {format(date, 'MMMM d, yyyy')}</CardTitle>
+              <CardTitle className="text-2xl font-bold">Journal out of inspiration, not obligation - {format(date, 'MMMM d, yyyy')}</CardTitle>
               <div className="mt-2">
                 <Badge variant="secondary">Level 1</Badge>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigateDate('prev')}
-              title="Previous day"
-              disabled={isFetching}
-            >
+            <Button variant="outline" size="icon" onClick={() => navigateDate('prev')} title="Previous day">
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                const today = startOfDay(new Date())
-                setDate(today)
-                fetchJournalEntry(today)
-              }}
-              disabled={isFetching}
-            >
+            <Button variant="outline" onClick={() => {
+              const today = startOfDay(new Date())
+              setDate(today)
+              fetchJournalEntry(today)
+            }}>
               Today
             </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigateDate('next')}
-              title="Next day"
-              disabled={isFetching}
-            >
+            <Button variant="outline" size="icon" onClick={() => navigateDate('next')} title="Next day">
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={handleLogout}
-              disabled={isFetching}
-            >
+            <Button variant="outline" onClick={handleLogout}>
               Logout
             </Button>
           </div>
@@ -349,217 +330,117 @@ function JournalEntry() {
                 <div className="animate-spin">Loading...</div>
               </div>
             )}
-            <div>
-              <h2 className="text-xl font-semibold mb-2">🌟 Gratitude</h2>
-              <p className="mb-2">Write down 3 things you are grateful for today:</p>
-              <div className="space-y-2">
-                <Input {...register('gratitude.mundane')} placeholder="1. Something mundane" />
-                <Input {...register('gratitude.chance')} placeholder="2. Something that happened by chance" />
-                <Input {...register('gratitude.made_happen')} placeholder="3. Something you made happen" />
-              </div>
-            </div>
+            <Accordion type="multiple">
+            {/* Gratitude Section */}
+            <AccordionItem value="gratitude">
+              <AccordionTrigger className="bg-blue-200">🌟 Gratitude</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <Input {...register('gratitude.mundane')} placeholder="1. Something mundane" className="mb-2" />
+                  <Input {...register('gratitude.chance')} placeholder="2. Something that happened by chance" className="mb-2" />
+                  <Input {...register('gratitude.made_happen')} placeholder="3. Something you made happen" className="mb-2" />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">🔥 V - Vent</h2>
-              <Textarea
-                {...register('vent')}
-                placeholder="Write freely about anything that's frustrating or bothering you. Let it all out without judgment or concern for how it sounds. Venting helps you get started and anger can help motivate us to do something."
-                className="h-32"
-              />
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-2">📝 O - Obligations</h2>
-              
-              
-              <div className="grid grid-cols-2 gap-4 mt-2">
-                <div>
-                  <h3 className="font-semibold mb-1">Bare Minimum for the Day</h3>
+            {/* Vent Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">🔥 V - Vent</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
                   <Textarea
-                    {...register('obligations.bare_minimum')}
-                    placeholder="List your bare minimum goals for the day. For example, 30 minutes of exercise."
-                    className="h-24"
+                    {...register('vent')}
+                    placeholder="Write freely about anything that's frustrating or bothering you."
+                    className="h-32 mb-2"
                   />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">High Quality Kaizen Goals</h3>
-                  <Textarea
-                    {...register('obligations.kaizen_goals')}
-                    placeholder="List your high quality improvement goals. For example, if you are feeling like it, be 1% better than yesterday and do 33 minutes of exercise."
-                    className="h-24"
-                  />
-                </div>
-              </div>
-            </div>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">🧠 M - Mindset</h2>
-              <Input
-                {...register('mindset.affirmation')}
-                placeholder="For example, I am healthy BECAUSE I ate a healthy meal and exercised for 30 minutes this morning."
-                className="mb-2"
-              />
-              <h3 className="font-semibold mt-4 mb-2">Reframing</h3>
-              <div className="space-y-2">
-                <Textarea
-                  {...register('mindset.reframe.objective')}
-                  placeholder="When something bad happens, analyse what objectively happened?"
-                  className="h-20"
-                />
-                <Textarea
-                  {...register('mindset.reframe.meaning')}
-                  placeholder="What did you make it mean or what significance did you give to the event?"
-                  className="h-20"
-                />
-                <Textarea
-                  {...register('mindset.reframe.comfort')}
-                  placeholder="How would you comfort a friend in the same situation?"
-                  className="h-20"
-                />
-                <Textarea
-                  {...register('mindset.reframe.positive')}
-                  placeholder="What mental gymnastics can you do to reframe this bad event into something positive or what did you learn from this event?"
-                  className="h-20"
-                />
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-2">💡 I - Insights</h2>
-              <div className="space-y-2">
-                <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="h-20" />
-                <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="h-20" />
-                <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="h-20" />
-                <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="h-20" />
-                <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="h-20" />
-                <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="h-20" />
-                <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="h-20" />
-                <Textarea 
-                  {...register('reflections.fightToGetBack')} 
-                  placeholder="List 5 things you would fight to get back if they were taken away from you" 
-                  className="h-24" 
-                />
-                <Textarea 
-                  {...register('reflections.wouldntFightFor')} 
-                  placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" 
-                  className="h-24" 
-                />
-                <Textarea 
-                  {...register('reflections.pareto')} 
-                  placeholder="What 20% of actions are producing 80% of results?" 
-                  className="h-24" 
-                />
-                <Textarea 
-                  {...register('reflections.noFailure')} 
-                  placeholder="If you knew you wouldn't fail, what would you do?" 
-                  className="h-24" 
-                />
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-2">🚀 T - Trajectory</h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mt-4 mb-2">Current Trajectory</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="font-medium mb-1">Against Target</h4>
-                      <Textarea
-                        {...register('trajectory.current.against')}
-                        placeholder="Things you did that go against the target. For example, if your target is health and fitness, ordering from uber eats would come here."
-                        className="h-24"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-1">Towards Target</h4>
-                      <Textarea
-                        {...register('trajectory.current.towards')}
-                        placeholder="Things you did that help achieve the target. For example, resisting impulse buys"
-                        className="h-24"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-1">Actionable/Reward</h4>
-                      <Textarea
-                        {...register('trajectory.current.actionable')}
-                        placeholder="Actionable items or rewards. For example, added to savings."
-                        className="h-24"
-                      />
-                    </div>
+            {/* Obligations Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">📝 O - Obligations</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <Textarea
+                      {...register('obligations.bare_minimum')}
+                      placeholder="Bare Minimum for the Day"
+                      className="h-24 mb-2"
+                    />
+                    <Textarea
+                      {...register('obligations.kaizen_goals')}
+                      placeholder="High Quality Kaizen Goals"
+                      className="h-24 mb-2"
+                    />
                   </div>
-                </div>
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-                <div>
-                  <h3 className="font-semibold mt-4 mb-2">Long-term Trajectory</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <h4 className="font-medium mb-1">5 Years Ago</h4>
-                      <Textarea
-                        {...register('trajectory.longTerm.past')}
-                        placeholder="What did you want 5 years back?"
-                        className="h-24"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-1">Present</h4>
-                      <Textarea
-                        {...register('trajectory.longTerm.present')}
-                        placeholder="What do you want now?"
-                        className="h-24"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-1">5 Years in Future</h4>
-                      <Textarea
-                        {...register('trajectory.longTerm.future')}
-                        placeholder="What do you want 5 years in the future?"
-                        className="h-24"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Mindset Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">🧠 M - Mindset</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <Input
+                    {...register('mindset.affirmation')}
+                    placeholder="Affirmation"
+                    className="mb-2"
+                  />
+                  <Textarea {...register('mindset.reframe.objective')} placeholder="Objective" className="h-20 mb-2" />
+                  <Textarea {...register('mindset.reframe.meaning')} placeholder="Meaning" className="h-20 mb-2" />
+                  <Textarea {...register('mindset.reframe.comfort')} placeholder="Comfort" className="h-20 mb-2" />
+                  <Textarea {...register('mindset.reframe.positive')} placeholder="Positive" className="h-20 mb-2" />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">Fears, Fixes, and Outcomes</h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <h4 className="font-medium mb-1">Fears</h4>
-                  <Textarea
-                    {...register('ffo.fears')}
-                    placeholder="E.g., I'm worried no one is going to look at my content"
-                    className="h-24"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-medium mb-1">Fixes</h4>
-                  <Textarea
-                    {...register('ffo.fixes')}
-                    placeholder="E.g., Post it everywhere"
-                    className="h-24"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-medium mb-1">Outcomes</h4>
-                  <Textarea
-                    {...register('ffo.outcomes')}
-                    placeholder="E.g., Even if a single person benefits, it's great"
-                    className="h-24"
-                  />
-                </div>
-              </div>
-            </div>
+            {/* Insights Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">💡 I - Insights</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="h-20 mb-2" />
+                  <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="h-20 mb-2" />
+                  <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="h-20 mb-2" />
+                  <Textarea {...register('reflections.value')} placeholder="How can I add value to others?" className="h-20 mb-2" />
+                  <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="h-20 mb-2" />
+                  <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="h-20 mb-2" />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Saving...' : 'Save Journal Entry'}
-            </Button>
-          </form>
+            {/* Trajectory Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">🚀 T - Trajectory</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <Textarea {...register('trajectory.current.against')} placeholder="Against Target" className="h-24 mb-2" />
+                  <Textarea {...register('trajectory.current.towards')} placeholder="Towards Target" className="h-24 mb-2" />
+                  <Textarea {...register('trajectory.current.actionable')} placeholder="Actionable/Reward" className="h-24 mb-2" />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Fears, Fixes, and Outcomes Section */}
+            <AccordionItem value={''}>
+              <AccordionTrigger className="bg-blue-200">Fears, Fixes, and Outcomes</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                  <Textarea {...register('ffo.fears')} placeholder="Fears" className="h-24 mb-2" />
+                  <Textarea {...register('ffo.fixes')} placeholder="Fixes" className="h-24 mb-2" />
+                  <Textarea {...register('ffo.outcomes')} placeholder="Outcomes" className="h-24 mb-2" />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* Submit Button */}
+          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-blue-600 transition duration-200" disabled={isLoading}>
+            {isLoading ? 'Saving...' : 'Save Journal Entry'}
+          </Button>
+        </form>  
         </CardContent>
       </Card>
     </div>
