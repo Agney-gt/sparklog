@@ -101,7 +101,7 @@ export default function WheelOfInspiration() {
           {segments.map((segment, index) => (
               <div
                 key={index}
-                className={`absolute top-0 left-0 w-1/4 h-1/4 origin-bottom-right opacity-80 bg-gradient-to-r ${segment.color}`}
+                className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right opacity-80 bg-gradient-to-r ${segment.color}`}
                 style={{
                   transform: `rotate(${index * 45}deg) skew(45deg)`,
                   clipPath: 'inset(0% 0% 0% 0%)',  // Ensure any overflow is clipped
