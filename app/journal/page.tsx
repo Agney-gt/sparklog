@@ -14,6 +14,8 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import ThoughtMeter from "@/components/thought-meter";
+
 type JournalFormData = {
   gratitude: {
     mundane: string;
@@ -330,6 +332,7 @@ function JournalEntry() {
                 <div className="animate-spin">Loading...</div>
               </div>
             )}
+            <ThoughtMeter />
             <Accordion type="multiple">
             {/* Gratitude Section */}
             <AccordionItem value="gratitude">
@@ -524,7 +527,7 @@ function JournalEntry() {
           <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-blue-600 transition duration-200" disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save Journal Entry'}
           </Button>
-        </form>  
+        </form>    
         </CardContent>
       </Card>
     </div>
