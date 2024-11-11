@@ -60,23 +60,25 @@ const segments = [
   { color: 'from-gray-800 to-black', label: 'Inspire' },
 ]
 
-
-export function WheelOfInspiration() {
+export default function WheelOfInspiration() {
   const [rotation, setRotation] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
   const [selectedSegment, setSelectedSegment] = useState<string | null>(null)
   const [selectedQuote, setSelectedQuote] = useState<string | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const wheelRef = useRef<HTMLDivElement>(null)
 
   const spinWheel = () => {
     if (isSpinning) return
     setIsSpinning(true)
+    setIsDialogOpen(false)
     const spinRotation = 360 * 10 + Math.floor(Math.random() * 360)
     setRotation(rotation + spinRotation)
     setTimeout(() => {
       setIsSpinning(false)
       const selectedIndex = Math.floor(((rotation + spinRotation) % 360) / (360 / segments.length))
       setSelectedSegment(segments[selectedIndex].label)
+      setIsDialogOpen(true)
     }, 5000)
   }
 
@@ -118,26 +120,21 @@ export function WheelOfInspiration() {
         </div>
       </div>
       <Button
-            onClick={spinWheel}
-            disabled={isSpinning}
-            className="mt-56 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
-          >
-            {isSpinning ? 'Spinning...' : 'Spin the Wheel of Inspiration  '}
-          </Button>
-          
-          {selectedSegment && (
-            <Dialog>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>{selectedSegment}</DialogTitle>
-                </DialogHeader>
-                <p className="text-center py-4">{selectedQuote}</p>
-              </DialogContent>
-            </Dialog>
-          )}
-
+        onClick={spinWheel}
+        disabled={isSpinning}
+        className="mt-56 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
+      >
+        {isSpinning ? 'Spinning...' : 'Spin the Wheel of Inspiration'}
+      </Button>
+      
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{selectedSegment}</DialogTitle>
+          </DialogHeader>
+          <p className="text-center py-4">{selectedQuote}</p>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
-
-export default WheelOfInspiration;
