@@ -50,15 +50,16 @@ const quotes = [
 ]
 
 const segments = [
-  { color: 'from-red-500 to-pink-500', label: 'Create' },
-  { color: 'from-orange-500 to-amber-500', label: 'Reflect' },
-  { color: 'from-yellow-500 to-lime-500', label: 'Explore' },
-  { color: 'from-green-500 to-emerald-500', label: 'Learn' },
-  { color: 'from-teal-500 to-cyan-500', label: 'Grow' },
-  { color: 'from-blue-500 to-indigo-500', label: 'Innovate' },
-  { color: 'from-purple-500 to-fuchsia-500', label: 'Imagine' },
-  { color: 'from-pink-500 to-rose-500', label: 'Inspire' },
+  { color: 'from-white to-gray-200', label: 'Create' },
+  { color: 'from-white to-gray-200', label: 'Reflect' },
+  { color: 'from-white to-gray-300', label: 'Explore' },
+  { color: 'from-white to-gray-400', label: 'Learn' },
+  { color: 'from-gray-500 to-gray-600', label: 'Grow' },
+  { color: 'from-gray-600 to-gray-700', label: 'Innovate' },
+  { color: 'from-gray-700 to-gray-800', label: 'Imagine' },
+  { color: 'from-gray-800 to-black', label: 'Inspire' },
 ]
+
 
 export function WheelOfInspiration() {
   const [rotation, setRotation] = useState(0)
@@ -103,9 +104,7 @@ export function WheelOfInspiration() {
                 transform: `rotate(${index * 45}deg) skew(45deg)`,
               }}
             >
-              <span className="absolute bottom-6 right-8 text-white font-bold transform -rotate-[75deg] skew-y-[45deg]">
-                {segment.label}
-              </span>
+              
             </div>
           ))}
         </motion.div>
