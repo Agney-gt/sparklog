@@ -490,7 +490,7 @@ function JournalEntry() {
           </Accordion>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-black   transition duration-200" disabled={isLoading}>
+          <Button type="submit" className="w-full mt-4 bg-[#D1D2B3] text-white hover:bg-black   transition duration-200" disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save Journal Entry'}
           </Button>
         </form>    
