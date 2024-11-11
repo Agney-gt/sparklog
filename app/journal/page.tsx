@@ -391,13 +391,13 @@ function JournalEntry() {
               <AccordionTrigger className="bg-black text-white">💡 Insights</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
-                <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="h-20" />
-                <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="h-20" />
-                <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="h-20" />
-                <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="h-20" />
-                <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="h-20" />
-                <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="h-20" />
-                <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="h-20" />
+                <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="mb-2 h-20" />
+                <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="mb-2 h-20" />
                 <Textarea 
                   {...register('reflections.fightToGetBack')} 
                   placeholder="List 5 things you would fight to get back if they were taken away from you" 
