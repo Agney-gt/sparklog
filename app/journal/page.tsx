@@ -350,7 +350,7 @@ function JournalEntry() {
                 <Card className="bg-white shadow-md p-4">
                   <Textarea
                     {...register('vent')}
-                    placeholder="Write freely about anything that's frustrating or bothering you."
+                    placeholder="Write freely about anything that's frustrating or bothering you. Let it all out without judgment or concern for how it sounds. Venting helps you get started and anger can help motivate us to do something."
                     className="h-32 mb-2"
                   />
                 </Card>
@@ -365,12 +365,12 @@ function JournalEntry() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <Textarea
                       {...register('obligations.bare_minimum')}
-                      placeholder="Bare Minimum for the Day"
+                      placeholder="List your bare minimum goals for the day. For example, 30 minutes of exercise."
                       className="h-24 mb-2"
                     />
                     <Textarea
                       {...register('obligations.kaizen_goals')}
-                      placeholder="High Quality Kaizen Goals"
+                      placeholder="List your high quality improvement goals. For example, if you are feeling like it, be 1% better than yesterday and do 33 minutes of exercise."
                       className="h-24 mb-2"
                     />
                   </div>
@@ -388,10 +388,26 @@ function JournalEntry() {
                     placeholder="Affirmation"
                     className="mb-2"
                   />
-                  <Textarea {...register('mindset.reframe.objective')} placeholder="Objective" className="h-20 mb-2" />
-                  <Textarea {...register('mindset.reframe.meaning')} placeholder="Meaning" className="h-20 mb-2" />
-                  <Textarea {...register('mindset.reframe.comfort')} placeholder="Comfort" className="h-20 mb-2" />
-                  <Textarea {...register('mindset.reframe.positive')} placeholder="Positive" className="h-20 mb-2" />
+                  <Textarea
+                  {...register('mindset.reframe.objective')}
+                  placeholder="When something bad happens, analyse what objectively happened?"
+                  className="h-20"
+                />
+                <Textarea
+                  {...register('mindset.reframe.meaning')}
+                  placeholder="What did you make it mean or what significance did you give to the event?"
+                  className="h-20"
+                />
+                <Textarea
+                  {...register('mindset.reframe.comfort')}
+                  placeholder="How would you comfort a friend in the same situation?"
+                  className="h-20"
+                />
+                <Textarea
+                  {...register('mindset.reframe.positive')}
+                  placeholder="What mental gymnastics can you do to reframe this bad event into something positive or what did you learn from this event?"
+                  className="h-20"
+                />
                 </Card>
               </AccordionContent>
             </AccordionItem>
@@ -401,12 +417,33 @@ function JournalEntry() {
               <AccordionTrigger className="bg-blue-200">💡 I - Insights</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
-                  <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="h-20 mb-2" />
-                  <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="h-20 mb-2" />
-                  <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="h-20 mb-2" />
-                  <Textarea {...register('reflections.value')} placeholder="How can I add value to others?" className="h-20 mb-2" />
-                  <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="h-20 mb-2" />
-                  <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="h-20 mb-2" />
+                <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="h-20" />
+                <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="h-20" />
+                <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="h-20" />
+                <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="h-20" />
+                <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="h-20" />
+                <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="h-20" />
+                <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="h-20" />
+                <Textarea 
+                  {...register('reflections.fightToGetBack')} 
+                  placeholder="List 5 things you would fight to get back if they were taken away from you" 
+                  className="h-24" 
+                />
+                <Textarea 
+                  {...register('reflections.wouldntFightFor')} 
+                  placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" 
+                  className="h-24" 
+                />
+                <Textarea 
+                  {...register('reflections.pareto')} 
+                  placeholder="What 20% of actions are producing 80% of results?" 
+                  className="h-24" 
+                />
+                <Textarea 
+                  {...register('reflections.noFailure')} 
+                  placeholder="If you knew you wouldn't fail, what would you do?" 
+                  className="h-24" 
+                />
                 </Card>
               </AccordionContent>
             </AccordionItem>
@@ -416,9 +453,44 @@ function JournalEntry() {
               <AccordionTrigger className="bg-blue-200">🚀 T - Trajectory</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
-                  <Textarea {...register('trajectory.current.against')} placeholder="Against Target" className="h-24 mb-2" />
-                  <Textarea {...register('trajectory.current.towards')} placeholder="Towards Target" className="h-24 mb-2" />
-                  <Textarea {...register('trajectory.current.actionable')} placeholder="Actionable/Reward" className="h-24 mb-2" />
+                <Textarea
+                        {...register('trajectory.current.against')}
+                        placeholder="Things you did that go against the target. For example, if your target is health and fitness, ordering from uber eats would come here."
+                        className="h-24"
+                      />
+                  <Textarea
+                        {...register('trajectory.current.towards')}
+                        placeholder="Things you did that help achieve the target. For example, resisting impulse buys"
+                        className="h-24"
+                      />
+                  <Textarea
+                        {...register('trajectory.current.actionable')}
+                        placeholder="Actionable items or rewards. For example, added to savings."
+                        className="h-24"
+                      />
+                </Card>
+              </AccordionContent>
+            </AccordionItem>
+            {/* Long Term Tragectory Section */}
+            <AccordionItem value="LTT">
+              <AccordionTrigger className="bg-blue-200">Long Term Trajectory</AccordionTrigger>
+              <AccordionContent>
+                <Card className="bg-white shadow-md p-4">
+                <Textarea
+                        {...register('trajectory.longTerm.past')}
+                        placeholder="What did you want 5 years back?"
+                        className="h-24"
+                      />
+                  <Textarea
+                        {...register('trajectory.longTerm.present')}
+                        placeholder="What do you want now?"
+                        className="h-24"
+                      />
+                  <Textarea
+                        {...register('trajectory.longTerm.future')}
+                        placeholder="What do you want 5 years in the future?"
+                        className="h-24"
+                      />
                 </Card>
               </AccordionContent>
             </AccordionItem>
@@ -428,9 +500,21 @@ function JournalEntry() {
               <AccordionTrigger className="bg-blue-200">Fears, Fixes, and Outcomes</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
-                  <Textarea {...register('ffo.fears')} placeholder="Fears" className="h-24 mb-2" />
-                  <Textarea {...register('ffo.fixes')} placeholder="Fixes" className="h-24 mb-2" />
-                  <Textarea {...register('ffo.outcomes')} placeholder="Outcomes" className="h-24 mb-2" />
+                <Textarea
+                    {...register('ffo.fears')}
+                    placeholder="E.g., I'm worried no one is going to look at my content"
+                    className="h-24"
+                  />
+                  <Textarea
+                    {...register('ffo.fixes')}
+                    placeholder="E.g., Post it everywhere"
+                    className="h-24"
+                  />
+                  <Textarea
+                    {...register('ffo.outcomes')}
+                    placeholder="E.g., Even if a single person benefits, it's great"
+                    className="h-24"
+                  />
                 </Card>
               </AccordionContent>
             </AccordionItem>
