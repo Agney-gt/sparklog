@@ -29,7 +29,7 @@ export function ThoughtMeter() {
   return (
     <Card className="w-full max-w-md mx-auto bg-transparent">
       <CardHeader>
-        <CardDescription className="text-black">Check your balance between consuming and creating</CardDescription>
+        <CardDescription className="text-black">Inspiration fuels your journal, not obligation.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
