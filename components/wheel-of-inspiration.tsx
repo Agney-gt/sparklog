@@ -86,7 +86,7 @@ export function WheelOfInspiration() {
   }, [selectedSegment])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-purple-700 to-pink-500 dark:from-gray-900 dark:to-gray-800">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-transparent">
       <div className="relative w-64 h-64 md:w-96 md:h-96">
         <div className="absolute top-0 left-1/2 w-1 h-8 bg-white -ml-0.5 z-10"></div>
         <motion.div
@@ -121,7 +121,7 @@ export function WheelOfInspiration() {
       <Button
         onClick={spinWheel}
         disabled={isSpinning}
-        className="mt-8 px-6 py-3 bg-white text-purple-700 rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
+        className="mt-8 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
       >
         {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
       </Button>
