@@ -29,7 +29,7 @@ function Calendar({
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
     return markedDates.includes(formattedDate);
   };
-  const onDayClick = (date: Date) => {
+  const onDayClicks = (date: Date) => {
     setSelectedDate(date);
     handleDateChange(date); // Use handleDateChange to update the date in the parent
   };
@@ -72,7 +72,7 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      onDayClick={(date) => onDayClick(date)}
+      onDayClick={(date) => onDayClicks(date)}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
