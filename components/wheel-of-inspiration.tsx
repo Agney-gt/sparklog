@@ -96,12 +96,12 @@ export default function WheelOfInspiration() {
           ref={wheelRef}
           animate={{ rotate: rotation }}
           transition={{ duration: 5, ease: "easeOut" }}
-          className="w-48 h-48 rounded-full overflow-hidden shadow-xl"
+          className="w-full h-full rounded-full overflow-hidden shadow-xl"
         >
           {segments.map((segment, index) => (
             <div
               key={index}
-              className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right opacity-80 bg-gradient-to-r ${segment.color}`}
+              className={`absolute top-0 left-0 w-2 h-2 origin-bottom-right opacity-80 bg-gradient-to-r ${segment.color}`}
               style={{
                 transform: `rotate(${index * 45}deg) skew(45deg)`,
               }}
