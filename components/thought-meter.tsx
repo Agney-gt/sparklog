@@ -44,7 +44,7 @@ export function ThoughtMeter() {
             value={[consuming]}
             onValueChange={(value) => setConsuming(value[0])}
           />
-          <span className="text-sm text-muted-foreground">{consuming}%</span>
+          <span className="text-sm text-black text-muted-foreground">{consuming}%</span>
         </div>
 
         <div className="space-y-2">
@@ -59,7 +59,7 @@ export function ThoughtMeter() {
             value={[creating]}
             onValueChange={(value) => setCreating(value[0])}
           />
-          <span className="text-sm text-muted-foreground">{creating}%</span>
+          <span className="text-black text-sm text-muted-foreground">{creating}%</span>
         </div>
 
         <div className="space-y-2">
