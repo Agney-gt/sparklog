@@ -302,7 +302,7 @@ function JournalEntry() {
             <Accordion type="multiple">
             {/* Gratitude Section */}
             <AccordionItem value="gratitude">
-              <AccordionTrigger className="bg-blue-200">🌟 Gratitude</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🌟 Gratitude</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <Input {...register('gratitude.mundane')} placeholder="1. Something mundane" className="mb-2" />
@@ -314,7 +314,7 @@ function JournalEntry() {
 
             {/* Vent Section */}
             <AccordionItem value="vent">
-              <AccordionTrigger className="bg-blue-200">🔥 V - Vent</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🔥 V - Vent</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <Textarea
@@ -328,7 +328,7 @@ function JournalEntry() {
 
             {/* Obligations Section */}
             <AccordionItem value="obligations">
-              <AccordionTrigger className="bg-blue-200">📝 O - Obligations</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">📝 O - Obligations</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
@@ -349,7 +349,7 @@ function JournalEntry() {
 
             {/* Mindset Section */}
             <AccordionItem value="mindset">
-              <AccordionTrigger className="bg-blue-200">🧠 M - Mindset</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🧠 M - Mindset</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <Input
@@ -383,7 +383,7 @@ function JournalEntry() {
 
             {/* Insights Section */}
             <AccordionItem value="insights">
-              <AccordionTrigger className="bg-blue-200">💡 I - Insights</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">💡 I - Insights</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="h-20" />
@@ -419,7 +419,7 @@ function JournalEntry() {
 
             {/* Trajectory Section */}
             <AccordionItem value="trajectory">
-              <AccordionTrigger className="bg-blue-200">🚀 T - Trajectory</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🚀 T - Trajectory</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea
@@ -442,7 +442,7 @@ function JournalEntry() {
             </AccordionItem>
             {/* Long Term Tragectory Section */}
             <AccordionItem value="LTT">
-              <AccordionTrigger className="bg-blue-200">Long Term Trajectory</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">Long Term Trajectory</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea
@@ -466,7 +466,7 @@ function JournalEntry() {
 
             {/* Fears, Fixes, and Outcomes Section */}
             <AccordionItem value="ffo">
-              <AccordionTrigger className="bg-blue-200">Fears, Fixes, and Outcomes</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">Fears, Fixes, and Outcomes</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea
@@ -490,7 +490,7 @@ function JournalEntry() {
           </Accordion>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-blue-600 transition duration-200" disabled={isLoading}>
+          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-black transition duration-200" disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save Journal Entry'}
           </Button>
         </form>    
