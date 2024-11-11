@@ -314,7 +314,7 @@ function JournalEntry() {
 
             {/* Vent Section */}
             <AccordionItem value="vent">
-              <AccordionTrigger className="bg-black text-white">🔥 V - Vent</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🔥 Vent</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <Textarea
@@ -328,7 +328,7 @@ function JournalEntry() {
 
             {/* Obligations Section */}
             <AccordionItem value="obligations">
-              <AccordionTrigger className="bg-black text-white">📝 O - Obligations</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">📝 Obligations</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
@@ -349,7 +349,7 @@ function JournalEntry() {
 
             {/* Mindset Section */}
             <AccordionItem value="mindset">
-              <AccordionTrigger className="bg-black text-white">🧠 M - Mindset</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🧠 Mindset</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                   <Input
@@ -383,7 +383,7 @@ function JournalEntry() {
 
             {/* Insights Section */}
             <AccordionItem value="insights">
-              <AccordionTrigger className="bg-black text-white">💡 I - Insights</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">💡 Insights</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea {...register('reflections.excited')} placeholder="What can i do to make everything easier?" className="h-20" />
@@ -419,7 +419,7 @@ function JournalEntry() {
 
             {/* Trajectory Section */}
             <AccordionItem value="trajectory">
-              <AccordionTrigger className="bg-black text-white">🚀 T - Trajectory</AccordionTrigger>
+              <AccordionTrigger className="bg-black text-white">🚀 Trajectory</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea
@@ -437,15 +437,7 @@ function JournalEntry() {
                         placeholder="Actionable items or rewards. For example, added to savings."
                         className="h-24"
                       />
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
-            {/* Long Term Tragectory Section */}
-            <AccordionItem value="LTT">
-              <AccordionTrigger className="bg-black text-white">Long Term Trajectory</AccordionTrigger>
-              <AccordionContent>
-                <Card className="bg-white shadow-md p-4">
-                <Textarea
+                  <Textarea
                         {...register('trajectory.longTerm.past')}
                         placeholder="What did you want 5 years back?"
                         className="h-24"
@@ -463,10 +455,10 @@ function JournalEntry() {
                 </Card>
               </AccordionContent>
             </AccordionItem>
-
-            {/* Fears, Fixes, and Outcomes Section */}
+                        {/* Fears, Fixes, and Outcomes Section */}
             <AccordionItem value="ffo">
-              <AccordionTrigger className="bg-black text-white">Fears, Fixes, and Outcomes</AccordionTrigger>
+            
+              <AccordionTrigger className="bg-black text-white">🛠️ Fears, Fixes, and Outcomes</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
                 <Textarea

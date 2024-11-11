@@ -43,9 +43,6 @@ export default function LoginPage() {
 
     } catch (err) {
       console.error('Error:', err)
-
-      
-
       alert('Error logging in with Google')
     } finally {
       setIsLoading(false)
@@ -54,12 +51,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg.jpg')] bg-cover bg-center">
-      <div className="flex items-center justify-center">
-        <Card className="w-[700px] bg-[#D1D2B3] shadow-lg rounded-lg">
+      <div className="flex items-center justify-center w-full px-4">
+        <Card className="w-full max-w-md bg-[#D1D2B3] shadow-lg rounded-lg">
           <CardHeader className="text-center p-6">
-            <CardTitle className="text-3xl font-serif text-brown-800">Sparklog</CardTitle>
+            <CardTitle className="text-2xl font-serif text-brown-800">Sparklog</CardTitle>
             <CardDescription className="text-lg font-light text-brown-600">
-             Where yesterday’s inspiration shapes tomorrow’s innovation.
+              Where yesterday’s inspiration shapes tomorrow’s innovation.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6">
