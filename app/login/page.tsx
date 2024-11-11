@@ -55,7 +55,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg.jpg')] bg-cover bg-center">
       <div className="flex items-center justify-center">
-        <Card className="h-[700px] w-[700px] bg-[#E3CC6F] shadow-lg rounded-lg">
+        <Card className="w-[700px] bg-[#D1D2B3] shadow-lg rounded-lg">
           <CardHeader className="text-center p-6">
             <CardTitle className="text-3xl font-serif text-brown-800">Sparklog</CardTitle>
             <CardDescription className="text-lg font-light text-brown-600">

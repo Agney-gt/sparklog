@@ -289,7 +289,7 @@ function JournalEntry() {
         handleLogout={handleLogout} 
         fetchJournalEntry={fetchJournalEntry}
       />
-      <Card className="w-full max-w-4xl mx-auto bg-gray-100">
+      <Card className="w-full max-w-4xl mx-auto bg-transparent">
         
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
