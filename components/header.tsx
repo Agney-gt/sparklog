@@ -35,7 +35,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
   };
 
   return (
-    <header className="bg-#E3CC6F shadow-md">
+    <header className="bg-[#E3CC6F] shadow-md">
     <div className="border-b">
       <div className="container px-4">
         <div className="flex h-16 items-center justify-between">    <div className="flex flex-1 items-center gap-2">
