@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Settings, LogOut, Trophy, Sparkles } from "lucide-react"
+import Image from 'next/image'
 
 interface HeaderProps {
   date: Date;
@@ -113,7 +114,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
 
       <div className="container px-4 py-3 text-center">
       <div className="flex justify-center items-center">
-            <img src="/sparklog.jpg" alt="Logo" className="h-16 w-16" />
+        <Image src="/sparklog.jpg" alt="Logo" className="h-16 w-16" width={16} height={16} />
           </div>
         <h1 className="text-2xl font-semibold tracking-tight">
           Journal out of inspiration, not obligation
