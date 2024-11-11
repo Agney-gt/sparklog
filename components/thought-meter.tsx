@@ -29,7 +29,6 @@ export function ThoughtMeter() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Thought Meter</CardTitle>
         <CardDescription>Check your balance between consuming and creating</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
