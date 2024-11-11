@@ -13,6 +13,7 @@ import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import ThoughtMeter from "@/components/thought-meter";
 import { Header } from '@/components/header'
+import WheelOfInspiration from '@/components/wheel-of-inspiration'
 
 type JournalFormData = {
   gratitude: {
@@ -302,7 +303,7 @@ function JournalEntry() {
               </div>
             )}
             <div className="mt-6">
-              <ThoughtMeter />
+              <WheelOfInspiration />
             </div>
             <Accordion type="multiple">
             {/* Gratitude Section */}
