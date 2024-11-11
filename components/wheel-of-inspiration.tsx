@@ -90,8 +90,8 @@ export default function WheelOfInspiration() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-transparent">
-      <div className="relative w-64 h-64 md:w-96 md:h-96">
-        <div className="absolute top-0 left-1/2 w-1 h-8 bg-white -ml-0.5 z-10"></div>
+      <div className="relative w-64 h-64 md:w-96 md:h-96 overflow-hidden">
+        <div className="absolute top-0 left-1/2 w-1 h-8 bg-white -ml-0.5 z-10 overflow-hidden"></div>
         <motion.div
           ref={wheelRef}
           animate={{ rotate: rotation }}
