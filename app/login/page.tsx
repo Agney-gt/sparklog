@@ -53,35 +53,35 @@ export default function LoginPage() {
   }
 
   return (
-    
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      
-      <Card className="w-[700px]">
-        <CardHeader className="text-center">
-          <CardTitle>Past meets future with every journal entry</CardTitle>
-          <CardDescription>
-          Find your self through journaling and reflection
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button 
-            onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2"
-            variant="outline"
-            disabled={isLoading}
-          >
-            {!isLoading && (
-              <Image 
-                src="/google-logo.png" 
-                alt="Google" 
-                width={20} 
-                height={20}
-              />
-            )}
-            {isLoading ? 'Redirecting...' : 'Continue with Google'}
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen flex items-center justify-center bg-[url('/bg.jpg')] bg-cover bg-center">
+      <div className="flex items-center justify-center">
+        <Card className="h-[700px] w-[700px] bg-white shadow-lg rounded-lg">
+          <CardHeader className="text-center p-6">
+            <CardTitle className="text-3xl font-serif text-brown-800">Sparklog</CardTitle>
+            <CardDescription className="text-lg font-light text-brown-600">
+             Where yesterday’s inspiration shapes tomorrow’s innovation.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <Button 
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center gap-2 bg-brown-800 text-white hover:bg-brown-700"
+              variant="outline"
+              disabled={isLoading}
+            >
+              {!isLoading && (
+                <Image 
+                  src="/google-logo.png" 
+                  alt="Google" 
+                  width={20} 
+                  height={20}
+                />
+              )}
+              {isLoading ? 'Redirecting...' : 'Continue with Google'}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

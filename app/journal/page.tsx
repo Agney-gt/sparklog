@@ -281,7 +281,7 @@ function JournalEntry() {
   }
 
   return (
-    
+    <div className="min-h-screen flex items-center justify-center bg-[url('/bg.jpg')] bg-cover bg-center">
     <div className="container mx-auto p-4">
       <Header 
         date={date} 
@@ -490,13 +490,13 @@ function JournalEntry() {
           </Accordion>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-black transition duration-200" disabled={isLoading}>
+          <Button type="submit" className="w-full mt-4 bg-blue-500 text-white hover:bg-black   transition duration-200" disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save Journal Entry'}
           </Button>
         </form>    
         </CardContent>
       </Card>
-    </div>
+    </div></div>
   )
 }
 
