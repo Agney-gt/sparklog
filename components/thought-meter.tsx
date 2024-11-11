@@ -29,7 +29,7 @@ export function ThoughtMeter() {
   return (
     <Card className="w-full max-w-md mx-auto bg-transparent">
       <CardHeader>
-        <CardDescription>Check your balance between consuming and creating</CardDescription>
+        <CardDescription className="text-black">Check your balance between consuming and creating</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
@@ -67,11 +67,11 @@ export function ThoughtMeter() {
             <span>Consuming</span>
             <span>Creating</span>
           </div>
-          <Progress value={50 + balance / 2} className="h-2" />
+          <Progress value={50 + balance / 2} className="h-2 text-black" />
         </div>
 
         <Alert>
-          <InfoIcon className="h-4 w-4" />
+          <InfoIcon className="h-4 w-4 bg-transparent" />
           <AlertTitle>Tip</AlertTitle>
           <AlertDescription>{tip}</AlertDescription>
         </Alert>
