@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import ThoughtMeter from "@/components/thought-meter";
 import { Header } from '@/components/header'
 import WheelOfInspiration from '@/components/wheel-of-inspiration'
 
