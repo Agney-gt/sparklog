@@ -96,7 +96,7 @@ export default function WheelOfInspiration() {
           ref={wheelRef}
           animate={{ rotate: rotation }}
           transition={{ duration: 5, ease: "easeOut" }}
-          className="w-full h-full rounded-full overflow-hidden shadow-xl"
+          className="w-48 h-48 rounded-full overflow-hidden shadow-xl"
         >
           {segments.map((segment, index) => (
             <div
