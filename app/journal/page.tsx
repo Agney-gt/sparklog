@@ -344,7 +344,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Vent Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="vent">
               <AccordionTrigger className="bg-blue-200">🔥 V - Vent</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
@@ -358,7 +358,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Obligations Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="obligations">
               <AccordionTrigger className="bg-blue-200">📝 O - Obligations</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
@@ -379,7 +379,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Mindset Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="mindset">
               <AccordionTrigger className="bg-blue-200">🧠 M - Mindset</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
@@ -397,7 +397,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Insights Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="insights">
               <AccordionTrigger className="bg-blue-200">💡 I - Insights</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
@@ -412,7 +412,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Trajectory Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="trajectory">
               <AccordionTrigger className="bg-blue-200">🚀 T - Trajectory</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
@@ -424,7 +424,7 @@ function JournalEntry() {
             </AccordionItem>
 
             {/* Fears, Fixes, and Outcomes Section */}
-            <AccordionItem value={''}>
+            <AccordionItem value="ffo">
               <AccordionTrigger className="bg-blue-200">Fears, Fixes, and Outcomes</AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-white shadow-md p-4">
