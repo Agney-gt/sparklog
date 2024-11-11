@@ -304,31 +304,7 @@ function JournalEntry() {
         fetchJournalEntry={fetchJournalEntry}
       />
       <Card className="w-full max-w-4xl mx-auto bg-gray-100">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div>
-              <CardTitle className="text-2xl font-bold">Journal out of inspiration, not obligation!</CardTitle>
-              <div className="mt-2">
-                <Badge variant="secondary">Level 1</Badge>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" onClick={() => navigateDate('prev')} title="Previous day">
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={() => {
-              const today = startOfDay(new Date())
-              setDate(today)
-              fetchJournalEntry(today)
-            }}>
-              Today
-            </Button>
-            <Button variant="outline" size="icon" onClick={() => navigateDate('next')} title="Next day">
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardHeader>
+        
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {(isLoading || isFetching) && (
