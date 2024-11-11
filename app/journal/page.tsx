@@ -13,7 +13,7 @@ import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import ThoughtMeter from "@/components/thought-meter";
 import { Header } from '@/components/header'
-import { Calendar } from "@/components/ui/calendar"
+
 type JournalFormData = {
   gratitude: {
     mundane: string;
@@ -290,8 +290,8 @@ function JournalEntry() {
         setDate={setDate} 
         handleLogout={handleLogout} 
         fetchJournalEntry={fetchJournalEntry}
+        markedDates={markedDates}
       />
-      <Calendar markedDates={markedDates} />
       <Card className="w-full max-w-4xl mx-auto bg-transparent">
         
         <CardContent>

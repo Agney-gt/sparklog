@@ -20,15 +20,15 @@ import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Settings, LogOut, Trophy, Sparkles } from "lucide-react"
 
-
 interface HeaderProps {
   date: Date;
   setDate: (date: Date) => void;
   handleLogout: () => Promise<void>;
   fetchJournalEntry: (date: Date) => Promise<void>;
+  markedDates: string[];
 }
 
-export function Header({ date, setDate, handleLogout, fetchJournalEntry }: HeaderProps) {
+export function Header({ date, setDate, handleLogout, fetchJournalEntry, markedDates }: HeaderProps) {
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
     fetchJournalEntry(newDate); // Fetch journal entry for the new date
@@ -36,32 +36,34 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
 
   return (  
     <header className="bg-transparent shadow-md">
-    <div className="border-b">
-      <div className="container px-4">
-        <div className="flex h-16 items-center justify-between">    <div className="flex flex-1 items-center gap-2">
-          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}>
-            <ChevronLeft className="h-5 w-5" />
-            <span className="sr-only">Previous day</span>
-          </Button>
-          
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2">
-                <CalendarIcon className="h-4 w-4" />
-                <span className="hidden sm:inline-block font-normal">
-                  {format(date, "MMMM d, yyyy")}
-                </span>
+      <div className="border-b">
+        <div className="container px-4">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex flex-1 items-center gap-2">
+              <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}>
+                <ChevronLeft className="h-5 w-5" />
+                <span className="sr-only">Previous day</span>
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(date) => date && handleDateChange(date)}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-2">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span className="hidden sm:inline-block font-normal">
+                      {format(date, "MMMM d, yyyy")}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(date) => date && handleDateChange(date)}
+                    initialFocus
+                    markedDates={markedDates}
+                  />
+                </PopoverContent>
+              </Popover>
 
           <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() + 1)))}>
             <ChevronRight className="h-5 w-5" />
