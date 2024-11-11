@@ -71,7 +71,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
           </Button>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex justify-center items-center">
             <img src="/sparklog.jpg" alt="Logo" className="h-16 w-16" />
           </div>
 
