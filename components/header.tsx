@@ -25,9 +25,15 @@ interface HeaderProps {
   date: Date;
   setDate: (date: Date) => void;
   handleLogout: () => Promise<void>;
+  fetchJournalEntry: (date: Date) => Promise<void>;
 }
 
 export function Header({ date, setDate, handleLogout }: HeaderProps) {
+  const handleDateChange = (newDate: Date) => {
+    setDate(newDate);
+    fetchJournalEntry(newDate); // Fetch journal entry for the new date
+  };
+
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center gap-4 px-4">
@@ -119,3 +125,7 @@ export function Header({ date, setDate, handleLogout }: HeaderProps) {
 }
 
 export default Header;
+
+function fetchJournalEntry(newDate: Date) {
+  throw new Error("Function not implemented.")
+}

@@ -200,7 +200,7 @@ function JournalEntry() {
     } finally {
       setIsFetching(false)
     }
-  }
+  };
 
   const navigateDate = async (direction: 'prev' | 'next') => {
     const newDate = new Date(date)
@@ -297,7 +297,12 @@ function JournalEntry() {
   return (
     
     <div className="container mx-auto p-4">
-      <Header date={date} setDate={setDate} handleLogout={handleLogout} />
+      <Header 
+        date={date} 
+        setDate={setDate} 
+        handleLogout={handleLogout} 
+        fetchJournalEntry={fetchJournalEntry}
+      />
       <Card className="w-full max-w-4xl mx-auto bg-gray-100">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
