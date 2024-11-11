@@ -22,14 +22,18 @@ import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Settings, LogOut, Trophy, Sparkles } from "lucide-react"
 
-export function Header() {
-  const [date, setDate] = useState<Date>(new Date())
+interface HeaderProps {
+  date: Date;
+  setDate: (date: Date) => void;
+  handleLogout: () => Promise<void>;
+}
 
+export function Header({ date, setDate, handleLogout }: HeaderProps) {
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center gap-4 px-4">
         <div className="flex flex-1 items-center gap-2">
-          <Button variant="ghost" size="icon" className="shrink-0">
+          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}>
             <ChevronLeft className="h-5 w-5" />
             <span className="sr-only">Previous day</span>
           </Button>
@@ -53,12 +57,14 @@ export function Header() {
             </PopoverContent>
           </Popover>
 
-          <Button variant="ghost" size="icon" className="shrink-0">
+          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}>
             <ChevronRight className="h-5 w-5" />
             <span className="sr-only">Next day</span>
           </Button>
 
-          <Button variant="ghost" className="hidden sm:inline-block">Today</Button>
+          <Button variant="ghost" className="hidden sm:inline-block" onClick={() => setDate(new Date())}>
+            Today
+          </Button>
         </div>
 
         <div className="flex items-center gap-4">
@@ -90,7 +96,7 @@ export function Header() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Stats</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </DropdownMenuItem>
