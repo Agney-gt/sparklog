@@ -4,13 +4,11 @@ import { useState, useEffect } from 'react'
 import { SessionProvider } from "next-auth/react"
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import ThoughtMeter from "@/components/thought-meter";
