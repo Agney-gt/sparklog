@@ -297,7 +297,7 @@ function JournalEntry() {
   return (
     
     <div className="container mx-auto p-4">
-      <Header />
+      <Header date={date} setDate={setDate} handleLogout={handleLogout} />
       <Card className="w-full max-w-4xl mx-auto bg-gray-100">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
@@ -321,9 +321,6 @@ function JournalEntry() {
             </Button>
             <Button variant="outline" size="icon" onClick={() => navigateDate('next')} title="Next day">
               <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={handleLogout}>
-              Logout
             </Button>
           </div>
         </CardHeader>
