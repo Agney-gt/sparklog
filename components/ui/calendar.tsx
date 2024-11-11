@@ -30,6 +30,7 @@ function Calendar({
     return markedDates.includes(formattedDate);
   };
   const onDayClicks = (date: Date) => {
+    console.log("Selected date:", date)
     setSelectedDate(date);
     handleDateChange(date); // Use handleDateChange to update the date in the parent
   };
