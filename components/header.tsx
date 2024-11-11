@@ -71,9 +71,9 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
           </Button>
         </div>
 
-        <div className="flex items-center justify-center flex-1">
-          <img src="/sparklog.jpg" alt="Logo" className="h-8" />
-        </div>
+        <div className="flex items-center">
+            <img src="/sparklog.jpg" alt="Logo" className="h-16 w-16" />
+          </div>
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
