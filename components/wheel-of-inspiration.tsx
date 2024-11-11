@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
 const quotes = [
@@ -122,7 +122,7 @@ export function WheelOfInspiration() {
             disabled={isSpinning}
             className="mt-40 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
           >
-            {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
+            {isSpinning ? 'Spinning...' : 'Spin the Inspiration Wheel'}
           </Button>
 
           {selectedSegment && (
