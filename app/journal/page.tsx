@@ -207,6 +207,11 @@ function JournalEntry() {
   }, [date])
 
   const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
+    // Check if all entries are null or empty
+    if (!data.gratitude && !data.vent && !data.obligations && !data.mindset && !data.reflections && !data.trajectory && !data.ffo) {
+      alert('Please fill in at least one entry before submitting.');
+      return;
+    }
     try {
       setIsLoading(true);
       const journalData: JournalFormData = {
