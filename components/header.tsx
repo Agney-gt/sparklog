@@ -36,7 +36,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center gap-4 px-4">
+      <div className="container flex h-14 items-center justify-between px-4">
         <div className="flex flex-1 items-center gap-2">
           <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}>
             <ChevronLeft className="h-5 w-5" />
@@ -70,6 +70,10 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
           <Button variant="ghost" className="hidden sm:inline-block" onClick={() => handleDateChange(new Date())}>
             Today
           </Button>
+        </div>
+
+        <div className="flex items-center justify-center flex-1">
+          <img src="/sparklog.jpg" alt="Logo" className="h-8" />
         </div>
 
         <div className="flex items-center gap-4">
@@ -107,15 +111,10 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/placeholder.svg" alt="User avatar" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
         </div>
       </div>
 
-      <div className="container px-4 py-3">
+      <div className="container px-4 py-3 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">
           Journal out of inspiration, not obligation
         </h1>
