@@ -15,6 +15,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import ThoughtMeter from "@/components/thought-meter";
+import { Header } from '@/components/header'
 
 type JournalFormData = {
   gratitude: {
@@ -295,12 +296,14 @@ function JournalEntry() {
   }
 
   return (
+    
     <div className="container mx-auto p-4">
+      <Header />
       <Card className="w-full max-w-4xl mx-auto bg-gray-100">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
             <div>
-              <CardTitle className="text-2xl font-bold">Journal out of inspiration, not obligation - {format(date, 'MMMM d, yyyy')}</CardTitle>
+              <CardTitle className="text-2xl font-bold">Journal out of inspiration, not obligation!</CardTitle>
               <div className="mt-2">
                 <Badge variant="secondary">Level 1</Badge>
               </div>
