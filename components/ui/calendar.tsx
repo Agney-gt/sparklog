@@ -30,6 +30,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -65,6 +66,7 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      onDayClick={(date) => setSelectedDate(date)}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
