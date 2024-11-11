@@ -19,7 +19,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Settings, LogOut, Trophy, Sparkles } from "lucide-react"
-import Image from 'next/image'
+
 
 interface HeaderProps {
   date: Date;
