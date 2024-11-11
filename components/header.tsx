@@ -38,7 +38,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center gap-4 px-4">
         <div className="flex flex-1 items-center gap-2">
-          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}>
+          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}>
             <ChevronLeft className="h-5 w-5" />
             <span className="sr-only">Previous day</span>
           </Button>
@@ -56,18 +56,18 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
               <Calendar
                 mode="single"
                 selected={date}
-                onSelect={(date) => date && setDate(date)}
+                onSelect={(date) => date && handleDateChange(date)}
                 initialFocus
               />
             </PopoverContent>
           </Popover>
 
-          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}>
+          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() + 1)))}>
             <ChevronRight className="h-5 w-5" />
             <span className="sr-only">Next day</span>
           </Button>
 
-          <Button variant="ghost" className="hidden sm:inline-block" onClick={() => setDate(new Date())}>
+          <Button variant="ghost" className="hidden sm:inline-block" onClick={() => handleDateChange(new Date())}>
             Today
           </Button>
         </div>
