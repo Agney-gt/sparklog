@@ -120,9 +120,9 @@ export function WheelOfInspiration() {
       <Button
             onClick={spinWheel}
             disabled={isSpinning}
-            className="mt-40 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
+            className="mt-56 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
           >
-            {isSpinning ? 'Spinning...' : 'Spin the Inspiration Wheel'}
+            {isSpinning ? 'Spinning...' : 'Spin the Wheel of Inspiration  '}
           </Button>
 
           {selectedSegment && (
