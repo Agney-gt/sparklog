@@ -200,18 +200,6 @@ function JournalEntry() {
     }
   };
 
-  const navigateDate = async (direction: 'prev' | 'next') => {
-    const newDate = new Date(date)
-    if (direction === 'next') {
-      newDate.setDate(newDate.getDate() + 1)
-    } else {
-      newDate.setDate(newDate.getDate() - 1)
-    }
-    const newStartOfDay = startOfDay(newDate)
-    setDate(newStartOfDay)
-    await fetchJournalEntry(newStartOfDay)
-  }
-
   useEffect(() => {
     fetchJournalEntry(date)
   }, [])
