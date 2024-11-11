@@ -298,7 +298,9 @@ function JournalEntry() {
                 <div className="animate-spin">Loading...</div>
               </div>
             )}
-            <ThoughtMeter />
+            <div className="mt-6">
+              <ThoughtMeter />
+            </div>
             <Accordion type="multiple">
             {/* Gratitude Section */}
             <AccordionItem value="gratitude">
@@ -360,22 +362,22 @@ function JournalEntry() {
                   <Textarea
                   {...register('mindset.reframe.objective')}
                   placeholder="When something bad happens, analyse what objectively happened?"
-                  className="h-20"
+                  className="mb-2 h-20"
                 />
                 <Textarea
                   {...register('mindset.reframe.meaning')}
                   placeholder="What did you make it mean or what significance did you give to the event?"
-                  className="h-20"
+                  className="mb-2 h-20"
                 />
                 <Textarea
                   {...register('mindset.reframe.comfort')}
                   placeholder="How would you comfort a friend in the same situation?"
-                  className="h-20"
+                  className="mb-2 h-20"
                 />
                 <Textarea
                   {...register('mindset.reframe.positive')}
                   placeholder="What mental gymnastics can you do to reframe this bad event into something positive or what did you learn from this event?"
-                  className="h-20"
+                  className="mb-2 h-20"
                 />
                 </Card>
               </AccordionContent>
@@ -396,22 +398,22 @@ function JournalEntry() {
                 <Textarea 
                   {...register('reflections.fightToGetBack')} 
                   placeholder="List 5 things you would fight to get back if they were taken away from you" 
-                  className="h-24" 
+                  className="mb-2 h-24" 
                 />
                 <Textarea 
                   {...register('reflections.wouldntFightFor')} 
                   placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" 
-                  className="h-24" 
+                  className="mb-2 h-24" 
                 />
                 <Textarea 
                   {...register('reflections.pareto')} 
                   placeholder="What 20% of actions are producing 80% of results?" 
-                  className="h-24" 
+                  className="mb-2 h-24" 
                 />
                 <Textarea 
                   {...register('reflections.noFailure')} 
                   placeholder="If you knew you wouldn't fail, what would you do?" 
-                  className="h-24" 
+                  className="mb-2 h-24" 
                 />
                 </Card>
               </AccordionContent>
@@ -425,32 +427,32 @@ function JournalEntry() {
                 <Textarea
                         {...register('trajectory.current.against')}
                         placeholder="Things you did that go against the target. For example, if your target is health and fitness, ordering from uber eats would come here."
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                   <Textarea
                         {...register('trajectory.current.towards')}
                         placeholder="Things you did that help achieve the target. For example, resisting impulse buys"
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                   <Textarea
                         {...register('trajectory.current.actionable')}
                         placeholder="Actionable items or rewards. For example, added to savings."
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                   <Textarea
                         {...register('trajectory.longTerm.past')}
                         placeholder="What did you want 5 years back?"
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                   <Textarea
                         {...register('trajectory.longTerm.present')}
                         placeholder="What do you want now?"
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                   <Textarea
                         {...register('trajectory.longTerm.future')}
                         placeholder="What do you want 5 years in the future?"
-                        className="h-24"
+                        className="mb-2 h-24"
                       />
                 </Card>
               </AccordionContent>
@@ -464,17 +466,17 @@ function JournalEntry() {
                 <Textarea
                     {...register('ffo.fears')}
                     placeholder="E.g., I'm worried no one is going to look at my content"
-                    className="h-24"
+                    className="mb-2 h-24"
                   />
                   <Textarea
                     {...register('ffo.fixes')}
                     placeholder="E.g., Post it everywhere"
-                    className="h-24"
+                    className="mb-2 h-24"
                   />
                   <Textarea
                     {...register('ffo.outcomes')}
                     placeholder="E.g., Even if a single person benefits, it's great"
-                    className="h-24"
+                    className="mb-2 h-24"
                   />
                 </Card>
               </AccordionContent>
@@ -482,7 +484,7 @@ function JournalEntry() {
           </Accordion>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full mt-4 bg-[#D1D2B3] text-white hover:bg-black   transition duration-200" disabled={isLoading}>
+          <Button type="submit" className="w-full mt-4 bg-black text-white hover:bg-black   transition duration-200" disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save Journal Entry'}
           </Button>
         </form>    
