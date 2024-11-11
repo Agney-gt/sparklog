@@ -124,9 +124,9 @@ export function WheelOfInspiration() {
           >
             {isSpinning ? 'Spinning...' : 'Spin the Wheel of Inspiration  '}
           </Button>
-
+          
           {selectedSegment && (
-            <Dialog open={!!selectedSegment}>
+            <Dialog>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>{selectedSegment}</DialogTitle>
