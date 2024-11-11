@@ -101,7 +101,7 @@ export default function WheelOfInspiration() {
           {segments.map((segment, index) => (
             <div
               key={index}
-              className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right bg-gradient-to-r ${segment.color} ${isSpinning ? '' : 'opacity-80 transition-opacity'}`}
+              className={`absolute top-0 left-0 w-1/2 h-1/2 origin-bottom-right opacity-80 bg-gradient-to-r ${segment.color}`}
               style={{
                 transform: `rotate(${index * 45}deg) skew(45deg)`,
               }}
@@ -122,7 +122,7 @@ export default function WheelOfInspiration() {
       <Button
         onClick={spinWheel}
         disabled={isSpinning}
-        className="mt-56 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
+        className="mt-8 px-6 py-3 bg-white text-black rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors"
       >
         {isSpinning ? 'Spinning...' : 'Spin the Wheel of Inspiration'}
       </Button>
