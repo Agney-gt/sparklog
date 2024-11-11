@@ -2,19 +2,28 @@
 
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, DayProps } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  markedDates?: string[]; // Add a prop for marked dates
+}
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  markedDates = [], // Default to an empty array
   ...props
 }: CalendarProps) {
+  // Function to check if a date is marked
+  const isMarkedDate = (date: Date) => {
+    const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+    return markedDates.includes(formattedDate);
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -56,6 +65,16 @@ function Calendar({
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
+        Day: ({ date }: DayProps) => (
+          <div className="relative">
+            <div className={cn("h-9 w-9 text-center")}>
+              {date.getDate()}
+              {isMarkedDate(date) && (
+                <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span> // Mark for entries
+              )}
+            </div>
+          </div>
+        ),
       }}
       {...props}
     />

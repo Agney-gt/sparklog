@@ -13,7 +13,7 @@ import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import ThoughtMeter from "@/components/thought-meter";
 import { Header } from '@/components/header'
-
+import { Calendar } from "@/components/ui/calendar"
 type JournalFormData = {
   gratitude: {
     mundane: string;
@@ -71,6 +71,7 @@ function JournalEntry() {
   const [date, setDate] = useState(startOfDay(new Date()))
   const { register, handleSubmit, reset } = useForm()
   const [isLoading, setIsLoading] = useState(false)
+  const [markedDates, setMarkedDates] = useState<string[]>([])
   const supabase = createClientComponentClient()
   const [isFetching, setIsFetching] = useState(false)
 
@@ -80,7 +81,7 @@ function JournalEntry() {
       const formattedDate = date.toISOString()
       
       const response = await fetch(`/api/journal?date=${formattedDate}`)
-      const { data } = await response.json()
+      const { data, markedDates: fetchedMarkedDates } = await response.json()
       
       if (data) {
         reset({
@@ -139,6 +140,7 @@ function JournalEntry() {
             outcomes: data.ffo?.outcomes || ''
           }
         })
+        setMarkedDates(fetchedMarkedDates)
       } else {
         reset({
           gratitude: {
@@ -202,7 +204,7 @@ function JournalEntry() {
 
   useEffect(() => {
     fetchJournalEntry(date)
-  }, [])
+  }, [date])
 
   const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
     try {
@@ -289,6 +291,7 @@ function JournalEntry() {
         handleLogout={handleLogout} 
         fetchJournalEntry={fetchJournalEntry}
       />
+      <Calendar markedDates={markedDates} />
       <Card className="w-full max-w-4xl mx-auto bg-transparent">
         
         <CardContent>

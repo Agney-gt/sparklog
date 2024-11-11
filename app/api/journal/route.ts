@@ -93,7 +93,21 @@ export async function GET(request: Request) {
       throw error
     }
 
-    return NextResponse.json({ data: data || {} })
+    const { data: datesData, error: datesError } = await supabase
+      .from('journal_entries')
+      .select('date')
+      .eq('user_id', user?.id)
+      
+
+    if (datesError) {
+      console.error('Error fetching dates:', datesError)
+      return NextResponse.json(
+        { error: 'Error fetching dates' }, 
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ data: data || {}, markedDates: datesData.map(entry => entry.date) })
 
   } catch (error) {
     console.error('Error fetching entry:', error)
