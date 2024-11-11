@@ -3,6 +3,7 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker, DayProps } from "react-day-picker"
+import { useState } from "react";
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
@@ -18,6 +19,8 @@ function Calendar({
   markedDates = [], // Default to an empty array
   ...props
 }: CalendarProps) {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined); // State for selected date
+
   // Function to check if a date is marked
   const isMarkedDate = (date: Date) => {
     const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
@@ -66,11 +69,11 @@ function Calendar({
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
         Day: ({ date }: DayProps) => (
-          <div className="relative">
-            <div className={cn("h-9 w-9 text-center")}>
+          <div className="relative" onClick={() => setSelectedDate(date)}>
+            <div className={cn("h-9 w-9 text-center", { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() })}>
               {date.getDate()}
               {isMarkedDate(date) && (
-                <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span> // Mark for entries
+                <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span>
               )}
             </div>
           </div>
