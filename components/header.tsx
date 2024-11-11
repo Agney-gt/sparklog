@@ -116,13 +116,9 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry }: Heade
         </div>
       </div>
 
-      <div className="container px-4 py-3 text-center">
-             <h1 className="text-2xl font-semibold tracking-tight">
-          Journal out of inspiration, not obligation
-        </h1>
       </div>
     </div>
-    </div>
+    
   )
 }
 
