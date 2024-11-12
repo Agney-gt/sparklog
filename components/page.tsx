@@ -4,50 +4,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { ArrowRight, Menu } from "lucide-react"
 
-export default function Component() {
-  const router = useRouter()
-  const supabase = createClientComponentClient()
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        router.push('/journal')
-        router.refresh()
-      }
-    }
-    checkUser()
-  }, [router, supabase])
-
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true)
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        }
-      })
-
-      if (error) throw error
-      
-      if (data?.url) {
-        window.location.href = data.url
-      }
-
-    } catch (err) {
-      console.error('Error:', err)
-      alert('Error logging in with Google')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
+export function BlockPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="px-4 lg:px-6 h-14 flex items-center">
@@ -70,10 +29,11 @@ export default function Component() {
             Pricing
           </Link>
         </nav>
-        <div className="ml-auto flex items-center">
-          <Button onClick={handleGoogleLogin} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Sign in with Google'}
+        <div className="ml-auto flex items-center gap-2">
+          <Button variant="ghost" size="sm">
+            Sign in
           </Button>
+          <Button size="sm">Start Free</Button>
         </div>
       </header>
       <main className="flex-1">
@@ -91,9 +51,7 @@ export default function Component() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" onClick={handleGoogleLogin} disabled={isLoading}>
-                    {isLoading ? 'Loading...' : 'Get yours now!'}
-                  </Button>
+                  <Button size="lg">Get yours now!</Button>
                 </div>
               </div>
               <div className="flex items-center justify-center">
@@ -190,8 +148,8 @@ export default function Component() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button className="bg-white text-blue-600 hover:bg-gray-100" size="lg" onClick={handleGoogleLogin} disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Try Free Now'}
+                <Button className="bg-white text-blue-600 hover:bg-gray-100" size="lg">
+                  Try Free Now
                 </Button>
               </div>
             </div>
