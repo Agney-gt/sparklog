@@ -88,13 +88,15 @@ function JournalEntry() {
   const [startIndex, setStartIndex] = useState(0)
   const visibleTabs = ALL_TABS.slice(startIndex, startIndex + 3)
   
-  const handleNext = () => {
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault() // Prevent form submission
     if (startIndex + 3 < ALL_TABS.length) {
       setStartIndex(prev => prev + 1)
     }
   }
 
-  const handlePrev = () => {
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault() // Prevent form submission
     if (startIndex > 0) {
       setStartIndex(prev => prev - 1)
     }
