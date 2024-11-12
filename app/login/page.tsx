@@ -1,9 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
