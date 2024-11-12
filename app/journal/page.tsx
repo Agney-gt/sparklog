@@ -12,7 +12,7 @@ import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Header } from '@/components/header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 
 type JournalFormData = {
