@@ -65,11 +65,11 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({  cookies: () => cookieStore })
     
     const { searchParams } = new URL(request.url)
     const date = searchParams.get('date')
-
+    
     if (!date) {
       return NextResponse.json(
         { error: 'Date is required' }, 

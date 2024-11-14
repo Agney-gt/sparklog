@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker, DayProps } from "react-day-picker"
 import { useState } from "react";
 
+
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -25,15 +26,20 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(); // State for selected date
+  console.log(markedDates)
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
     fetchJournalEntry(newDate); // Fetch journal entry for the new date
   };
   // Function to check if a date is marked
   const isMarkedDate = (date: Date) => {
-    const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+    // Format the date to YYYY-MM-DD
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    
+    // Check if the formatted date exists in the markedDates array
     return markedDates.includes(formattedDate);
   };
+  
   
   return (
     <DayPicker
@@ -64,7 +70,7 @@ function Calendar({
         day_range_end: "day-range-end",
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
+          day_today: "bg-accent text-accent-foreground rounded-full border-2 border-accent",
         day_outside:
           "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
         day_disabled: "text-muted-foreground opacity-50",
@@ -74,13 +80,15 @@ function Calendar({
         ...classNames,
       }}
       
-      components={{
+        components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
         IconRight: () => <ChevronRight className="h-4 w-4" />,
         Day: ({ date }: DayProps) => (
           <div className="relative" onClick={() => { 
+            console.log(date)
             setSelectedDate(date);
-            handleDateChange(date); // Call handleDateChange here
+            handleDateChange(date);
+             // Call handleDateChange here
           }}>
             <div className={cn("h-9 w-9 text-center", { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() })}>
               {date.getDate()}

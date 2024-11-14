@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { startOfDay } from 'date-fns'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Header } from '@/components/header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -79,7 +78,7 @@ const ALL_TABS = [
 
 function JournalEntry() {
   const router = useRouter()
-  const [date, setDate] = useState(startOfDay(new Date()))
+  const [date, setDate] = useState(new Date())
   const { register, handleSubmit, reset } = useForm()
   const [isLoading, setIsLoading] = useState(false)
   const [markedDates, setMarkedDates] = useState<string[]>([])
@@ -104,8 +103,8 @@ function JournalEntry() {
   const fetchJournalEntry = async (date: Date) => {
     try {
       setIsFetching(true)
-      const formattedDate = date.toISOString()
-      
+      const formattedDate = date
+      console.log("formated date inside fetchJournalEntry",formattedDate)
       const response = await fetch(`/api/journal?date=${formattedDate}`)
       const { data, markedDates: fetchedMarkedDates } = await response.json()
       
@@ -322,6 +321,7 @@ function JournalEntry() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100] bg-cover bg-center">
     <div className="container mx-auto p-4">
+     
       <Header 
         date={date} 
         setDate={setDate} 
