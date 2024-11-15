@@ -232,6 +232,7 @@ function JournalEntry() {
   }, [date])
 
   const onSubmit: SubmitHandler<FieldValues> = async (data: FieldValues) => {
+    console.log("Date on submit",date)
     // Check if all entries are null or empty
     if (!data.gratitude && !data.vent && !data.obligations && !data.mindset && !data.reflections && !data.trajectory && !data.ffo) {
       alert('Please fill in at least one entry before submitting.');
@@ -247,7 +248,7 @@ function JournalEntry() {
         reflections: data.reflections || null,
         trajectory: data.trajectory || null,
         ffo: data.ffo || null,
-        date: new Date().toISOString(),
+        date: date.toDateString(),
       };
   
       const response = await fetch('/api/journal', {
