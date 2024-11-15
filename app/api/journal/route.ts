@@ -16,8 +16,6 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
 
-    // Format the date to remove time component
-    const formattedDate = new Date(date).toDateString().split('T')[0]
     
     // Prepare the entry data
     const entryData = {
