@@ -78,7 +78,7 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
 
-    const formattedDate = new Date(date).toISOString().split('T')[0]
+    const formattedDate = new Date(date).toDateString().split('T')[0]
 
     const { data, error } = await supabase
       .from('journal_entries')
