@@ -31,52 +31,63 @@ interface HeaderProps {
 export function Header({ date, setDate, handleLogout, fetchJournalEntry, markedDates }: HeaderProps) {
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
-    fetchJournalEntry(newDate); // Fetch journal entry for the new date
+    fetchJournalEntry(newDate);
   };
 
-  return (  
-    <header className="bg-transparent shadow-md">
-      <div className="border-b">
-        <div className="container px-4">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex flex-1 items-center gap-2">
-              <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}>
-                <ChevronLeft className="h-5 w-5" />
-                <span className="sr-only">Previous day</span>
+  return (
+    <header className="border-b bg-background">
+      <div className="container flex h-14 items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="shrink-0"
+            onClick={() => handleDateChange(new Date(date.setDate(date.getDate() - 1)))}
+          >
+            <ChevronLeft className="h-5 w-5" />
+            <span className="sr-only">Previous day</span>
+          </Button>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" className="flex items-center gap-2">
+                <CalendarIcon className="h-4 w-4" />
+                <span className="hidden sm:inline-block font-normal">
+                  {format(date, "MMMM d, yyyy")}
+                </span>
               </Button>
-              
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span className="hidden sm:inline-block font-normal">
-                      {format(date, "MMMM d, yyyy")}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(date) => date && handleDateChange(date)}
-                    initialFocus
-                    markedDates={markedDates}
-                    setDate={setDate}
-                    fetchJournalEntry={fetchJournalEntry}
-                  />
-                </PopoverContent>
-              </Popover>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={(date) => date && handleDateChange(date)}
+                initialFocus
+                markedDates={markedDates}
+                setDate={setDate}
+                fetchJournalEntry={fetchJournalEntry}
+              />
+            </PopoverContent>
+          </Popover>
 
-          <Button variant="ghost" size="icon" className="shrink-0" onClick={() => handleDateChange(new Date(date.setDate(date.getDate() + 1)))}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="shrink-0"
+            onClick={() => handleDateChange(new Date(date.setDate(date.getDate() + 1)))}
+          >
             <ChevronRight className="h-5 w-5" />
             <span className="sr-only">Next day</span>
           </Button>
 
-          <Button variant="ghost" className="hidden sm:inline-block" onClick={() => handleDateChange(new Date())}>
+          <Button
+            variant="ghost"
+            className="hidden sm:inline-block"
+            onClick={() => handleDateChange(new Date())}
+          >
             Today
           </Button>
         </div>
-
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
@@ -115,12 +126,8 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry, markedD
           </DropdownMenu>
         </div>
       </div>
-
-      </div>
-    </div>
-    </header>  
+    </header>
   )
 }
 
 export default Header;
-
