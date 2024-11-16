@@ -13,8 +13,7 @@ export default function Component() {
   const router = useRouter()
   const supabase = createClientComponentClient()
   const [isLoading, setIsLoading] = useState(false)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession()
