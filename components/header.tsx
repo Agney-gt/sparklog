@@ -94,7 +94,7 @@ export function Header({ date, setDate, handleLogout, fetchJournalEntry, markedD
             <Trophy className="h-4 w-4 text-yellow-500" />
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Level 1</span>
+                <span className="text-sm font-medium ">Level 1</span>
                 <Badge variant="secondary" className="rounded-sm">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Novice Writer

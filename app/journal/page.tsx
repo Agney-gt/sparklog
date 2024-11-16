@@ -693,6 +693,12 @@ function JournalEntry() {
           </Button>
         </form>    
         </CardContent>
+        <div className="flex items-center justify-center h-full">
+  <h1 className="text-1xl font-bold tracking-tighter sm:text-1xl xl:text-1xl/none">
+    Journal with <span className="text-blue-600">inspiration</span>, not out of obligation!
+  </h1>
+</div>
+
       </Card>
     </div></div>
   )
