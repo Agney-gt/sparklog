@@ -111,13 +111,13 @@ export default function Component() {
           <div className="md:col-span-1">
             <h3 className="text-lg font-semibold">Resources</h3>
             <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/documentation">
                 Documentation
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/blog">
                 Blog
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/analytics">
                 Analytics
               </Link>
             </nav>
@@ -125,13 +125,13 @@ export default function Component() {
           <div className="md:col-span-1">
             <h3 className="text-lg font-semibold">Company</h3>
             <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/about">
                 About Us
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/careers">
                 Careers
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/contact">
                 Contact
               </Link>
             </nav>
@@ -139,10 +139,10 @@ export default function Component() {
           <div className="md:col-span-1">
             <h3 className="text-lg font-semibold">Legal</h3>
             <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/terms">
                 Terms of Service
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-primary" href="/privacy">
                 Privacy Policy
               </Link>
             </nav>
