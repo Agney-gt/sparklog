@@ -21,6 +21,7 @@ type JournalFormData = {
     made_happen: string;
   };
   vent: string;
+  notes: string;
   obligations: {
     bare_minimum: string;
     kaizen_goals: string;
@@ -68,6 +69,7 @@ type JournalFormData = {
 
 const ALL_TABS = [
   'Gratitude',
+  'DIY',
   'Vent',
   'Obligations',
   'Mindset',
@@ -115,7 +117,7 @@ function JournalEntry() {
             chance: data.gratitude?.chance || '',
             made_happen: data.gratitude?.made_happen || ''
           },
-          
+          notes: data.notes || '',
           vent: data.vent || '',
           
           obligations: {
@@ -173,6 +175,7 @@ function JournalEntry() {
             chance: '',
             made_happen: ''
           },
+          notes: '',
           vent: '',
           obligations: {
             bare_minimum: '',
@@ -242,6 +245,7 @@ function JournalEntry() {
       setIsLoading(true);
       const journalData: JournalFormData = {
         gratitude: data.gratitude || null,
+        notes: data.notes || null,
         vent: data.vent || null,
         obligations: data.obligations || null,
         mindset: data.mindset || null,
@@ -387,25 +391,33 @@ function JournalEntry() {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('gratitude.mundane')} placeholder="Something mundane you're grateful for..." />
-                      Something mundane
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Input {...register('gratitude.chance')} placeholder="A fortunate coincidence..." />
-                      Something that happened by chance
+                      <Textarea {...register('gratitude.chance')} placeholder="A fortunate coincidence..." />
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Input {...register('gratitude.made_happen')} placeholder="An achievement you're proud of..." />
-                      Something you made happen
+                      <Textarea {...register('gratitude.made_happen')} placeholder="An achievement you're proud of..." />
                     </label>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
-
+            <TabsContent value="DIY">
+              <Card className="border-none shadow-lg">
+                <CardContent className="p-6 space-y-4">
+                  <h2 className="text-2xl font-bold mb-4">Your Notes and Questions</h2>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      <Textarea {...register('notes')} placeholder="Add your own notes and questions and track them over time. All text fields are resizable, drag the box from the bottom right to change" />
+                      </label>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
             <TabsContent value="Vent">
               <Card className="border-none shadow-lg">
                 <CardContent className="p-6 space-y-4">
@@ -417,7 +429,6 @@ function JournalEntry() {
                         placeholder="Write freely about anything that's frustrating or bothering you. Let it all out without judgment or concern for how it sounds. Venting helps you get started and anger can help motivate us to do something."
                         className="resize-both h-48"
                       />
-                      Let it all out
                     </label>
                   </div>
                 </CardContent>
@@ -435,7 +446,6 @@ function JournalEntry() {
                         placeholder="List your bare minimum goals for the day. For example, 30 minutes of exercise."
                         className="resize-both h-24"
                       />
-                      Bare minimum goals
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -445,7 +455,6 @@ function JournalEntry() {
                         placeholder="List your high-quality improvement goals. For example, if you are feeling like it, be 1% better than yesterday and do 33 minutes of exercise."
                         className="resize-both h-24"
                       />
-                      High-quality improvement goals
                     </label>
                   </div>
                 </CardContent>
@@ -458,9 +467,8 @@ function JournalEntry() {
                   <h2 className="text-2xl font-bold mb-4">Mindset</h2>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Input {...register('mindset.affirmation')} placeholder="Your daily affirmation..." />
-                      Affirmation
-                    </label>
+                      <Textarea {...register('mindset.affirmation')} placeholder="Evidence backed affirmation work best! For example: 'I am healthy because i went for that 15 minute jog this morning'" />
+                      </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
@@ -469,7 +477,6 @@ function JournalEntry() {
                         placeholder="When something bad happens, analyze what objectively happened?"
                         className="resize-both h-24"
                       />
-                      Objective analysis
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -479,7 +486,6 @@ function JournalEntry() {
                         placeholder="What did you make it mean or what significance did you give to the event?"
                         className="resize-both h-24"
                       />
-                      Meaning and significance
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -489,7 +495,6 @@ function JournalEntry() {
                         placeholder="How would you comfort a friend in the same situation?"
                         className="resize-both h-24"
                       />
-                      Comforting a friend
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -499,7 +504,6 @@ function JournalEntry() {
                         placeholder="What mental gymnastics can you do to reframe this bad event into something positive or what did you learn from this event?"
                         className="resize-both h-24"
                       />
-                      Positive reframing
                     </label>
                   </div>
                 </CardContent>
@@ -513,67 +517,56 @@ function JournalEntry() {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.easier')} placeholder="What can I do to make everything easier?" className="resize-both h-20" />
-                      Making things easier
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="resize-both h-20" />
-                      Excitement
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="resize-both h-20" />
-                      Energy drainers
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="resize-both h-20" />
-                      Learnings
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="resize-both h-20" />
-                      Adding value
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="resize-both h-20" />
-                      Moving forward
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="resize-both h-20" />
-                      Message to past self
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.fightToGetBack')} placeholder="List 5 things you would fight to get back if they were taken away from you" className="resize-both h-24" />
-                      Things to fight for
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.wouldntFightFor')} placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" className="resize-both h-24" />
-                      Things not to fight for
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.pareto')} placeholder="What 20% of actions are producing 80% of results?" className="resize-both h-24" />
-                      Pareto principle
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea {...register('reflections.noFailure')} placeholder="If you knew you wouldn't fail, what would you do?" className="resize-both h-24" />
-                      Without failure
                     </label>
                   </div>
                 </CardContent>
@@ -584,6 +577,7 @@ function JournalEntry() {
               <Card className="border-none shadow-lg">
                 <CardContent className="p-6 space-y-4">
                   <h2 className="text-2xl font-bold mb-4">Trajectory</h2>
+                  <h3 className="text-1xl font-bold mb-4">Current</h3>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea
@@ -591,7 +585,6 @@ function JournalEntry() {
                         placeholder="Things you did that go against the target. For example, if your target is health and fitness, ordering from Uber Eats would come here."
                         className="resize-both h-24"
                       />
-                      Against the target
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -601,7 +594,6 @@ function JournalEntry() {
                         placeholder="Things you did that help achieve the target. For example, resisting impulse buys."
                         className="resize-both h-24"
                       />
-                      Towards the target
                     </label>
                   </div>
                   <div className="space-y-2">
@@ -614,6 +606,7 @@ function JournalEntry() {
                       Actionable items or rewards
                     </label>
                   </div>
+                  <h3 className="text-1xl font-bold mb-4">Future</h3>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
                       <Textarea

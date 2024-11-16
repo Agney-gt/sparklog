@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       date: date,
       gratitude: journalData.gratitude || {},
       vent: journalData.vent,
+      notes: journalData.notes,
       obligations: journalData.obligations || {},
       mindset: journalData.mindset || {},
       reflections: journalData.reflections || {},
