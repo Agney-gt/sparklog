@@ -386,7 +386,7 @@ function JournalEntry() {
                   <h2 className="text-2xl font-bold mb-4">Gratitude</h2>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Input {...register('gratitude.mundane')} placeholder="Something mundane you're grateful for..." />
+                      <Textarea {...register('gratitude.mundane')} placeholder="Something mundane you're grateful for..." />
                       Something mundane
                     </label>
                   </div>
@@ -415,7 +415,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('vent')}
                         placeholder="Write freely about anything that's frustrating or bothering you. Let it all out without judgment or concern for how it sounds. Venting helps you get started and anger can help motivate us to do something."
-                        className="resize-none h-48"
+                        className="resize-both h-48"
                       />
                       Let it all out
                     </label>
@@ -433,7 +433,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('obligations.bare_minimum')}
                         placeholder="List your bare minimum goals for the day. For example, 30 minutes of exercise."
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Bare minimum goals
                     </label>
@@ -443,7 +443,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('obligations.kaizen_goals')}
                         placeholder="List your high-quality improvement goals. For example, if you are feeling like it, be 1% better than yesterday and do 33 minutes of exercise."
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       High-quality improvement goals
                     </label>
@@ -467,7 +467,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('mindset.reframe.objective')}
                         placeholder="When something bad happens, analyze what objectively happened?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Objective analysis
                     </label>
@@ -477,7 +477,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('mindset.reframe.meaning')}
                         placeholder="What did you make it mean or what significance did you give to the event?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Meaning and significance
                     </label>
@@ -487,7 +487,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('mindset.reframe.comfort')}
                         placeholder="How would you comfort a friend in the same situation?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Comforting a friend
                     </label>
@@ -497,7 +497,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('mindset.reframe.positive')}
                         placeholder="What mental gymnastics can you do to reframe this bad event into something positive or what did you learn from this event?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Positive reframing
                     </label>
@@ -512,67 +512,67 @@ function JournalEntry() {
                   <h2 className="text-2xl font-bold mb-4">Insights</h2>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.easier')} placeholder="What can I do to make everything easier?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.easier')} placeholder="What can I do to make everything easier?" className="resize-both h-20" />
                       Making things easier
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.excited')} placeholder="What excited me today?" className="resize-both h-20" />
                       Excitement
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.drained')} placeholder="What drained energy?" className="resize-both h-20" />
                       Energy drainers
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.learned')} placeholder="What did I learn?" className="resize-both h-20" />
                       Learnings
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.value')} placeholder="How can I add value to others and benefit from service to others?" className="resize-both h-20" />
                       Adding value
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.needle')} placeholder="How do I push the needle forward?" className="resize-both h-20" />
                       Moving forward
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="resize-none h-20" />
+                      <Textarea {...register('reflections.past_self')} placeholder="If you wanted to tell your past self something, what would it be?" className="resize-both h-20" />
                       Message to past self
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.fightToGetBack')} placeholder="List 5 things you would fight to get back if they were taken away from you" className="resize-none h-24" />
+                      <Textarea {...register('reflections.fightToGetBack')} placeholder="List 5 things you would fight to get back if they were taken away from you" className="resize-both h-24" />
                       Things to fight for
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.wouldntFightFor')} placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" className="resize-none h-24" />
+                      <Textarea {...register('reflections.wouldntFightFor')} placeholder="List 5 things you wouldn't fight to get back if they were taken away from you" className="resize-both h-24" />
                       Things not to fight for
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.pareto')} placeholder="What 20% of actions are producing 80% of results?" className="resize-none h-24" />
+                      <Textarea {...register('reflections.pareto')} placeholder="What 20% of actions are producing 80% of results?" className="resize-both h-24" />
                       Pareto principle
                     </label>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      <Textarea {...register('reflections.noFailure')} placeholder="If you knew you wouldn't fail, what would you do?" className="resize-none h-24" />
+                      <Textarea {...register('reflections.noFailure')} placeholder="If you knew you wouldn't fail, what would you do?" className="resize-both h-24" />
                       Without failure
                     </label>
                   </div>
@@ -589,7 +589,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.current.against')}
                         placeholder="Things you did that go against the target. For example, if your target is health and fitness, ordering from Uber Eats would come here."
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Against the target
                     </label>
@@ -599,7 +599,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.current.towards')}
                         placeholder="Things you did that help achieve the target. For example, resisting impulse buys."
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Towards the target
                     </label>
@@ -609,7 +609,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.current.actionable')}
                         placeholder="Actionable items or rewards. For example, added to savings."
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Actionable items or rewards
                     </label>
@@ -619,7 +619,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.longTerm.past')}
                         placeholder="What did you want 5 years back?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       5 years ago
                     </label>
@@ -629,7 +629,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.longTerm.present')}
                         placeholder="What do you want now?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Present desires
                     </label>
@@ -639,7 +639,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('trajectory.longTerm.future')}
                         placeholder="What do you want 5 years in the future?"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       5 years from now
                     </label>
@@ -657,7 +657,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('ffo.fears')}
                         placeholder="E.g., I'm worried no one is going to look at my content"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Fears
                     </label>
@@ -667,7 +667,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('ffo.fixes')}
                         placeholder="E.g., Post it everywhere"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Fixes
                     </label>
@@ -677,7 +677,7 @@ function JournalEntry() {
                       <Textarea
                         {...register('ffo.outcomes')}
                         placeholder="E.g., Even if a single person benefits, it's great"
-                        className="resize-none h-24"
+                        className="resize-both h-24"
                       />
                       Outcomes
                     </label>
