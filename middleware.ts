@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Protect routes except login
-  if (!session && req.nextUrl.pathname !== '/login') {
+  if (!session && req.nextUrl.pathname === '/journal') {
     const redirectUrl = new URL('/login', req.url)
     return NextResponse.redirect(redirectUrl)
   }
