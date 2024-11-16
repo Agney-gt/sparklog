@@ -12,27 +12,28 @@ interface ReflectionPoint {
 const reflectionPoints: ReflectionPoint[] = [
   {
     title: "Focused Reflection",
-    description: "Thinking about questions like 'What made me feel good today?' helps you begin to notice patterns if done consistently. For example, if creative tasks boost your energy, you can plan your day to stay productive and reach your goals."
+    description: "By asking, <strong>'What did I learn from my actions today?'</strong> you shift from simply reacting to reflecting with focus, turning each experience into valuable insight for growth."
   },
   {
     title: "Progress Tracking",
-    description: "By regularly asking 'What progress did I make toward my goals this week?', you cross the threshold from just dreaming to actively creating your story of growth. Fuel your affirmations with evidence."
+    description: "By asking, <strong>'What progress did I make toward my goals this week?'</strong> you move from dreaming to actively shaping your growth story, using real achievements to power your affirmations."
   },
   {
     title: "Enhanced Self-Awareness",
-    description: "Questions like 'What triggered me emotionally today?' help you face the trials and challenges along your journey and spot stress causes, like noise or change. This awareness lets you make proactive changes to reduce distractions and stay focused."
+    description: 
+                 "'<em>The happiness of your life depends upon the quality of your thoughts.</em>'<br /> – Marcus Aurelius"
   },
   {
     title: "Accountability",
-    description: "Reflecting on 'What promise did I keep to myself this week?' builds accountability and creates catharsis. Over time, you'll spot patterns and feel motivated to make improvements."
+    description: "'<em>It is not death that a man should fear, but he should fear never beginning to live.</em>'<br />– Marcus Aurelius" 
   },
   {
     title: "Intentional Growth",
-    description: "Over time, these small, steady actions bring clarity and drive progress toward important goals like gaining expertise or forming better habits."
+    description: "'<em>The impediment to action advances action. What stands in the way becomes the way.</em>'<br />– Marcus Aurelius"
   },
   {
     title: "Problem-Solving",
-    description: "Answering 'What's one challenge I faced today, and how did I respond?' creates catharsis by revealing patterns like overthinking. This clarity helps you better understand ourselves and others."
+    description: "By asking, <strong>'What challenge did I face today, and how did I respond?'</strong> you can see how overthinking a task might delay action, helping you understand both your own behavior and others' responses."
   }
 ];
 
@@ -116,7 +117,7 @@ export default function AnimatedReflectionProgress() {
               className="bg-blue-50 p-6 rounded-lg"
             >
               <h2 className="text-xl font-semibold mb-4">{reflectionPoints[currentIndex].title}</h2>
-              <p className="text-gray-700">{reflectionPoints[currentIndex].description}</p>
+              <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: reflectionPoints[currentIndex].description }} />
             </motion.div>
           </AnimatePresence>
         </div>
