@@ -12,29 +12,30 @@ interface ReflectionPoint {
 const reflectionPoints: ReflectionPoint[] = [
   {
     title: "Focused Reflection",
-    description: "Structured questions zero in on critical areas of your life. For example, answering \"What energized me today?\" over a month might reveal patterns, such as how social interactions boost your motivation on workdays but deplete your energy on weekends. This clarity helps refine your schedule for optimal productivity."
+    description: "Consistent reflection on structured questions, such as \"What energized me today?\", reveals patterns over time. For example, noticing that creative tasks boost your energy on weekdays can inform your scheduling for sustained productivity. Compounding these insights deepens your understanding of how to align your energy with your goals."
   },
   {
     title: "Progress Tracking",
-    description: "By journaling responses to \"What progress did I make toward my goals this week?\", you create a narrative of growth. Over a month, you may notice recurring obstacles, like procrastination on administrative tasks, and take steps to address them by delegating or scheduling them earlier in the day."
+    description: "By answering \"What progress did I make toward my goals this week?\" regularly, you create a compounding narrative of growth. Over time, recurring themes, like delays in specific tasks, become clear, empowering you to implement actionable steps for improvement, such as better time management or delegation."
   },
   {
     title: "Enhanced Self-Awareness",
-    description: "Questions like \"What triggered me emotionally today?\" invite deeper introspection. A month of responses might highlight that specific situations, like unclear feedback from colleagues, consistently frustrate you. Recognizing this pattern can prompt you to address communication habits or clarify expectations proactively."
+    description: "Questions like \"What triggered me emotionally today?\" encourage consistent emotional release and introspection. Over weeks, you might notice that unclear feedback or missed deadlines are key stressors. This self-awareness can prompt proactive communication or boundary-setting to improve clarity and reduce frustration."
   },
   {
     title: "Accountability",
-    description: "Structured journaling revisits goals consistently. Consider the question \"What promise did I keep to myself this week?\" Over time, you'll notice where you're excelling or falling short, such as committing to regular exercise but skipping meal prep. This reflection can motivate adjustments for better adherence."
+    description: "Reflecting on \"What promise did I keep to myself this week?\" builds accountability. Compounding these reflections over time reveals trends, such as excelling in fitness but falling short in consistent journaling. This catharsis highlights areas needing adjustment and fuels motivation for intentional action."
   },
   {
     title: "Intentional Growth",
-    description: "Consistently reflecting on \"What one action can I take tomorrow to align with my long-term goals?\" transforms aspirations into achievable steps. Over a month, you might observe a clear pathway forming, such as daily learning sessions stacking up to master a new skill."
+    description: "Journaling \"What one action can I take tomorrow to align with my long-term goals?\" consistently transforms inspiration into tangible progress. Over a month, these small, compounded actions create a roadmap for significant milestones, such as building expertise or fostering better habits."
   },
   {
     title: "Problem-Solving",
-    description: "Addressing \"What's one challenge I faced today, and how did I respond?\" fosters analytical thinking. After a month, you might see patterns like overthinking simple problems or missing key steps. These insights can inform strategies, like using decision frameworks or prioritizing tasks more effectively."
+    description: "Answering \"What's one challenge I faced today, and how did I respond?\" enhances analytical thinking. Over time, patterns like repeated overthinking or skipping crucial steps become evident. This clarity allows for compounding solutions, such as simplifying decisions with frameworks or prioritizing effectively, leading to creative breakthroughs."
   }
-]
+];
+
 
 interface CircularProgressIndicatorProps {
   progress: number
@@ -102,7 +103,6 @@ export default function AnimatedReflectionProgress() {
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold text-center mb-8"><span className="text-blue-600">Unlocking Clarity, Growth and Flow</span></h1>
       <div className="flex flex-col md:flex-row items-center justify-between mb-8">
         <CircularProgressIndicator progress={progress} />
         <div className="mt-8 md:mt-0 md:ml-8 flex-1">
