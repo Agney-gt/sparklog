@@ -12,27 +12,27 @@ interface ReflectionPoint {
 const reflectionPoints: ReflectionPoint[] = [
   {
     title: "Focused Reflection",
-    description: "Consistent reflection on structured questions, such as \"What energized me today?\", reveals patterns over time. For example, noticing that creative tasks boost your energy on weekdays can inform your scheduling for sustained productivity. Compounding these insights deepens your understanding of how to align your energy with your goals."
+    description: "Thinking about questions like 'What made me feel good today?' helps you begin to notice patterns if done consistently. For example, if creative tasks boost your energy, you can plan your day to stay productive and reach your goals."
   },
   {
     title: "Progress Tracking",
-    description: "By answering \"What progress did I make toward my goals this week?\" regularly, you create a compounding narrative of growth. Over time, recurring themes, like delays in specific tasks, become clear, empowering you to implement actionable steps for improvement, such as better time management or delegation."
+    description: "By regularly asking 'What progress did I make toward my goals this week?', you cross the threshold from just dreaming to actively creating your story of growth. Fuel your affirmations with evidence."
   },
   {
     title: "Enhanced Self-Awareness",
-    description: "Questions like \"What triggered me emotionally today?\" encourage consistent emotional release and introspection. Over weeks, you might notice that unclear feedback or missed deadlines are key stressors. This self-awareness can prompt proactive communication or boundary-setting to improve clarity and reduce frustration."
+    description: "Questions like 'What triggered me emotionally today?' help you face the trials and challenges along your journey and spot stress causes, like noise or change. This awareness lets you make proactive changes to reduce distractions and stay focused."
   },
   {
     title: "Accountability",
-    description: "Reflecting on \"What promise did I keep to myself this week?\" builds accountability. Compounding these reflections over time reveals trends, such as excelling in fitness but falling short in consistent journaling. This catharsis highlights areas needing adjustment and fuels motivation for intentional action."
+    description: "Reflecting on 'What promise did I keep to myself this week?' builds accountability and creates catharsis. Over time, you'll spot patterns and feel motivated to make improvements."
   },
   {
     title: "Intentional Growth",
-    description: "Journaling \"What one action can I take tomorrow to align with my long-term goals?\" consistently transforms inspiration into tangible progress. Over a month, these small, compounded actions create a roadmap for significant milestones, such as building expertise or fostering better habits."
+    description: "Over time, these small, steady actions bring clarity and drive progress toward important goals like gaining expertise or forming better habits."
   },
   {
     title: "Problem-Solving",
-    description: "Answering \"What's one challenge I faced today, and how did I respond?\" enhances analytical thinking. Over time, patterns like repeated overthinking or skipping crucial steps become evident. This clarity allows for compounding solutions, such as simplifying decisions with frameworks or prioritizing effectively, leading to creative breakthroughs."
+    description: "Answering 'What's one challenge I faced today, and how did I respond?' creates catharsis by revealing patterns like overthinking. This clarity helps you better understand ourselves and others."
   }
 ];
 
