@@ -26,7 +26,6 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date>(); // State for selected date
-  console.log(markedDates)
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
     fetchJournalEntry(newDate); // Fetch journal entry for the new date
@@ -81,23 +80,37 @@ function Calendar({
       }}
       
         components={{
-        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () => <ChevronRight className="h-4 w-4" />,
-        Day: ({ date }: DayProps) => (
-          <div className="relative" onClick={() => { 
-            console.log(date)
-            setSelectedDate(date);
-            handleDateChange(date);
-             // Call handleDateChange here
-          }}>
-            <div className={cn("h-9 w-9 text-center", { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() })}>
-              {date.getDate()}
-              {isMarkedDate(date) && (
-                <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span>
-              )}
+        IconLeft: () => null,
+        IconRight: () => null,
+        Day: ({ date }: DayProps) => {
+          const isOutsideDate = props.month ? date.getMonth() !== props.month.getMonth() : false;
+          
+          return (
+            <div 
+              className={cn(
+                "relative", 
+                isOutsideDate && "pointer-events-none opacity-30"
+              )} 
+              onClick={() => {
+                if (!isOutsideDate) {
+                  console.log(date);
+                  setSelectedDate(date);
+                  handleDateChange(date);
+                }
+              }}
+            >
+              <div className={cn(
+                "h-9 w-9 text-center flex items-center justify-center", 
+                { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() },
+              )}>
+                {date.getDate()}
+                {isMarkedDate(date) && (
+                  <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span>
+                )}
+              </div>
             </div>
-          </div>
-        ),
+          );
+        },
       }}
       {...props}
     />

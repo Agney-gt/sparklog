@@ -21,14 +21,8 @@ export async function POST(request: Request) {
     const entryData = {
       user_id: user?.id,
       date: date,
-      gratitude: journalData.gratitude || {},
-      vent: journalData.vent,
       notes: journalData.notes,
-      obligations: journalData.obligations || {},
-      mindset: journalData.mindset || {},
-      reflections: journalData.reflections || {},
-      trajectory: journalData.trajectory || {},
-      ffo: journalData.ffo || {}
+      
     }
 
     // Upsert the entry (update if exists, insert if not)
@@ -79,7 +73,8 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
 
-    const formattedDate = new Date(date).toDateString().split('T')[0]
+    // Format date properly for PostgreSQL
+    const formattedDate = date.split('T')[0] // This will keep the YYYY-MM-DD format
 
     const { data, error } = await supabase
       .from('journal_entries')
