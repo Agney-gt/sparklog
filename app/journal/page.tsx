@@ -16,8 +16,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Camera, FileAudio, FileVideo, ListTodo, Tags, Timer, Type } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
-import { useToast } from "@/components/ui/use-toast"
-import { Toaster } from "@/components/ui/toaster"
 
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -25,9 +23,8 @@ export default function Component() {
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
   const [journalContent, setJournalContent] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isSaving, setIsSaving] = React.useState(false);
-  const { toast } = useToast();
-
+  const [isSaving] = React.useState(false);
+  
   // Generate an array of dates for the past 5 years plus current year
   const calendarMonths = React.useMemo(() => {
     const currentDate = new Date()
@@ -230,7 +227,7 @@ export default function Component() {
           )}
         </CardContent>
       </Card>
-      <Toaster />
+      
     </div>
   )
 }
