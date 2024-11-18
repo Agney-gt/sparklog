@@ -33,8 +33,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange }) => {
         hideToolbar={false}
         enableScroll={true}
         textareaProps={{
-          placeholder: `Markdown Guide:
-H1 Header ## H2 Subheader ### H3 Smaller Header Bold | Italic | Strikethrough Create a bullet list using "-" or "*". 1. Numbered list: Start lines with "1.", "2.", etc. > Use ">" for blockquotes. Inline code wraps text in single backticks. Use triple backticks for code blocks. Example: console.log('Hello, World!'); Link text creates a hyperlink. `,
+          placeholder: `Markdown allows you to easily format text using simple symbols. For example, using # for headings or * for bullet points lets you create well-structured, readable entries without the need for a complex interface or tool. This means less time fiddling with menus and more time reflecting on your thoughts.`,
         }}
       />
     </div>
