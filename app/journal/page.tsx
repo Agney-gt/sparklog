@@ -11,7 +11,6 @@ import { Loader2 } from 'lucide-react'
 
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  const [entryType, setEntryType] = React.useState("text")
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
   const [journalContent, setJournalContent] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState(false);
