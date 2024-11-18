@@ -1,5 +1,6 @@
 'use client'
 
+import MarkdownEditor from "@/components/markdown-editor"
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
@@ -103,7 +104,7 @@ export default function Component() {
     <div className="flex flex-col lg:flex-row h-screen max-h-screen w-full gap-4 p-4">
       <Card className="lg:w-80 w-full flex-shrink-0 h-auto lg:h-full">
         <CardHeader className="p-4">
-          <h2 className="font-semibold">Journal Calendar</h2>
+          <h2 className="font-semibold">Calendar</h2>
         </CardHeader>
         <CardContent className="p-2">
           <ScrollArea className="h-[300px] lg:h-[calc(100vh-8rem)]">
@@ -143,71 +144,19 @@ export default function Component() {
           </p>
         </CardHeader>
         <CardContent className="p-4">
-          <div className="mb-4">
-            <Select value={entryType} onValueChange={setEntryType}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select entry type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="text">
-                  <span className="flex items-center gap-2">
-                    <Type className="h-4 w-4" />
-                    Text Entry
-                  </span>
-                </SelectItem>
-                <SelectItem value="image">
-                  <span className="flex items-center gap-2">
-                    <Camera className="h-4 w-4" />
-                    Images
-                  </span>
-                </SelectItem>
-                <SelectItem value="audio">
-                  <span className="flex items-center gap-2">
-                    <FileAudio className="h-4 w-4" />
-                    Audio
-                  </span>
-                </SelectItem>
-                <SelectItem value="video">
-                  <span className="flex items-center gap-2">
-                    <FileVideo className="h-4 w-4" />
-                    Video
-                  </span>
-                </SelectItem>
-                <SelectItem value="tasks">
-                  <span className="flex items-center gap-2">
-                    <ListTodo className="h-4 w-4" />
-                    Tasks
-                  </span>
-                </SelectItem>
-                <SelectItem value="tags">
-                  <span className="flex items-center gap-2">
-                    <Tags className="h-4 w-4" />
-                    Tags
-                  </span>
-                </SelectItem>
-                <SelectItem value="timer">
-                  <span className="flex items-center gap-2">
-                    <Timer className="h-4 w-4" />
-                    Auto Timer
-                  </span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          
           {isLoading ? (
             <div className="flex items-center justify-center min-h-[200px] lg:min-h-[300px]">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : (
             <>
-              {entryType === "text" && (
-                <Textarea 
-                  placeholder="Write your journal entry here..."
-                  className="min-h-[200px] lg:min-h-[300px]"
-                  value={journalContent}
-                  onChange={(e) => setJournalContent(e.target.value)}
-                />
-              )}
+              {
+                <MarkdownEditor 
+                value={journalContent}
+                onChange={(value) => setJournalContent(value)}
+              />
+              }
               {/* ... other entry types ... */}
               <Button 
                 className="mt-4 w-full lg:w-auto"
