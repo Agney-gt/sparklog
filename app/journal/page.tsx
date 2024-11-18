@@ -5,16 +5,7 @@ import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Camera, FileAudio, FileVideo, ListTodo, Tags, Timer, Type } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
 
