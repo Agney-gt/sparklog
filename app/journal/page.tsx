@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
-import { CharacterTree } from "@/components/character-tree"
 
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
