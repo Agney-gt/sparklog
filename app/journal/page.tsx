@@ -166,7 +166,7 @@ export default function Component() {
             </>
           )}
         </CardContent>
-        //<CharacterTree />
+        <CharacterTree />
       </Card>
       
       

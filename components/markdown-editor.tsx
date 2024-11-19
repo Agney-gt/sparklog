@@ -62,7 +62,7 @@ export default function Component({
         hideToolbar={false}
         enableScroll
         textareaProps={{
-          placeholder: 'Markdown allows you to easily format text using simple symbols. For example, using # for headings or * for bullet points lets you create well-structured, readable entries without the need for a complex interface or tool. This means less time fiddling with menus and more time reflecting on your thoughts.',
+          placeholder: 'Try a Quest! 🚀 Prefix your journal entry with the quest title as header. For example, "# A Noble Crown" or "# Shining Brightly". Quests will be completed after 3 days of journaling. ',
           'aria-label': 'Markdown editor',
         }}
         previewOptions={{
