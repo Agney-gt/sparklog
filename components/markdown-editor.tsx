@@ -19,7 +19,7 @@ const MDEditor = dynamic(
 
 export default function Component({ 
   value = '', 
-  onChange = (val: string) => void 0 
+  onChange = () => {} 
 }: { 
   value?: string
   onChange?: (value: string) => void 
