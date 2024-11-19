@@ -1,43 +1,74 @@
 'use client'
 
-import React from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
+import { Card } from "@/components/ui/card"
+import "@uiw/react-md-editor/markdown-editor.css"
+import "@uiw/react-markdown-preview/markdown.css"
 
-// Dynamically import MDEditor to avoid SSR issues
+// Dynamically import MDEditor with loading fallback
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor").then((mod) => mod.default),
-  { ssr: false }
-);
+  { 
+    ssr: false,
+    loading: () => (
+      <Card className="w-full h-[400px] animate-pulse bg-muted" />
+    )
+  }
+)
 
-interface MarkdownEditorProps {
-  value: string
-  onChange: (value: string) => void
-}
+export default function Component({ 
+  value = '', 
+  onChange = (val: string) => void 0 
+}: { 
+  value?: string
+  onChange?: (value: string) => void 
+}) {
+  // Debounced value for performance
+  const [localValue, setLocalValue] = useState(value)
 
-const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange }) => {
-  // Create a data-color-mode attribute handler for dark mode
-  React.useEffect(() => {
-    document.documentElement.setAttribute('data-color-mode', 'light');
-  }, []);
+  // Debounced onChange handler
+  const debouncedOnChange = useCallback((val: string | undefined) => {
+    const timeoutId = setTimeout(() => {
+      onChange(val || '')
+    }, 100)
+    return () => clearTimeout(timeoutId)
+  }, [onChange])
+
+  // Handle value changes with debouncing
+  const handleChange = useCallback((val: string | undefined) => {
+    setLocalValue(val || '')
+    debouncedOnChange(val)
+  }, [debouncedOnChange])
+
+  // Set color mode for the editor
+  useEffect(() => {
+    document.documentElement.setAttribute('data-color-mode', 'light')
+    
+    // Cleanup on unmount
+    return () => {
+      document.documentElement.removeAttribute('data-color-mode')
+    }
+  }, [])
 
   return (
     <div className="w-full">
       <MDEditor
-        value={value}
-        onChange={(val) => onChange(val || '')}
+        value={localValue}
+        onChange={handleChange}
         preview="edit"
         height={400}
         visibleDragbar={false}
         hideToolbar={false}
-        enableScroll={true}
+        enableScroll
         textareaProps={{
-          placeholder: `Markdown allows you to easily format text using simple symbols. For example, using # for headings or * for bullet points lets you create well-structured, readable entries without the need for a complex interface or tool. This means less time fiddling with menus and more time reflecting on your thoughts.`,
+          placeholder: 'Markdown allows you to easily format text using simple symbols. For example, using # for headings or * for bullet points lets you create well-structured, readable entries without the need for a complex interface or tool. This means less time fiddling with menus and more time reflecting on your thoughts.',
+          'aria-label': 'Markdown editor',
+        }}
+        previewOptions={{
+          className: 'prose prose-sm max-w-none dark:prose-invert',
         }}
       />
     </div>
   )
 }
-
-export default MarkdownEditor
