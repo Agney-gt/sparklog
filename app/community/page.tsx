@@ -7,9 +7,13 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Trophy } from "lucide-react"
-
+interface UserProgress {
+    user_id: string
+    user_name: string
+    level: number
+  }
 export default function LeaderboardPage() {
-    const [leaderboardData, setLeaderboardData] = React.useState<any[]>([])
+    const [leaderboardData, setLeaderboardData] = React.useState<UserProgress[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const supabase = createClientComponentClient()
   
