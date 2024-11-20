@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
 import { CharacterTree } from "@/components/character-tree"
+import { ActionWorkbook } from "@/components/action-workbook"
 
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -167,6 +168,7 @@ export default function Component() {
           )}
         </CardContent>
         <CharacterTree />
+        <ActionWorkbook />
       </Card>
       
       
