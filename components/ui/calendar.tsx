@@ -97,7 +97,7 @@ function Calendar({
                   handleDateChange(date);
                 }
               }}
-            >
+            role='button'>
               <div className={cn(
                 "h-9 w-9 text-center flex items-center justify-center", 
                 { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() },
