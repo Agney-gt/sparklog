@@ -13,6 +13,11 @@ interface UserProgress {
     level: number
   }
 export default function LeaderboardPage() {
+  const rankColorMap : Record<number, string> = {
+    0: 'text-yellow-500',  // Gold for 1st place
+    1: 'text-gray-400',    // Silver for 2nd place
+    2: 'text-amber-600',   // Bronze for 3rd place
+  };
     const [leaderboardData, setLeaderboardData] = React.useState<UserProgress[]>([])
     const [isLoading, setIsLoading] = React.useState(true)
     const supabase = createClientComponentClient()
@@ -65,12 +70,7 @@ export default function LeaderboardPage() {
                     className="flex items-center justify-between p-4 rounded-lg bg-muted/50"
                   >
                     <div className="flex items-center gap-4">
-                      <span className={`text-lg font-semibold ${
-                        index === 0 ? 'text-yellow-500' :
-                        index === 1 ? 'text-gray-400' :
-                        index === 2 ? 'text-amber-600' :
-                        'text-gray-600'
-                      }`}>
+                    <span className={`text-lg font-semibold ${rankColorMap[index] || 'text-gray-600'}`}>
                         #{index + 1}
                       </span>
                       <div>

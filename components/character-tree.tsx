@@ -866,7 +866,18 @@ const questMap = {
     'from-lime-500 to-lime-600',
     'from-emerald-500 to-emerald-600',
   ]
-
+  const gridLayoutMap = {
+    'character': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+    'conflict': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+    'consequences': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+    'discipline': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+    'family': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+    'honesty': 'grid-cols-1 sm:grid-cols-2',
+    'patience': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+    'simplicity': 'grid-cols-1 sm:grid-cols-2',
+    'speech': 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+  };
+  const defaultGridLayout = 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5';
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 p-2 sm:p-6">
       <Card className="max-w-6xl mx-auto bg-black/20 border-slate-700">
@@ -972,27 +983,7 @@ const questMap = {
         </CardHeader>
         <CardContent className="p-2 sm:p-6">
           <div className="relative">
-            <div className={`relative grid ${
-              selectedPath === 'character' 
-                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5' 
-                : selectedPath === 'conflict' 
-                  ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3' 
-                  : selectedPath === 'consequences'
-                    ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                    : selectedPath === 'discipline'
-                      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5'
-                      : selectedPath === 'family'
-                        ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3'
-                        : selectedPath === 'honesty'
-                          ? 'grid-cols-1 sm:grid-cols-2'
-                          : selectedPath === 'patience'
-                            ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                            : selectedPath === 'simplicity'
-                              ? 'grid-cols-1 sm:grid-cols-2'
-                              : selectedPath === 'speech'
-                                ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                                : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5'
-            } gap-4 items-center`}>
+          <div className={`relative grid ${gridLayoutMap[selectedPath as keyof typeof gridLayoutMap] || defaultGridLayout} gap-4 items-center`}>
               {currentQuests.map((quest, index) => (
                 <div key={index} className="flex justify-center py-8">
                   <TooltipProvider>
