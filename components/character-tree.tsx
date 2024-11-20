@@ -839,26 +839,18 @@ export function CharacterTree() {
     
     // Add remaining quests following the same structure
 ];
-
-  const currentQuests = selectedPath === 'character' 
-    ? characterQuests 
-    : selectedPath === 'conflict' 
-      ? conflictQuests 
-      : selectedPath === 'consequences'
-        ? consequenceQuests
-        : selectedPath === 'discipline'
-          ? disciplineQuests
-          : selectedPath === 'family'
-            ? familyQuests
-            : selectedPath === 'honesty'
-              ? honestyQuests
-              : selectedPath === 'patience'
-                ? patienceQuests
-                : selectedPath === 'simplicity'
-                  ? simplicityQuests
-                  : selectedPath === 'speech'
-                    ? speechQuests
-                    : wisdomQuests
+const questMap = {
+  'character': characterQuests,
+  'conflict': conflictQuests,
+  'consequences': consequenceQuests,
+  'discipline': disciplineQuests,
+  'family': familyQuests,
+  'honesty': honestyQuests,
+  'patience': patienceQuests,
+  'simplicity': simplicityQuests,
+  'speech': speechQuests,
+};
+  const currentQuests = questMap[selectedPath as keyof typeof questMap] || wisdomQuests;
   const questColors = [
     'from-amber-500 to-amber-600',
     'from-blue-500 to-blue-600',
