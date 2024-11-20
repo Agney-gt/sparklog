@@ -176,8 +176,11 @@ export function ActionWorkbook() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex items-center justify-center h-[400px] flex-col">
+        <Loader2 className="h-8 w-8 animate-spin mb-4" />
+        <p className="text-center text-sm text-gray-600">
+        Preparing your workbook... this won't take more than a minute!
+        </p>
       </div>
     )
   }
@@ -185,7 +188,6 @@ export function ActionWorkbook() {
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Consistency Workbook</h1>
-      <h3 className="text-1xl font-bold mb-6">Record your journey to consistency and celebrate when new habits stick. </h3>
       <div className="mb-6 flex gap-4">
         <Input
           placeholder="Type your Classifier here"
@@ -215,8 +217,8 @@ export function ActionWorkbook() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[200px]">Classifier</TableHead>
-              <TableHead className="w-[400px]">Action</TableHead>
-              <TableHead className="text-center">Completed</TableHead>
+              <TableHead className="w-[400px]">7 Day Streak</TableHead>
+              <TableHead className="text-center">Reward When Habit Sticks</TableHead>
               <TableHead className="w-[100px]">Delete</TableHead>
             </TableRow>
           </TableHeader>

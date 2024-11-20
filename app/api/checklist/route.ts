@@ -22,7 +22,6 @@ export async function GET(request: Request) {
       .from('checklist_items')
       .select('*')
       .eq('user_id', user?.id)
-      .eq('date', date)
       .order('created_at', { ascending: true })
 
     if (error) throw error
