@@ -64,7 +64,7 @@ export default function Component() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button size="lg" onClick={handleGoogleLogin} disabled={isLoading}>
-                    {isLoading ? 'Loading...' : 'Evolve with Intention'}
+                    {isLoading ? 'Loading...' : 'Login with Google'}
                   </Button>
                 </div>
               
