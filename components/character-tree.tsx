@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { 
   Lightbulb, 
   Scale, 
@@ -879,22 +878,15 @@ const questMap = {
   };
   const defaultGridLayout = 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5';
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 p-2 sm:p-6">
+    <div className="w-full h-min bg-gradient-to-b from-slate-900 to-slate-800 p-2 sm:p-6">
       <Card className="max-w-6xl mx-auto bg-black/20 border-slate-700">
         <CardHeader className="border-b border-slate-700">
           <div className="flex flex-col space-y-4">
             <div>
-              <CardTitle className="text-slate-100">Quests</CardTitle>
+              <CardTitle className="text-slate-100">Scroll through the questlines if you dare...</CardTitle>
             </div>
             <div className="relative flex items-center">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="absolute left-0 z-10 hidden md:flex" 
-                onClick={() => scrollCategories('left')}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+              
               <ScrollArea className="w-full">
                 <div ref={scrollContainerRef} className="flex gap-2 px-4 pb-4 overflow-x-auto hide-scrollbar">
                   <Button 
@@ -970,14 +962,7 @@ const questMap = {
                 </div>
                 <ScrollBar orientation="horizontal" className="hidden" />
               </ScrollArea>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="absolute right-0 z-10 hidden md:flex" 
-                onClick={() => scrollCategories('right')}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+              
             </div>
           </div>
         </CardHeader>
@@ -986,64 +971,31 @@ const questMap = {
           <div className={`relative grid ${gridLayoutMap[selectedPath as keyof typeof gridLayoutMap] || defaultGridLayout} gap-4 items-center`}>
               {currentQuests.map((quest, index) => (
                 <div key={index} className="flex justify-center py-8">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <button
-                          onClick={() => setSelectedQuest(quest)}
-                          className={`w-16 h-16 rounded-full bg-gradient-to-br ${questColors[index]} flex items-center justify-center transform transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900`}
-                        >
-                          {quest.icon}
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="max-w-[300px] p-4">
-                        <div className="space-y-2">
-                          <p className="font-semibold text-lg">{quest.title}</p>
-                          <p className="text-sm italic">{quest.verse}</p>
-                          <div className="pt-2">
-                            <p className="font-medium">Question:</p>
-                            <p className="text-sm">{quest.question}</p>
-                          </div>
-                          <div>
-                            <p className="font-medium">Description:</p>
-                            <p className="text-sm">{quest.description}</p>
-                          </div>
-                          <div>
-                            <p className="font-medium">Benefits:</p>
-                            <p className="text-sm">{quest.benefits}</p>
-                          </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        onClick={() => setSelectedQuest(quest)}
+                        className={`w-16 h-16 rounded-full bg-gradient-to-br ${questColors[index]} flex items-center justify-center transform transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900`}
+                      >
+                        {quest.icon}
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent side="top" className="max-w-[300px] p-4">
+                      <div className="space-y-2">
+                        <p className="font-semibold text-lg">{quest.title}</p>
+                        <p className="text-sm text-muted-foreground">{quest.verse}</p>
+                        <p className="text-sm">{quest.description}</p>
+                        <p className="text-sm font-medium">{quest.benefits}</p>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Selected Quest Details */}
-          {selectedQuest && (
-            <Card className="mt-6 bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-slate-100">{selectedQuest.title}</CardTitle>
-                <CardDescription className="text-slate-400">{selectedQuest.verse}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-slate-100">Daily Question</h3>
-                  <p className="text-sm text-slate-400">{selectedQuest.question}</p>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-slate-100">Description</h3>
-                  <p className="text-sm text-slate-400">{selectedQuest.description}</p>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-slate-100">Benefits</h3>
-                  <p className="text-sm text-slate-400">{selectedQuest.benefits}</p>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          
         </CardContent>
       </Card>
     </div>
