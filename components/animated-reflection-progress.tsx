@@ -11,29 +11,29 @@ interface ReflectionPoint {
 
 const reflectionPoints: ReflectionPoint[] = [
   {
-    title: "Focused Reflection",
-    description: "By asking, <strong>'What did I learn from my actions today?'</strong> you shift from simply reacting to reflecting with focus, turning each experience into valuable insight for growth."
+    title: "Inspiration from Content Consumption",
+    description: "Let content consumption spark creativity and <strong>motivate meaningful action.</strong>"
   },
   {
-    title: "Progress Tracking",
-    description: "By asking, <strong>'What progress did I make toward my goals this week?'</strong> you move from dreaming to actively shaping your growth story, using real achievements to power your affirmations."
+    title: "Fully Customizable Markdown Journal",
+    description: "Enjoy a fullscreen, <strong>markdown-based journal</strong> that adapts to your personal style."
   },
   {
-    title: "Enhanced Self-Awareness",
+    title: "Automatic Daily Calendar View",
     description: 
-                 "'<em>The happiness of your life depends upon the quality of your thoughts.</em>'<br /> – Marcus Aurelius"
+                 "Stay organized with an auto-generated page for each day, making it easy to track progress."
   },
   {
-    title: "Accountability",
-    description: "'<em>It is not death that a man should fear, but he should fear never beginning to live.</em>'<br />– Marcus Aurelius" 
+    title: "Build Your Habit Stack",
+    description: "Create and track habits with streaks to stay motivated and consistent." 
   },
   {
-    title: "Intentional Growth",
-    description: "'<em>The impediment to action advances action. What stands in the way becomes the way.</em>'<br />– Marcus Aurelius"
+    title: "Reflect to Grow",
+    description: "Use guided reflection to foster personal growth and continuous improvement."
   },
   {
-    title: "Problem-Solving",
-    description: "By asking, <strong>'What challenge did I face today, and how did I respond?'</strong> you can see how overthinking a task might delay action, helping you understand both your own behavior and others' responses."
+    title: "Gamification",
+    description: "Engage with a fun, competitive quest system and community leaderboards to level up your progress."
   }
 ];
 
