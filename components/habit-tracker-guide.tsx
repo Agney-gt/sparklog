@@ -22,7 +22,7 @@ export default function HabitTrackerGuide() {
           <AccordionContent>
             <p>Each habit falls under a Classifier that focuses on a specific area of life, such as:</p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li><span className="font-semibold">Morning Routine</span> for starting your day right.</li>
+              <li><span className="font-semibold"><Sun className="mr-2" />Morning Routine</span> for starting your day right.</li>
               <li><span className="font-semibold">Intentional Growth</span> to ensure consistent progress.</li>
               <li><span className="font-semibold">Energy Optimization</span> for sustained vitality.</li>
             </ul>
