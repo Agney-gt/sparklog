@@ -85,7 +85,7 @@ interface Quest {
 }
 
 export function CharacterTree() {
-  const [_selectedQuest, setSelectedQuest] = useState<Quest | null>(null)
+  const [, setSelectedQuest] = useState<Quest | null>(null)
   const [selectedPath, setSelectedPath] = useState<'character' | 'conflict' | 'consequences' | 'discipline' | 'family' | 'honesty' | 'patience' | 'simplicity' | 'speech' | 'wisdom'>('character')
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -875,6 +875,7 @@ const questMap = {
       <Card className="max-w-6xl mx-auto bg-black/20 border-slate-700">
         <CardHeader className="border-b border-slate-700">
           <div className="flex flex-col space-y-4">
+            
             <div>
               <CardTitle className="text-slate-100">Scroll through the questlines if you dare...</CardTitle>
             </div>
@@ -973,6 +974,7 @@ const questMap = {
                         {quest.icon}
                       </button>
                     </PopoverTrigger>
+                    
                     <PopoverContent side="top" className="max-w-[300px] p-4">
                       <div className="space-y-2">
                         <p className="font-semibold text-lg">{quest.title}</p>
