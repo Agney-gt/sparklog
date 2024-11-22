@@ -69,8 +69,7 @@ import {
   Crown, 
   Share, 
   Heart, 
-  ChevronLeft, 
-  ChevronRight 
+  
 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
@@ -86,17 +85,11 @@ interface Quest {
 }
 
 export function CharacterTree() {
-  const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null)
+  const [_selectedQuest, setSelectedQuest] = useState<Quest | null>(null)
   const [selectedPath, setSelectedPath] = useState<'character' | 'conflict' | 'consequences' | 'discipline' | 'family' | 'honesty' | 'patience' | 'simplicity' | 'speech' | 'wisdom'>('character')
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const scrollCategories = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = direction === 'left' ? -200 : 200
-      scrollContainerRef.current.scrollLeft += scrollAmount
-    }
-  }
-
+ 
   const characterQuests: Quest[] = [
     {
       title: "A Noble Crown",
