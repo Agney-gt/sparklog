@@ -1,5 +1,5 @@
 'use client'
-
+import HabitTrackerGuide from "@/components/habit-tracker-guide"
 import MarkdownEditor from "@/components/markdown-editor"
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
@@ -167,8 +167,9 @@ export default function Component() {
             </>
           )}
         </CardContent>
-        <CharacterTree />
+        <HabitTrackerGuide/>
         <ActionWorkbook />
+        <CharacterTree />
       </Card>
       
       

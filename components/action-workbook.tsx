@@ -187,7 +187,6 @@ export function ActionWorkbook() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Consistency Workbook</h1>
       <div className="mb-6 flex gap-4">
         <Input
           placeholder="Type your Classifier here"
