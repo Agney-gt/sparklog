@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
 import { CharacterTree } from "@/components/character-tree"
 import { ActionWorkbook } from "@/components/action-workbook"
-
+import Banner from "@/components/banner"
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
@@ -93,6 +93,8 @@ export default function Component() {
   };
 
   return (
+    <div className="flex flex-col min-h-screen">
+      <Banner />
     <div className="flex flex-col lg:flex-row h-screen max-h-screen w-full gap-4 p-4">
       <Card className="lg:w-80 w-full flex-shrink-0 h-auto lg:h-full">
         <CardHeader className="p-4">
@@ -173,6 +175,6 @@ export default function Component() {
       </Card>
       
       
-    </div>
+    </div></div>
   )
 }
