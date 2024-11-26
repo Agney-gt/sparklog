@@ -11,6 +11,7 @@ import { Loader2 } from 'lucide-react'
 import { CharacterTree } from "@/components/character-tree"
 import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
+import { Maximize2 } from "lucide-react"
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
@@ -100,8 +101,8 @@ export default function Component() {
         <CardHeader className="p-4">
           <h2 className="font-semibold">Calendar</h2>
         </CardHeader>
-        <CardContent className="p-2">
-          <ScrollArea className="h-[300px] lg:h-[calc(100vh-8rem)]">
+        <CardContent className="p-2 ">
+          <ScrollArea className="h-[300px] lg:h-[calc((100vh-8rem)/2)]">
             {calendarMonths.map((month, index) => (
               <div key={index} className="mb-4">
                 <Calendar
@@ -124,6 +125,34 @@ export default function Component() {
             ))}
           </ScrollArea>
         </CardContent>
+        <CardContent className="p-2">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-semibold">Chatbot</h3>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  const iframe = document.querySelector('#taskade-chat') as HTMLIFrameElement;
+                  if (iframe) {
+                    iframe.requestFullscreen();
+                  }
+                }}
+              >
+                <Maximize2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="w-full h-[400px] overflow-hidden rounded-md">
+              <iframe 
+                id="taskade-chat"
+                src="https://www.taskade.com/a/01JDKJ5G25N79MH2Z6RDW8BBEH" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 'none' }}
+                title="Taskade Chatbot"
+                allowFullScreen
+              />
+            </div>
+          </CardContent>
       </Card>
       <Card id="journal-entry" className="flex-grow h-auto lg:h-full overflow-auto">
         <CardHeader className="p-4">
