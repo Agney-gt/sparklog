@@ -7,11 +7,10 @@ import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Loader2 } from 'lucide-react'
+import { Maximize2, Loader2 } from 'lucide-react'
 import { CharacterTree } from "@/components/character-tree"
 import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
-import { Maximize2 } from "lucide-react"
 import LevelProgress from '@/components/level-progress'
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())

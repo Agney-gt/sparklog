@@ -4,13 +4,7 @@ import { cn } from "@/lib/utils"
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement> & {
-    /**
-     * Set to true if the table is used for layout purposes only.
-     * This will add role="presentation" to make it clear to assistive technologies.
-     */
-    isPresentation?: boolean
-  }
+  React.HTMLAttributes<HTMLTableElement> & { isPresentation?: boolean }
 >(({ className, isPresentation, ...props }, ref) => (
   <div className="relative w-full overflow-auto">
     <table
@@ -18,10 +12,22 @@ const Table = React.forwardRef<
       className={cn("w-full caption-bottom text-sm", className)}
       role={isPresentation ? "presentation" : "table"}
       {...props}
-    />
+    >
+      {!isPresentation && (
+        <thead>
+          <tr>
+            {/* Add default header cells that can be overridden */}
+            <th scope="col" className="h-12 px-4 text-left align-middle font-medium"></th>
+            
+          </tr>
+        </thead>
+      )}
+      {props.children}
+    </table>
   </div>
 ))
 Table.displayName = "Table"
+
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
