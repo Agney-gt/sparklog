@@ -89,7 +89,7 @@ function Calendar({
               className={cn(
                 "relative", 
                 isOutsideDate && "pointer-events-none opacity-30"
-              )} 
+              )} role = 'button'
               onClick={() => {
                 if (!isOutsideDate) {
                   console.log(date);
