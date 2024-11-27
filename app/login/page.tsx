@@ -73,10 +73,14 @@ export default function Component() {
           </div>
           <AnimatedReflectionProgress />
         </section>
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            
         <GoogleButton
   type="dark" // can be light or dark
   onClick={handleGoogleLogin}
 />
+
+        </div>
       </main>
       <Footer />
     </div>
