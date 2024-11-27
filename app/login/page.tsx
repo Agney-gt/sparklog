@@ -66,16 +66,17 @@ export default function Component() {
                 </h1>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <GoogleButton
-  type="dark" // can be light or dark
-  onClick={handleGoogleLogin}
-/>
+              
                 
               </div>
             </div>
           </div>
           <AnimatedReflectionProgress />
         </section>
+        <GoogleButton
+  type="dark" // can be light or dark
+  onClick={handleGoogleLogin}
+/>
       </main>
       <Footer />
     </div>
