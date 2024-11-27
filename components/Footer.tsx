@@ -1,50 +1,9 @@
-import Link from "next/link";
 
 export const Footer = () => {
   return (
     <footer className="border-t bg-white">
       <div className="mx-auto w-full max-w-screen-xl px-4 py-12 md:px-6">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-5">
-          <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold">Resources</h3>
-            <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/documentation">
-                Documentation
-              </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/blog">
-                Blog
-              </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/analytics">
-                Analytics
-              </Link>
-            </nav>
-          </div>
-          <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold">Company</h3>
-            <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/about">
-                About Us
-              </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/careers">
-                Careers
-              </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/contact">
-                Contact
-              </Link>
-            </nav>
-          </div>
-          <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold">Legal</h3>
-            <nav className="mt-4 flex flex-col space-y-2">
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/terms">
-                Terms of Service
-              </Link>
-              <Link className="text-sm text-muted-foreground hover:text-primary" href="/privacy">
-                Privacy Policy
-              </Link>
-            </nav>
-          </div>
-        </div>
+        
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
           <p className="text-sm text-muted-foreground">© 2024 Sparklog. All rights reserved.</p>
           <div className="flex space-x-4">

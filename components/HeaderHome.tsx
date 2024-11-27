@@ -10,7 +10,7 @@ const HeaderHome = () => {
 
   return (
     <header className="flex flex-wrap items-center justify-between px-4 py-4 lg:px-6">
-      <Link className="flex items-center justify-center" href="#">
+      <Link className="flex items-center justify-center" href="/login#">
         <span className="font-bold text-xl flex items-center">
           <span className="text-primary">sparklog</span>
         </span>
@@ -29,9 +29,6 @@ const HeaderHome = () => {
           isMenuOpen ? 'flex' : 'hidden'
         } w-full flex-col items-center gap-4 lg:flex lg:w-auto lg:flex-row lg:items-center lg:gap-6`}
       >
-        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/login">
-          Home
-        </Link>
         <Link className="text-sm font-medium hover:underline underline-offset-4" href="/community">
           Community
         </Link>

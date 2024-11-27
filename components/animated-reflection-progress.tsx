@@ -16,7 +16,7 @@ const reflectionPoints: ReflectionPoint[] = [
   },
   {
     title: "Fully Customizable Markdown Journal",
-    description: "Enjoy a fullscreen, <strong>markdown-based journal</strong> that adapts to your personal style."
+    description: "Enjoy a fullscreen, <strong>markdown-based journal</strong> that adapts to your personal style with AI."
   },
   {
     title: "Automatic Daily Calendar View",
@@ -98,7 +98,7 @@ export default function AnimatedReflectionProgress() {
       const nextIndex = (currentIndex + 1) % reflectionPoints.length
       setCurrentIndex(nextIndex)
       setProgress(((nextIndex + 1) / reflectionPoints.length) * 100)
-    }, 5000) // Change point every 5 seconds
+    }, 3500) // Change point every 5 seconds
     return () => clearTimeout(timer)
   }, [currentIndex])
 
