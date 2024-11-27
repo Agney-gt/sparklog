@@ -150,7 +150,7 @@ export default function Component() {
                 height="100%" 
                 style={{ border: 'none' }}
                 title="Taskade Chatbot"
-                
+                allow="clipboard-write; clipboard-read"
                 allowFullScreen
               />
             </div>
