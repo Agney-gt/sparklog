@@ -13,6 +13,41 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   fetchJournalEntry: (date: Date) => Promise<void>;
   setDate: (date: Date) => void; // Add a prop for marked dates
 }
+interface CalendarDayProps {
+  date: Date;
+  month?: Date;
+  isMarkedDate: (date: Date) => boolean;
+  selectedDate?: Date;
+  onDateSelect: (date: Date) => void;
+}
+
+function CalendarDay({ date, month, isMarkedDate, selectedDate, onDateSelect }: CalendarDayProps) {
+  const isOutsideDate = month ? date.getMonth() !== month.getMonth() : false;
+  
+  return (
+    <div 
+      className={cn(
+        "relative", 
+        isOutsideDate && "pointer-events-none opacity-30"
+      )} 
+      onClick={() => {
+        if (!isOutsideDate) {
+          onDateSelect(date);
+        }
+      }}
+    >
+      <div className={cn(
+        "h-9 w-9 text-center flex items-center justify-center", 
+        { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() },
+      )}>
+        {date.getDate()}
+        {isMarkedDate(date) && (
+          <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function Calendar({
   className,
@@ -46,8 +81,8 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
+          caption: "flex justify-center pt-1 relative items-center",
+          caption_label: "text-sm font-medium",
         
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
@@ -61,38 +96,21 @@ function Calendar({
         ),
       }}
       
-        components={{
+      components={{
         IconLeft: () => null,
         IconRight: () => null,
-        Day: ({ date }: DayProps) => {
-          const isOutsideDate = props.month ? date.getMonth() !== props.month.getMonth() : false;
-          
-          return (
-            <div 
-              className={cn(
-                "relative", 
-                isOutsideDate && "pointer-events-none opacity-30"
-              )} 
-              onClick={() => {
-                if (!isOutsideDate) {
-                  console.log(date);
-                  setSelectedDate(date);
-                  handleDateChange(date);
-                }
-              }}
-            >
-              <div className={cn(
-                "h-9 w-9 text-center flex items-center justify-center", 
-                { "bg-blue-200": selectedDate?.toDateString() === date.toDateString() },
-              )}>
-                {date.getDate()}
-                {isMarkedDate(date) && (
-                  <span className="absolute bottom-0 left-0 right-0 text-red-500 text-xs">•</span>
-                )}
-              </div>
-            </div>
-          );
-        },
+        Day: ({ date }: DayProps) => (
+          <CalendarDay
+            date={date}
+            month={props.month}
+            isMarkedDate={isMarkedDate}
+            selectedDate={selectedDate}
+            onDateSelect={(date) => {
+              setSelectedDate(date);
+              handleDateChange(date);
+            }}
+          />
+        ),
       }}
       {...props}
     />
