@@ -62,7 +62,7 @@ export default function Component({
         hideToolbar={false}
         enableScroll
         textareaProps={{
-          placeholder: "Reflect and create an amazing markdown journal entry with the Chatbot! 🚀 Try a Quest by simply copying and pasting it into the Chatbot. Begin your journal entry with the quest title as a header, such as # A Noble Crown or # Shining Brightly. Complete your quest after three days of journaling.",
+          placeholder: "Reflect and create an amazing markdown journal entry with the Chatbot! 🚀 Try a Quest by simply copying and pasting it into the Chatbot. Begin your journal entry with the quest title as a header, such as # A Noble Crown or # Shining Brightly. Quests will be marked complete after three days of journaling.",
           'aria-label': 'Markdown editor',
         }}
         previewOptions={{

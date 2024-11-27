@@ -12,6 +12,7 @@ import { CharacterTree } from "@/components/character-tree"
 import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import { Maximize2 } from "lucide-react"
+import LevelProgress from '@/components/level-progress'
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
@@ -96,6 +97,7 @@ export default function Component() {
   return (
     <div className="flex flex-col min-h-screen">
       <Banner />
+      <LevelProgress />
     <div className="flex flex-col lg:flex-row h-screen max-h-screen w-full gap-4 p-4">
       <Card className="lg:w-80 w-full flex-shrink-0 h-auto lg:h-full">
         <CardHeader className="p-4">
@@ -127,7 +129,7 @@ export default function Component() {
         </CardContent>
         <CardContent className="p-2">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="font-semibold">Chatbot</h3>
+              <h3 className="font-semibold">Chat</h3>
               <Button 
                 variant="ghost" 
                 size="icon"

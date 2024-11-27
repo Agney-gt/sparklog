@@ -871,7 +871,7 @@ const questMap = {
   };
   const defaultGridLayout = 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5';
   return (
-    <div className="w-full h-min bg-gradient-to-b from-slate-900 to-slate-800 p-2 sm:p-6">
+    <div className="w-full h-min bg-black p-2 sm:p-6">
       <Card className="max-w-6xl mx-auto bg-black/20 border-slate-700">
         <CardHeader className="border-b border-slate-700">
           <div className="flex flex-col space-y-4">
