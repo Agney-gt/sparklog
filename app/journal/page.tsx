@@ -142,7 +142,7 @@ export default function Component() {
                 <Maximize2 className="h-4 w-4" />
               </Button>
             </div>
-            <div className="w-full h-[400px] overflow-hidden rounded-md">
+            <div className="w-full h-[280px] overflow-hidden rounded-md">
               <iframe 
                 id="taskade-chat"
                 src="https://www.taskade.com/a/01JDKJ5G25N79MH2Z6RDW8BBEH" 
@@ -150,6 +150,7 @@ export default function Component() {
                 height="100%" 
                 style={{ border: 'none' }}
                 title="Taskade Chatbot"
+                
                 allowFullScreen
               />
             </div>
@@ -180,7 +181,7 @@ export default function Component() {
                 value={journalContent}
                 onChange={(value) => setJournalContent(value)}
               />
-              }
+              } 
               {/* ... other entry types ... */}
               <Button 
                 className="mt-4 w-full lg:w-auto"
