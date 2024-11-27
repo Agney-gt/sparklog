@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { DayPicker, DayProps } from "react-day-picker"
+import { DayPicker } from "react-day-picker"
 import { useState } from "react";
 
 
@@ -24,19 +24,11 @@ function Calendar({
    // Default to an empty array
   ...props
 }: CalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date>(); // State for selected date
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
     fetchJournalEntry(newDate); // Fetch journal entry for the new date
   };
-  // Function to check if a date is marked
-  const isMarkedDate = (date: Date) => {
-    // Format the date to YYYY-MM-DD
-    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-    
-    // Check if the formatted date exists in the markedDates array
-    return markedDates.includes(formattedDate);
-  };
+  
   
 
   return (
