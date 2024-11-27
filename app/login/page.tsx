@@ -1,6 +1,5 @@
 'use client'
 import GoogleButton from 'react-google-button'
-import { Button } from "@/components/ui/button"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -17,7 +16,7 @@ const AnimatedReflectionProgress = dynamic(
 export default function Component() {
   const router = useRouter()
   const supabase = createClientComponentClient()
-  const [isLoading, setIsLoading] = useState(false)
+  const [, setIsLoading] = useState(false)
   
   useEffect(() => {
     const checkUser = async () => {
