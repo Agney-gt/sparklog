@@ -36,7 +36,6 @@ const TableHeader = React.forwardRef<
   <thead 
     ref={ref} 
     className={cn("[&_tr]:border-b", className)}
-    role="rowgroup"
     {...props} 
   />
 ))
