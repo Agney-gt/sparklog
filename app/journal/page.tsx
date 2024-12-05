@@ -97,8 +97,8 @@ export default function Component() {
     <div className="flex flex-col min-h-screen">
       <Banner />
       <LevelProgress />
-    <div className="flex flex-col lg:flex-row h-screen max-h-screen w-full gap-4 p-4">
-      <Card className="lg:w-80 w-full flex-shrink-0 h-auto lg:h-full">
+    <div className="flex flex-col lg:flex-row min-h-screen w-full gap-4 p-4">
+      <Card className="lg:w-80 w-full flex-shrink-0 ">
         <CardHeader className="p-4">
           <h2 className="font-semibold">Calendar</h2>
         </CardHeader>
@@ -156,7 +156,7 @@ export default function Component() {
             </div>
           </CardContent>
       </Card>
-      <Card id="journal-entry" className="flex-grow h-auto lg:h-full overflow-auto">
+      <Card id="journal-entry" className="flex-grow min-h-[500px] lg:h-full overflow-auto">
         <CardHeader className="p-4">
           <h2 className="text-xl font-semibold">Journal out of inspiration, not obligation!</h2>
           <p className="text-sm text-muted-foreground">

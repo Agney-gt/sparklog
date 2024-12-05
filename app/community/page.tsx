@@ -26,10 +26,11 @@ export default function LeaderboardPage() {
       async function fetchLeaderboard() {
         try {
           const { data, error } = await supabase
-            .from('user_progress')
-            .select('*')
-            .order('level', { ascending: false })
-            .limit(100)
+          .from('user_progress')
+          .select('*')
+          .gte('level', 2)
+          .order('level', { ascending: false })
+          .limit(100)
             
   
           if (error) throw error
