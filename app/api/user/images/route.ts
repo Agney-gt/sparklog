@@ -9,7 +9,6 @@ export async function POST(request: Request) {
     
     if (!file) {
       return NextResponse.json(
-        { error: 'No file uploaded' },
         { status: 400 }
       );
     }
