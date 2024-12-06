@@ -9,6 +9,7 @@ export async function POST(request: Request) {
     
     if (!file) {
       return NextResponse.json(
+        { error: 'No file uploaded' },
         { status: 400 }
       );
     }
@@ -36,9 +37,9 @@ export async function POST(request: Request) {
       alt: file.name,
       url: publicUrl
     });
-  } catch (error) {
+  } catch (errors) {
     return NextResponse.json(
-      { error: 'Internal server error' },
+      console.log(errors),
       { status: 500 }
     );
   }
