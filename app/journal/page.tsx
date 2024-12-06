@@ -8,10 +8,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Loader2 } from 'lucide-react'
-import { CharacterTree } from "@/components/character-tree"
 import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
+import QuestLog from "@/components/quest-log"
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
@@ -202,7 +202,7 @@ export default function Component() {
         </CardContent>
         <HabitTrackerGuide/>
         <ActionWorkbook />
-        <CharacterTree />
+        <QuestLog />
       </Card>
       
       
