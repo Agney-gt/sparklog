@@ -68,7 +68,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-
+import TechStartupBattle from "@/components/tech-startup-battle"
 interface Quest {
   title: string
   verse: string
@@ -79,10 +79,102 @@ interface Quest {
   icon: React.ReactNode
 }
 
-type QuestCategory = 'character' | 'conflict' | 'consequences' | 'discipline' | 
+type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 'discipline' | 
                      'family' | 'honesty' | 'patience' | 'simplicity' | 
-                     'speech' | 'wisdom'
-
+                     'speech' | 'wisdom' 
+                     const entrepreneurQuests: Quest[] = [
+                      {
+                        title: "Automating Lead Generation with Phantombuster",
+                        verse: "Commit to the Lord whatever you do, and he will establish your plans. (Proverbs 16:3)",
+                        question: "How can I use automation to optimize my efforts?",
+                        description: "Learn how to automate repetitive lead generation tasks using Phantombuster to save time and focus on high-value activities.",
+                        benefits: "Automation improves efficiency. For example, automating LinkedIn lead extraction saves hours of manual work, allowing you to focus on strategy.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Scaling Webinars with Systeme.io",
+                        verse: "The plans of the diligent lead to profit as surely as haste leads to poverty. (Proverbs 21:5)",
+                        question: "How can I leverage automated tools to reach my audience effectively?",
+                        description: "Set up an automated webinar funnel using Systeme.io, complete with email reminders, follow-ups, and analytics.",
+                        benefits: "Webinar automation generates leads while you sleep. For instance, a coach generated $5,000 from one automated session.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Building a Lead Scoring System with Azure and Python Pandas",
+                        verse: "Wisdom is more precious than rubies, and nothing you desire can compare with her. (Proverbs 8:11)",
+                        question: "How can I make data-driven decisions to improve conversions?",
+                        description: "Build a lead scoring system using Python and Azure to rank leads based on engagement metrics.",
+                        benefits: "Lead scoring improves sales efficiency. For example, prioritizing leads increased conversion rates by 20% for a startup.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Organizing with GitHub and Taskade Kanban",
+                        verse: "For lack of guidance a nation falls, but victory is won through many advisers. (Proverbs 11:14)",
+                        question: "How can I manage my projects more effectively?",
+                        description: "Use GitHub and Taskade Kanban to streamline project tracking and collaboration.",
+                        benefits: "Effective project management improves productivity. For instance, syncing GitHub with Taskade ensured seamless issue resolution for a dev team.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Automating Tasks with AI Agents",
+                        verse: "Teach us to number our days, that we may gain a heart of wisdom. (Psalm 90:12)",
+                        question: "Which repetitive tasks can I delegate to AI?",
+                        description: "Implement AI agents to automate tasks like drafting emails, generating content, and summarizing data.",
+                        benefits: "AI agents save time. For example, automating blog drafts saved 8 hours monthly for a content creator.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Scaling Workflow Automation with Skyvern",
+                        verse: "The wise store up choice food and olive oil, but fools gulp theirs down. (Proverbs 21:20)",
+                        question: "How can I scale workflows without increasing costs?",
+                        description: "Deploy Skyvern to automate workflows such as data scraping, database updates, and email notifications.",
+                        benefits: "Scalable automation reduces overhead. For example, Skyvern cut a digital agency’s turnaround times by 30%.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Documenting with Mintlify",
+                        verse: "Write down the revelation and make it plain on tablets so that a herald may run with it. (Habakkuk 2:2)",
+                        question: "How can clear documentation improve my workflow?",
+                        description: "Use Mintlify to document user flows and backend workflows for your MVP.",
+                        benefits: "Clear documentation attracts collaborators. For example, a founder used Mintlify to secure developer support for their app.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Building the Backend with Supabase and Azure",
+                        verse: "By wisdom a house is built, and through understanding it is established. (Proverbs 24:3)",
+                        question: "What tools can I use to build a scalable backend quickly?",
+                        description: "Set up Supabase for authentication and integrate it with Azure for data processing.",
+                        benefits: "Scalable backends support growth. For instance, a fitness app startup halved development time using Supabase and Azure.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Developing the Frontend with Vercel and ShadCN",
+                        verse: "Unless the Lord builds the house, the builders labor in vain. (Psalm 127:1)",
+                        question: "How can I create a user-friendly interface for my MVP?",
+                        description: "Build a dashboard with ShadCN components, connecting backend APIs for real-time updates.",
+                        benefits: "Seamless UX attracts users. For example, a SaaS founder gained 500 users with a clean, responsive frontend.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      },
+                      {
+                        title: "Automating Marketing with AI Agents",
+                        verse: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven. (Matthew 5:16)",
+                        question: "How can I use AI to amplify my marketing efforts?",
+                        description: "Program AI agents to automate content creation, scheduling, and engagement analysis for your brand.",
+                        benefits: "AI boosts engagement. For example, a solopreneur doubled audience interaction in 30 days using AI agents.",
+                        category: "enterprise",
+                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
+                      }
+                    ]
+                     
                      const characterQuests: Quest[] = [
                       {
                         title: "A Noble Crown",
@@ -823,9 +915,10 @@ type QuestCategory = 'character' | 'conflict' | 'consequences' | 'discipline' |
                       }
                       
                       // Add remaining quests following the same structure
-                  ];
+                  ]
 
 const questMap = {
+  'enterprise': entrepreneurQuests,
   'character': characterQuests,
   'conflict': conflictQuests,
   'consequences': consequenceQuests,
@@ -839,6 +932,7 @@ const questMap = {
 };
 
 const categoryIcons: Record<QuestCategory, React.ReactNode> = {
+  enterprise: <Lightbulb className="w-6 h-6" />,
   character: <Crown className="w-6 h-6" />,
   conflict: <Sword className="w-6 h-6" />,
   consequences: <Scale className="w-6 h-6" />,
@@ -852,6 +946,7 @@ const categoryIcons: Record<QuestCategory, React.ReactNode> = {
 }
 
 const categoryColors: Record<QuestCategory, string> = {
+  enterprise: "from-amber-500/80 to-amber-700/80",
   character: "from-amber-500/80 to-amber-700/80",
   conflict: "from-red-500/80 to-red-700/80",
   consequences: "from-purple-500/80 to-purple-700/80",
@@ -865,7 +960,7 @@ const categoryColors: Record<QuestCategory, string> = {
 }
 
 export default function QuestLog() {
-  const [selectedPath, setSelectedPath] = useState<QuestCategory>("character")
+  const [selectedPath, setSelectedPath] = useState<QuestCategory>("enterprise")
   const currentQuests = questMap[selectedPath as keyof typeof questMap] || characterQuests
 
   return (
@@ -924,6 +1019,7 @@ export default function QuestLog() {
                     </div>
                   </button>
                 </PopoverTrigger>
+                
                 <PopoverContent className="w-80 bg-slate-800 border-slate-700 text-white">
                   <h3 className="font-bold mb-2">{quest.title}</h3>
                   <p className="text-sm italic mb-2">{quest.verse}</p>
@@ -934,7 +1030,30 @@ export default function QuestLog() {
               </Popover>
             ))}
           </div>
+          <Popover >
+                <PopoverTrigger asChild>
+                  <button
+                    className={cn(
+                      "w-full max-w-4xl mt-4 h-14 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-700 p-[2px]",
+                      "group hover:scale-105 hover:shadow-[0_0_15px_rgba(255,215,0,0.7)] transition-transform duration-200",
+                      "bg-black flex items-center justify-center text-black font-bold text-lg uppercase tracking-wide",
+                      "font-serif"
+                    )}
+                    
+                  >
+                    <div className="w-full h-full rounded-lg bg-gold flex flex-col items-center justify-center relative p-2">
+        final boss
+      </div>
+                  </button>
+                </PopoverTrigger>
+                
+                <PopoverContent className="w-120 bg-slate-800 border-slate-700 text-white">
+                  <TechStartupBattle/>
+                </PopoverContent>
+              </Popover>
+         
         </CardContent>
+
       </Card>
     </div>
   )

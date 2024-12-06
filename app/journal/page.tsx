@@ -12,6 +12,7 @@ import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
 import QuestLog from "@/components/quest-log"
+import TechStartupBattle from "@/components/tech-startup-battle"
 export default function Component() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
@@ -203,7 +204,9 @@ export default function Component() {
         <HabitTrackerGuide/>
         <ActionWorkbook />
         <QuestLog />
+        
       </Card>
+      
       
       
     </div></div>
