@@ -173,7 +173,7 @@ export default function Component() {
                 <Maximize2 className="h-4 w-4" />
               </Button>
             </div>
-            <div className="w-full h-[800px] overflow-hidden rounded-md">
+            <div className="w-full h-[780px] overflow-hidden rounded-md">
               <iframe 
                 id="taskade-chat"
                 src="https://www.taskade.com/a/01JDKJ5G25N79MH2Z6RDW8BBEH" 
@@ -250,7 +250,7 @@ export default function Component() {
           </div>
         </div>
         <div className="flex justify-between mt-4">
-          <Button onClick={scrollPrev} disabled={!canScrollPrev} variant="outline" size="icon">
+          <Button onClick={scrollPrev} disabled={!canScrollPrev} variant="default" size="icon">
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <div className="flex space-x-2">
@@ -263,7 +263,7 @@ export default function Component() {
               />
             ))}
           </div>
-          <Button onClick={scrollNext} disabled={!canScrollNext} variant="outline" size="icon">
+          <Button onClick={scrollNext} disabled={!canScrollNext} variant="default" size="icon">
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
