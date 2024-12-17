@@ -79,101 +79,10 @@ interface Quest {
   icon: React.ReactNode
 }
 
-type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 'discipline' | 
+type QuestCategory = 'character' | 'conflict' | 'consequences' | 'discipline' | 
                      'family' | 'honesty' | 'patience' | 'simplicity' | 
                      'speech' | 'wisdom' 
-                     const entrepreneurQuests: Quest[] = [
-                      {
-                        title: "Automating Lead Generation with Phantombuster",
-                        verse: "",
-                        question: "How can I use automation to optimize my efforts?",
-                        description: "Learn how to automate repetitive lead generation tasks using Phantombuster to save time and focus on high-value activities.",
-                        benefits: "Automation improves efficiency. For example, automating LinkedIn lead extraction saves hours of manual work, allowing you to focus on strategy.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Scaling Webinars with Systeme.io",
-                        verse: "",
-                        question: "How can I leverage automated tools to reach my audience effectively?",
-                        description: "Set up an automated webinar funnel using Systeme.io, complete with email reminders, follow-ups, and analytics.",
-                        benefits: "Webinar automation generates leads while you sleep. For instance, a coach generated $5,000 from one automated session.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Building a Lead Scoring System with Azure and Python Pandas",
-                        verse: "",
-                        question: "How can I make data-driven decisions to improve conversions?",
-                        description: "Build a lead scoring system using Python and Azure to rank leads based on engagement metrics.",
-                        benefits: "Lead scoring improves sales efficiency. For example, prioritizing leads increased conversion rates by 20% for a startup.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Organizing with GitHub and Taskade Kanban",
-                        verse: "",
-                        question: "How can I manage my projects more effectively?",
-                        description: "Use GitHub and Taskade Kanban to streamline project tracking and collaboration.",
-                        benefits: "Effective project management improves productivity. For instance, syncing GitHub with Taskade ensured seamless issue resolution for a dev team.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Automating Tasks with AI Agents",
-                        verse: "",
-                        question: "Which repetitive tasks can I delegate to AI?",
-                        description: "Implement AI agents to automate tasks like drafting emails, generating content, and summarizing data.",
-                        benefits: "AI agents save time. For example, automating blog drafts saved 8 hours monthly for a content creator.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Scaling Workflow Automation with Skyvern",
-                        verse: "",
-                        question: "How can I scale workflows without increasing costs?",
-                        description: "Deploy Skyvern to automate workflows such as data scraping, database updates, and email notifications.",
-                        benefits: "Scalable automation reduces overhead. For example, Skyvern cut a digital agency’s turnaround times by 30%.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Documenting with Mintlify",
-                        verse: "",
-                        question: "How can clear documentation improve my workflow?",
-                        description: "Use Mintlify to document user flows and backend workflows for your MVP.",
-                        benefits: "Clear documentation attracts collaborators. For example, a founder used Mintlify to secure developer support for their app.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Building the Backend with Supabase and Azure",
-                        verse: "",
-                        question: "What tools can I use to build a scalable backend quickly?",
-                        description: "Set up Supabase for authentication and integrate it with Azure for data processing.",
-                        benefits: "Scalable backends support growth. For instance, a fitness app startup halved development time using Supabase and Azure.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Developing the Frontend with Vercel and ShadCN",
-                        verse: "",
-                        question: "How can I create a user-friendly interface for my MVP?",
-                        description: "Build a dashboard with ShadCN components, connecting backend APIs for real-time updates.",
-                        benefits: "Seamless UX attracts users. For example, a SaaS founder gained 500 users with a clean, responsive frontend.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      },
-                      {
-                        title: "Automating Marketing with AI Agents",
-                        verse: "",
-                        question: "How can I use AI to amplify my marketing efforts?",
-                        description: "Program AI agents to automate content creation, scheduling, and engagement analysis for your brand.",
-                        benefits: "AI boosts engagement. For example, a solopreneur doubled audience interaction in 30 days using AI agents.",
-                        category: "enterprise",
-                        icon: <CheckCircle2 className="w-8 h-8 text-white" />
-                      }
-                    ]
+                     
                      
                      const characterQuests: Quest[] = [
                       {
@@ -931,7 +840,6 @@ const questMap = {
 };
 
 const categoryIcons: Record<QuestCategory, React.ReactNode> = {
-  enterprise: <Lightbulb className="w-6 h-6" />,
   character: <Crown className="w-6 h-6" />,
   conflict: <Sword className="w-6 h-6" />,
   consequences: <Scale className="w-6 h-6" />,
@@ -945,7 +853,6 @@ const categoryIcons: Record<QuestCategory, React.ReactNode> = {
 }
 
 const categoryColors: Record<QuestCategory, string> = {
-  enterprise: "from-amber-500/80 to-amber-700/80",
   character: "from-amber-500/80 to-amber-700/80",
   conflict: "from-red-500/80 to-red-700/80",
   consequences: "from-purple-500/80 to-purple-700/80",
@@ -959,7 +866,7 @@ const categoryColors: Record<QuestCategory, string> = {
 }
 
 export default function QuestLog() {
-  const [selectedPath, setSelectedPath] = useState<QuestCategory>("enterprise")
+  const [selectedPath, setSelectedPath] = useState<QuestCategory>("patience")
   const currentQuests = questMap[selectedPath as keyof typeof questMap] || characterQuests
 
   return (
