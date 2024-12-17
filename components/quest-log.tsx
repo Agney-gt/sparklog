@@ -1047,16 +1047,7 @@ export default function QuestLog() {
                 </PopoverTrigger>
                 
                 <PopoverContent className="w-120 bg-slate-800 border-slate-700 text-white">
-                <div className="w-full h-full rounded-lg bg-gold flex flex-col items-center justify-center relative p-2">
-  <a 
-    href="https://agneynalapat.gumroad.com/l/BAM" 
-    target="_blank" 
-    rel="noopener noreferrer" 
-    className="text-black text-lg font-semibold underline"
-  >
-    The Prudent Subscriber
-  </a>
-</div>
+                <TechStartupBattle/>
 
                 </PopoverContent>
               </Popover>
