@@ -85,7 +85,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                      const entrepreneurQuests: Quest[] = [
                       {
                         title: "Automating Lead Generation with Phantombuster",
-                        verse: "Commit to the Lord whatever you do, and he will establish your plans. (Proverbs 16:3)",
+                        verse: "",
                         question: "How can I use automation to optimize my efforts?",
                         description: "Learn how to automate repetitive lead generation tasks using Phantombuster to save time and focus on high-value activities.",
                         benefits: "Automation improves efficiency. For example, automating LinkedIn lead extraction saves hours of manual work, allowing you to focus on strategy.",
@@ -94,7 +94,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Scaling Webinars with Systeme.io",
-                        verse: "The plans of the diligent lead to profit as surely as haste leads to poverty. (Proverbs 21:5)",
+                        verse: "",
                         question: "How can I leverage automated tools to reach my audience effectively?",
                         description: "Set up an automated webinar funnel using Systeme.io, complete with email reminders, follow-ups, and analytics.",
                         benefits: "Webinar automation generates leads while you sleep. For instance, a coach generated $5,000 from one automated session.",
@@ -103,7 +103,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Building a Lead Scoring System with Azure and Python Pandas",
-                        verse: "Wisdom is more precious than rubies, and nothing you desire can compare with her. (Proverbs 8:11)",
+                        verse: "",
                         question: "How can I make data-driven decisions to improve conversions?",
                         description: "Build a lead scoring system using Python and Azure to rank leads based on engagement metrics.",
                         benefits: "Lead scoring improves sales efficiency. For example, prioritizing leads increased conversion rates by 20% for a startup.",
@@ -112,7 +112,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Organizing with GitHub and Taskade Kanban",
-                        verse: "For lack of guidance a nation falls, but victory is won through many advisers. (Proverbs 11:14)",
+                        verse: "",
                         question: "How can I manage my projects more effectively?",
                         description: "Use GitHub and Taskade Kanban to streamline project tracking and collaboration.",
                         benefits: "Effective project management improves productivity. For instance, syncing GitHub with Taskade ensured seamless issue resolution for a dev team.",
@@ -121,7 +121,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Automating Tasks with AI Agents",
-                        verse: "Teach us to number our days, that we may gain a heart of wisdom. (Psalm 90:12)",
+                        verse: "",
                         question: "Which repetitive tasks can I delegate to AI?",
                         description: "Implement AI agents to automate tasks like drafting emails, generating content, and summarizing data.",
                         benefits: "AI agents save time. For example, automating blog drafts saved 8 hours monthly for a content creator.",
@@ -130,7 +130,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Scaling Workflow Automation with Skyvern",
-                        verse: "The wise store up choice food and olive oil, but fools gulp theirs down. (Proverbs 21:20)",
+                        verse: "",
                         question: "How can I scale workflows without increasing costs?",
                         description: "Deploy Skyvern to automate workflows such as data scraping, database updates, and email notifications.",
                         benefits: "Scalable automation reduces overhead. For example, Skyvern cut a digital agency’s turnaround times by 30%.",
@@ -139,7 +139,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Documenting with Mintlify",
-                        verse: "Write down the revelation and make it plain on tablets so that a herald may run with it. (Habakkuk 2:2)",
+                        verse: "",
                         question: "How can clear documentation improve my workflow?",
                         description: "Use Mintlify to document user flows and backend workflows for your MVP.",
                         benefits: "Clear documentation attracts collaborators. For example, a founder used Mintlify to secure developer support for their app.",
@@ -148,7 +148,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Building the Backend with Supabase and Azure",
-                        verse: "By wisdom a house is built, and through understanding it is established. (Proverbs 24:3)",
+                        verse: "",
                         question: "What tools can I use to build a scalable backend quickly?",
                         description: "Set up Supabase for authentication and integrate it with Azure for data processing.",
                         benefits: "Scalable backends support growth. For instance, a fitness app startup halved development time using Supabase and Azure.",
@@ -157,7 +157,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Developing the Frontend with Vercel and ShadCN",
-                        verse: "Unless the Lord builds the house, the builders labor in vain. (Psalm 127:1)",
+                        verse: "",
                         question: "How can I create a user-friendly interface for my MVP?",
                         description: "Build a dashboard with ShadCN components, connecting backend APIs for real-time updates.",
                         benefits: "Seamless UX attracts users. For example, a SaaS founder gained 500 users with a clean, responsive frontend.",
@@ -166,7 +166,7 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                       },
                       {
                         title: "Automating Marketing with AI Agents",
-                        verse: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven. (Matthew 5:16)",
+                        verse: "",
                         question: "How can I use AI to amplify my marketing efforts?",
                         description: "Program AI agents to automate content creation, scheduling, and engagement analysis for your brand.",
                         benefits: "AI boosts engagement. For example, a solopreneur doubled audience interaction in 30 days using AI agents.",
@@ -918,7 +918,6 @@ type QuestCategory = 'enterprise' | 'character' | 'conflict' | 'consequences' | 
                   ]
 
 const questMap = {
-  'enterprise': entrepreneurQuests,
   'character': characterQuests,
   'conflict': conflictQuests,
   'consequences': consequenceQuests,
@@ -1048,7 +1047,17 @@ export default function QuestLog() {
                 </PopoverTrigger>
                 
                 <PopoverContent className="w-120 bg-slate-800 border-slate-700 text-white">
-                  <TechStartupBattle/>
+                <div className="w-full h-full rounded-lg bg-gold flex flex-col items-center justify-center relative p-2">
+  <a 
+    href="https://agneynalapat.gumroad.com/l/BAM" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="text-black text-lg font-semibold underline"
+  >
+    The Prudent Subscriber
+  </a>
+</div>
+
                 </PopoverContent>
               </Popover>
          
