@@ -38,9 +38,10 @@ export default function Component() {
   }, [emblaApi, onSelect])
 
   const cards = [
-    { title: 'Quest Log', component: <QuestLog /> },
-    { title: 'Habit Tracker Guide', component: <HabitTrackerGuide /> },
+   
+    { title: 'Habit Stack', component: <HabitTrackerGuide /> },
     { title: 'Action Workbook', component: <ActionWorkbook /> },
+    { title: 'Quest Log', component: <QuestLog /> },
   ]
 
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -231,7 +232,6 @@ export default function Component() {
           )}
         </CardContent>
         <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">My Personal Dashboard</h1>
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
