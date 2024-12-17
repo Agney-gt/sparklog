@@ -142,7 +142,7 @@ export default function Component() {
                 <Maximize2 className="h-4 w-4" />
               </Button>
             </div>
-            <div className="w-full h-[280px] overflow-hidden rounded-md">
+            <div className="w-full h-[400px] overflow-hidden rounded-md">
               <iframe 
                 id="taskade-chat"
                 src="https://www.taskade.com/a/01JDKJ5G25N79MH2Z6RDW8BBEH" 
