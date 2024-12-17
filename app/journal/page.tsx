@@ -1,10 +1,11 @@
 'use client'
+import { useState, useCallback, useEffect } from 'react'
 import HabitTrackerGuide from "@/components/habit-tracker-guide"
 import MarkdownEditor from "@/components/markdown-editor"
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader,CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Loader2 } from 'lucide-react'
@@ -12,7 +13,36 @@ import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
 import QuestLog from "@/components/quest-log"
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import useEmblaCarousel from 'embla-carousel-react'
 export default function Component() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [canScrollPrev, setCanScrollPrev] = useState(false)
+  const [canScrollNext, setCanScrollNext] = useState(true)
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi])
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi])
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+    setCanScrollPrev(emblaApi.canScrollPrev())
+    setCanScrollNext(emblaApi.canScrollNext())
+  }, [emblaApi])
+
+  useEffect(() => {
+    if (!emblaApi) return
+    onSelect()
+    emblaApi.on('select', onSelect)
+  }, [emblaApi, onSelect])
+
+  const cards = [
+    { title: 'Quest Log', component: <QuestLog /> },
+    { title: 'Habit Tracker Guide', component: <HabitTrackerGuide /> },
+    { title: 'Action Workbook', component: <ActionWorkbook /> },
+  ]
+
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [markedDates, setMarkedDates] = React.useState<string[]>([])
   const [journalContent, setJournalContent] = React.useState<string>("");
@@ -200,9 +230,45 @@ export default function Component() {
             </>
           )}
         </CardContent>
-        <HabitTrackerGuide/>
-        <ActionWorkbook />
-        <QuestLog />
+        <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">My Personal Dashboard</h1>
+      <div className="relative">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex">
+            {cards.map((card, index) => (
+              <div className="flex-[0_0_100%]" key={index}>
+                <Card className="h-[calc(100vh-12rem)] mx-4">
+                  <CardHeader>
+                    <CardTitle>{card.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="overflow-y-auto h-[calc(100%-5rem)]">
+                    {card.component}
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-between mt-4">
+          <Button onClick={scrollPrev} disabled={!canScrollPrev} variant="outline" size="icon">
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex space-x-2">
+            {cards.map((_, index) => (
+              <div
+                key={index}
+                className={`h-2 w-2 rounded-full ${
+                  index === selectedIndex ? 'bg-primary' : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+          <Button onClick={scrollNext} disabled={!canScrollNext} variant="outline" size="icon">
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
         
       </Card>
       
