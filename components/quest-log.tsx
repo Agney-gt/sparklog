@@ -870,7 +870,7 @@ export default function QuestLog() {
   const currentQuests = questMap[selectedPath as keyof typeof questMap] || characterQuests
 
   return (
-    <div className="h-[800px] bg-white p-6">
+    <div className="min-h-screen bg-white p-6">
       <Card className="max-w-4xl mx-auto bg-black">
         <CardHeader className="border-b border-slate-800">
           <ScrollArea className="w-full whitespace-nowrap">
