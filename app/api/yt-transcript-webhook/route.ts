@@ -1,4 +1,3 @@
-import { YoutubeTranscript } from 'youtube-transcript';
 import { NextResponse } from 'next/server'
 
 
