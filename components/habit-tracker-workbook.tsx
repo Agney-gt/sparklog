@@ -43,7 +43,7 @@ export default function HabitTrackerWorkbook() {
         <AccordionItem value="track">
           <AccordionTrigger>2. Track Your Progress</AccordionTrigger>
           <AccordionContent>
-            <p>For each habit:</p>
+            <p>For each habit</p>
             <ul className="list-disc pl-6 mt-2">
               <li>
                 <Checkbox id="streak" className="mr-2" />
