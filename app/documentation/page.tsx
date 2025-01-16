@@ -10,7 +10,6 @@ export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [message, setMessage] = useState('');
     
     const fetchHtmlContent = async () => {
       setLoading(true);

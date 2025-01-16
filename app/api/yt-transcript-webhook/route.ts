@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
     try {
         const body = await request.json()
-        const { ...url } = body
         
         // Fetch the YouTube transcript
         const transcript = await YoutubeTranscript.fetchTranscript(body.url);
