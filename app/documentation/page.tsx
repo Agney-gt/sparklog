@@ -76,7 +76,7 @@ export default function Home() {
             
             fetchHtmlContent();
             setLoading(false);
-          }, 60000); // 1 minute in milliseconds
+          }, 100000); // 1 minute in milliseconds
           
         } else {
           const error = await response.json();
