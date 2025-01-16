@@ -1,11 +1,16 @@
 import { YoutubeTranscript } from 'youtube-transcript';
 import { NextResponse } from 'next/server'
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json()
         
+      // Get request data
+        const body = await request.json()
+
+            
         // Fetch the YouTube transcript
         const transcript = await YoutubeTranscript.fetchTranscript(body.url);
         // Combine the text fields
@@ -30,7 +35,7 @@ export async function POST(request: Request) {
         catch (error) {
             console.error('Error processing request:', error)
             return NextResponse.json(
-              { error: 'Internal server error' }, 
+              { error: `${error}` }, 
               { status: 500 }
             )
           }
