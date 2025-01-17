@@ -14,7 +14,7 @@ export default function Home() {
     const fetchHtmlContent = async () => {
       setLoading(true);
       try {
-          const response = await fetch('https://yt2mapapi.blob.core.windows.net/html/test.html');
+          const response = await fetch('https://yt2mapapi.blob.core.windows.net/html/test.html', {cache: 'no-store',});
           console.log(response) 
           const text = await response.text();
           console.log(text)
