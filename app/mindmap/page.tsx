@@ -5,6 +5,7 @@ import {html} from "@codemirror/lang-html"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { Label } from "@radix-ui/react-dropdown-menu";
 
 export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
@@ -76,7 +77,7 @@ export default function Home() {
             
             fetchHtmlContent();
             setLoading(false);
-          }, 100000); // 1 minute in milliseconds
+          }, 80000); // 1 minute in milliseconds
           
         } else {
           const error = await response.json();
@@ -89,19 +90,35 @@ export default function Home() {
     
     
     return (
-      <div>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-6">
+                  Youtube to <span className="text-blue-600">MindMap</span>
+                </h1>
         <Input placeholder="Enter Youtube Link" value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}/>
+        onChange={(e) => setInputValue(e.target.value)}
+        className={`pl-10 pr-10 w-1/4 justify-center mb-6   
+        }`}/>
         <Button variant="outline" onClick={handleSubmit} disabled={loading}>
         {loading ? <Loader2 className="animate-spin w-4 h-4" /> : "Submit"}
         </Button>
         {/* Display the message only when loading */}
         {loading && (
-          <p className="text-sm text-gray-500">
-            Please take a deep breath and wait for 1-2 minutes.
-          </p>
+          <div className="mt-4">  
+            <p>AI is Processing, Please Wait Up To 2 Minutes For Your MindMap</p>
+            </div>
+        )
+
+        }
+        {inputValue.includes("https://www.youtube.com/") && (
+          <div className="aspect-w-16 aspect-h-9 mt-6 mb-3">
+          <iframe
+            src={`https://www.youtube.com/embed/${inputValue.split("=")[1]}`}
+            allowFullScreen
+            className="justify-center w-full h-full"
+          ></iframe>
+        </div>
         )}
-        <h2>Preview</h2>
+        <h2 className = "mb-6"> </h2>
         <iframe
           title="HTML Preview"
           style={{ width: "100%", height: "800px", border: "1px solid #ccc" }}
