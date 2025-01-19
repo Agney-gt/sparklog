@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {EditorView, basicSetup} from "codemirror"
 import {html} from "@codemirror/lang-html"
 import { Input } from "@/components/ui/input"
@@ -42,7 +42,6 @@ export default function Home() {
       
       
     });
-    
     // Cleanup the editor on unmount
     return () => {
       view.destroy();
@@ -88,6 +87,17 @@ export default function Home() {
     };
     
     
+    const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
+    const enterFullscreen = () => {
+    const iframe = iframeRef.current;
+    
+    if (iframe) { // Check if iframe is not null
+      if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+      } 
+    }
+  };
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-6">
@@ -98,7 +108,7 @@ export default function Home() {
         className={`pl-10 pr-10 w-1/4 justify-center mb-6   
         }`}/>
         <Button variant="outline" onClick={handleSubmit} disabled={loading}>
-        {loading ? <Loader2 className="animate-spin w-4 h-4" /> : "Submit"}
+        {loading ? <Loader2 className="animate-spin w-4 h-4" /> : "Try Free"}
         </Button>
         {/* Display the message only when loading */}
         {loading && (
@@ -117,15 +127,20 @@ export default function Home() {
           ></iframe>
         </div>
         )}
-        <h2 className = "mb-6"> </h2>
-        <div className = "border border-black shadow"></div>
+        
         <iframe
           title="HTML Preview"
-          style={{ width: "100%", height: "1200px", border: "1px solid #ccc" }}
+          style={{ width: "100%", height: "1000px", border: "1px solid #ccc" }}
           srcDoc={htmlContent}
+          allowFullScreen
+          className = "mb-4"
+          ref={iframeRef}
           
-        ></iframe>
-      </div>
+        ></iframe>   
+        <Button variant="outline" onClick={enterFullscreen}>Go Fullscreen</Button>
+        
+        </div>
+      
     );
   
 }
