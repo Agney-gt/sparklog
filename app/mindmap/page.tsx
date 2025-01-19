@@ -118,10 +118,12 @@ export default function Home() {
         </div>
         )}
         <h2 className = "mb-6"> </h2>
+        <div className = "border border-black shadow"></div>
         <iframe
           title="HTML Preview"
-          style={{ width: "100%", height: "800px", border: "1px solid #ccc" }}
+          style={{ width: "100%", height: "1200px", border: "1px solid #ccc" }}
           srcDoc={htmlContent}
+          
         ></iframe>
       </div>
     );
