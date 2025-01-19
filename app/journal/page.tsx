@@ -211,6 +211,7 @@ export default function Component() {
                 <MarkdownEditor 
                 value={journalContent}
                 onChange={(value) => setJournalContent(value)}
+                
               />
               } 
               {/* ... other entry types ... */}

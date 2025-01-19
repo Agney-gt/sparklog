@@ -1,7 +1,6 @@
 'use client'
-import React from "react";
+import React, { useState, useEffect, } from "react";
 import MDEditor from '@uiw/react-md-editor';
-
 interface MarkdownEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -9,6 +8,10 @@ interface MarkdownEditorProps {
 }
 
 export default function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
+  const [loading, setLoading] = useState(false);
+  
+  
+
   // Image upload to server
 const imageUploadHandler = async (
   image: File
@@ -27,9 +30,11 @@ const imageUploadHandler = async (
 const handlePaste = async (event: React.ClipboardEvent<HTMLDivElement>) => {
   // Access the clipboard data using event.clipboardData
   const clipboardData = event.clipboardData;
+  
  // only if clipboard payload is file
   if (clipboardData.files.length === 1) {
     const myfile = clipboardData.files[0] as File;
+    setLoading(true);
    // you could perform some test: image size, type mime ....
     const url = await imageUploadHandler(myfile);
     event.preventDefault();
@@ -49,13 +54,17 @@ const handlePaste = async (event: React.ClipboardEvent<HTMLDivElement>) => {
         "ERROR Image has not been stored on server"
       );
     }
+    setLoading(false);
   }
 };
+useEffect(() => {
+  ; // Fetch content when the component mounts
+}, []);
+
   return (
     <div className="container">
       <MDEditor
         value={value}
-        onChange={(val) => onChange(val || '')}
         onPaste={handlePaste}
         enableScroll
         height={400}
@@ -63,8 +72,10 @@ const handlePaste = async (event: React.ClipboardEvent<HTMLDivElement>) => {
           placeholder: "Coding, Markdown, and Journaling have one thing in common—they’re like assembling a puzzle. Each piece builds on the last to reveal a bigger picture. \n\nCopy-paste Quests into the chatbot, create a template you like and title each journal entry with the name of the quest -  (e.g., # A Noble Crown or # Shining Brightly).",
           'aria-label': 'Markdown editor',
         }}
+        
 
       />
+      {loading && <div className="spinner">Loading...</div>}
     </div>
   );
 }
