@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect } from "react";
 import MDEditor from '@uiw/react-md-editor';
 interface MarkdownEditorProps {
   value: string;
@@ -9,7 +9,6 @@ interface MarkdownEditorProps {
 
 export default function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
   const [loading, setLoading] = useState(false);
-  
   
 
   // Image upload to server
@@ -65,6 +64,7 @@ useEffect(() => {
     <div className="container">
       <MDEditor
         value={value}
+        onChange={(val) => onChange(val || '')}
         onPaste={handlePaste}
         enableScroll
         height={400}
