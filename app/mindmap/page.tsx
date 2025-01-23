@@ -5,8 +5,6 @@ import {html} from "@codemirror/lang-html"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 import { YouTubeEmbed } from '@next/third-parties/google'
 
 export default function Home() {
