@@ -5,11 +5,15 @@ import {html} from "@codemirror/lang-html"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
+import { YouTubeEmbed } from '@next/third-parties/google'
 
 export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    // Create a container for the editor
     
     const fetchHtmlContent = async () => {
       setLoading(true);
@@ -99,48 +103,56 @@ export default function Home() {
     }
   };
     return (
+      <div className='flex flex-col items-center justify-center'>
       <div className="flex flex-col items-center justify-center h-screen">
         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-6">
                   Youtube to <span className="text-blue-600">MindMap</span>
                 </h1>
         <Input placeholder="Enter Youtube Link" value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        className={`pl-10 pr-10 w-1/4 justify-center mb-6   
+        className={`pl-2 pr-2 w-1/2 justify-center mb-6   
         }`}/>
         <Button variant="outline" onClick={handleSubmit} disabled={loading}>
         {loading ? <Loader2 className="animate-spin w-4 h-4" /> : "Try Free"}
         </Button>
         {/* Display the message only when loading */}
         {loading && (
-          <div className="mt-4">  
+          <div className="justify-center">  
             <p>AI is Processing, Please Wait Up To 2 Minutes For Your MindMap</p>
             </div>
         )
 
         }
         {inputValue.includes("https://www.youtube.com/") && (
-          <div className="aspect-w-16 aspect-h-9 mt-6 mb-3">
+          <div className="justify-center mt-3">
+              
+              <YouTubeEmbed videoid={`${inputValue.split("=")[1]}`} height={5} />
+              
           <iframe
-            src={`https://www.youtube.com/embed/${inputValue.split("=")[1]}`}
-            allowFullScreen
-            className="justify-center w-full h-full"
-          ></iframe>
+            
+          >
+              
+
+          </iframe>
         </div>
+
         )}
         
-        <iframe
-          title="HTML Preview"
-          style={{ width: "100%", height: "1000px", border: "1px solid #ccc" }}
-          srcDoc={htmlContent}
-          allowFullScreen
-          className = "mb-4"
-          ref={iframeRef}
-          
-        ></iframe>   
-        <Button variant="outline" onClick={enterFullscreen}>Go Fullscreen</Button>
         
-        </div>
+        
+    </div>
+    <iframe
+        title="HTML Preview"
+        style={{ width: "80%", height: "700px", border: "1px solid #ccc" }}
+        srcDoc={htmlContent}
+        allowFullScreen
+        className = "mb-4 mt-4 "
+        ref={iframeRef}
+        
+      ></iframe>   
+      <Button variant="outline" onClick={enterFullscreen}>Go Fullscreen</Button>
+    </div>
       
     );
-  
+    
 }
