@@ -10,7 +10,7 @@ const GoalsPage = () => {
             <HeaderHome />
             <GrowthObjectives/>
             <BattleObjectives/>
-            <Footer /> {/* Include the Footer component here */}
+            <Footer /> 
         </div>
     );
 };
