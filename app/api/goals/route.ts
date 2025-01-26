@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies(); // Await cookies to comply with Next.js dynamic API rules
+    const cookieStore = cookies(); 
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     const body = await request.json();
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies(); // Await cookies to comply with Next.js dynamic API rules
+    const cookieStore = cookies(); 
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const cookieStore = await cookies(); // Await cookies to comply with Next.js dynamic API rules
+    const cookieStore = cookies(); 
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     const { searchParams } = new URL(request.url);
