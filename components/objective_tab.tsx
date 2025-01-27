@@ -16,7 +16,7 @@ interface ObjectiveProps {
   onDelete: (id: string | number) => void;
 }
 
-export default function Objective_tab({ id, title, start_date, end_date, progress, exp, coins, onDelete }: ObjectiveProps) {
+export default function objective_tab({ id, title, start_date, end_date, progress, exp, coins, onDelete }: ObjectiveProps) {
   return (
     <Card className="w-full">
       <CardContent className="pt-6 space-y-4">
