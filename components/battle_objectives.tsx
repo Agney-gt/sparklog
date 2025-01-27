@@ -1,9 +1,9 @@
-import ObjectiveList from "@/components/ui/ObjectiveList";
+import Objective_tab_parts from "@/components/ui/Objective_tab_parts";
 import { Flag } from "lucide-react";
 
 export default function BattleObjectives() {
   return (
-    <ObjectiveList 
+    <Objective_tab_parts 
       category="battle"
       icon={<Flag className="h-8 w-8 text-primary" />}
       heading="Battle Objectives"
