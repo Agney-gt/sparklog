@@ -1,9 +1,28 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Trophy, Bookmark, Plus, HelpCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+
+function DottedProgressBar({ value, dotted = true }: { value: number; dotted?: boolean }) {
+  return (
+    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div
+        className="h-full bg-primary"
+        style={{
+          width: `${value}%`,
+          ...(dotted
+            ? {
+                backgroundImage: "linear-gradient(to right, transparent 50%, #fff 50%)",
+                backgroundSize: "10px 100%",
+                backgroundRepeat: "repeat-x",
+              }
+            : {}),
+        }}
+      ></div>
+    </div>
+  )
+}
 
 export default function GrowthObjectives() {
   return (
@@ -66,17 +85,7 @@ export default function GrowthObjectives() {
             <CardContent className="space-y-4">
               <div>
                 <div className="text-sm text-gray-500 mb-2">Time Remaining:</div>
-                <div className="relative pt-1">
-                  <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                    <div
-                      className="w-full bg-primary"
-                      style={{
-                        backgroundImage: "linear-gradient(to right, #4f46e5 50%, transparent 50%)",
-                        backgroundSize: "20px 20px",
-                      }}
-                    ></div>
-                  </div>
-                </div>
+                <DottedProgressBar value={100} />
                 <div className="text-right text-sm text-gray-500 mt-1">100%</div>
               </div>
               <div>
@@ -93,7 +102,7 @@ export default function GrowthObjectives() {
                     Success
                   </Badge>
                 </div>
-                <Progress value={200} className="h-2" />
+                <DottedProgressBar value={200} dotted={false} />
                 <div className="text-right text-sm text-gray-500 mt-1">200%</div>
               </div>
             </CardContent>
@@ -115,4 +124,6 @@ export default function GrowthObjectives() {
     </div>
   )
 }
+
+
 
