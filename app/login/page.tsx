@@ -27,7 +27,7 @@ export default function Component() {
       }
     };
     checkUser();
-  }, [router, supabase.auth.getSession]);
+  }, [router, supabase.auth]);
 
   const handleGoogleLogin = async () => {
     try {
