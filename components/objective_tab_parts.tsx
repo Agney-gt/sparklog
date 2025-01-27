@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ObjectiveCard from "./ObjectiveCard";
+import ObjectiveCard from "./Objective_tab";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
