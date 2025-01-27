@@ -1,4 +1,4 @@
-import ObjectiveList from "@/components/ui/ObjectiveList";
+import Objective_tab_parts from "@/components/ui/Objective_tab_parts";
 import { BarChart3 } from "lucide-react";
 
 export default function GrowthObjectives() {
