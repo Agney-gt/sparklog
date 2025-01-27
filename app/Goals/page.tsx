@@ -1,8 +1,8 @@
 import React from 'react';
 import HeaderHome from '@/components/HeaderHome'; // Adjust the import path as necessary
 import Footer from '@/components/Footer'; // Adjust the import path as necessary
-import GrowthObjectives from '@/components/growth-objectives';
-import BattleObjectives from '@/components/battle-objectives';
+import GrowthObjectives from '@/components/growth_objectives';
+import BattleObjectives from '@/components/battle_objectives';
 
 const GoalsPage = () => {
     return (
