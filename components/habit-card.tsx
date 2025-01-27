@@ -1,15 +1,21 @@
-import { CalendarIcon, CheckIcon, XIcon } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import { useEffect } from "react";
+import { CheckIcon, XIcon } from "lucide-react";
+import { Card } from "'components/ui/card'"; // Ensure this path is correct
 
 interface HabitCardProps {
-  title: string
-  total: number
-  isGrown?: boolean
-  toBeGrown?: boolean
-  weeks: number[]
+  title: string;
+  total: number;
+  isGrown?: boolean;
+  toBeGrown?: boolean;
+  weeks: number[];
 }
 
 export function HabitCard({ title, total, isGrown, toBeGrown, weeks }: HabitCardProps) {
+  useEffect(() => {
+    // Ensure fetchActions is defined or remove this line
+    // fetchActions();
+  }, []); // Updated dependency array
+
   return (
     <Card className="p-4 w-full">
       <div className="flex items-center justify-between mb-4">
@@ -33,16 +39,7 @@ export function HabitCard({ title, total, isGrown, toBeGrown, weeks }: HabitCard
       </div>
       <div className="border-t pt-4">
         <div className="text-center mb-2 text-sm text-muted-foreground">---------- 2024 · Sep ----------</div>
-        <div className="grid grid-cols-7 gap-1 text-xs mb-2 text-center text-muted-foreground">
-          <div>M</div>
-          <div>T</div>
-          <div>W</div>
-          <div>T</div>
-          <div>F</div>
-          <div>S</div>
-          <div>S</div>
-        </div>
-        <div className="space-y-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {weeks.map((week) => (
             <div key={week} className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground w-8">w-{week}</span>
@@ -56,6 +53,5 @@ export function HabitCard({ title, total, isGrown, toBeGrown, weeks }: HabitCard
         </div>
       </div>
     </Card>
-  )
+  );
 }
-

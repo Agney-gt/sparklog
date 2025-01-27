@@ -4,14 +4,11 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import HeaderHome from '../../components/HeaderHome'; // Updated path
-import Footer from '../../components/Footer'; // Updated path
+import HeaderHome  from '@/components/HeaderHome';
+import Footer from '@/components/Footer';
+const AnimatedReflectionProgress = dynamic(() => import('@/components/animated-reflection-progress'), { ssr: false });
 
-// Dynamically import AnimatedReflectionProgress with no SSR
-const AnimatedReflectionProgress = dynamic(
-  () => import('../../components/animated-reflection-progress'), // Updated path
-  { ssr: false }
-);
+
 
 export default function Component() {
   const router = useRouter();
