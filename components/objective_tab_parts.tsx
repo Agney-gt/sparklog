@@ -26,7 +26,7 @@ interface ObjectiveListProps {
   description: string;
 }
 
-export default function Objective_tab({ category, icon, heading, description }: ObjectiveListProps) {
+export default function Objective_tab_parts({ category, icon, heading, description }: ObjectiveListProps) {
   const [objectives, setObjectives] = useState<ObjectiveProps[]>([]);
   const [newObjective, setNewObjective] = useState({
     title: "",
