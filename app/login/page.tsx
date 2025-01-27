@@ -1,55 +1,55 @@
-'use client'
-import GoogleButton from 'react-google-button'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
-import HeaderHome from '@/components/HeaderHome'
-import Footer from '@/components/Footer'
+'use client';
+import GoogleButton from 'react-google-button';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import HeaderHome from '../../components/HeaderHome'; // Updated path
+import Footer from '../../components/Footer'; // Updated path
 
 // Dynamically import AnimatedReflectionProgress with no SSR
 const AnimatedReflectionProgress = dynamic(
-  () => import('@/components/animated-reflection-progress'),
+  () => import('../../components/animated-reflection-progress'), // Updated path
   { ssr: false }
-)
+);
 
 export default function Component() {
-  const router = useRouter()
-  const supabase = createClientComponentClient()
-  const [, setIsLoading] = useState(false)
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+  const [, setIsLoading] = useState(false);
   
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.push('/journal')
-        router.refresh()
+        router.push('/journal');
+        router.refresh();
       }
-    }
-    checkUser()
-  }, [router, supabase])
+    };
+    checkUser();
+  }, [router, supabase.auth.getSession]);
 
   const handleGoogleLogin = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
         }
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
       
       if (data?.url) {
-        window.location.href = data.url
+        window.location.href = data.url;
       }
 
     } catch (err) {
-      console.error('Error:', err)
-      alert('Error logging in with Google')
+      console.error('Error:', err);
+      alert('Error logging in with Google');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -66,23 +66,19 @@ export default function Component() {
                 </h1>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              
-                
               </div>
             </div>
           </div>
           <AnimatedReflectionProgress />
         </section>
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            
-        <GoogleButton
-  type="dark" // can be light or dark
-  onClick={handleGoogleLogin}
-/>
-
+          <GoogleButton
+            type="dark" // can be light or dark
+            onClick={handleGoogleLogin}
+          />
         </div>
       </main>
       <Footer />
     </div>
-  )
+  );
 }
