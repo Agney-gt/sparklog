@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Objective_tab from "./Objective_tab";
+import objective_tab from "./objective_tab";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -26,7 +26,7 @@ interface ObjectiveListProps {
   description: string;
 }
 
-export default function Objective_tab_parts({ category, icon, heading, description }: ObjectiveListProps) {
+export default function objective_tab_parts({ category, icon, heading, description }: ObjectiveListProps) {
   const [objectives, setObjectives] = useState<ObjectiveProps[]>([]);
   const [newObjective, setNewObjective] = useState({
     title: "",
