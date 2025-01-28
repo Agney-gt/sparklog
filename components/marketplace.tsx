@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 
 type MarketplaceItem = {
   id: number;
+  image_url:string;
   name: string;
   price: number;
   image: string;
@@ -47,6 +48,7 @@ export function Marketplace(props: {id: string }) {
       });
 
       const data = await response.json();
+      console.log(data)
       setUserId(props.id);
       if (response.ok && data.success) {
         setItems(data.data.items || []);
@@ -116,7 +118,7 @@ export function Marketplace(props: {id: string }) {
                 <CardContent className="pt-8">
                   <div className="space-y-6">
                     <img
-                      src={item.image || "/placeholder.svg"}
+                      src={item.image_url || "/placeholder.svg"}
                       alt={item.name}
                       className="h-52 w-full rounded-lg object-cover"
                     />
