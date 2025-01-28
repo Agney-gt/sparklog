@@ -1,0 +1,144 @@
+-- Enable the uuid-ossp extension for generating UUIDs
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Create the users table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    username TEXT NOT NULL,
+    coins INT DEFAULT 0,
+    hp INT DEFAULT 100,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create the items table
+CREATE TABLE items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL,
+    price INT NOT NULL,
+    image_url TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create the hotels table
+CREATE TABLE hotels (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL,
+    price INT NOT NULL,
+    hp INT NOT NULL, -- Health Points gained
+    image_url TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create the blackmarket_items table
+CREATE TABLE blackmarket_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL,
+    price INT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create the cart table
+CREATE TABLE cart (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    item_id UUID REFERENCES items(id) ON DELETE CASCADE,
+    quantity INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create the purchases table
+CREATE TABLE purchases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    item_id UUID REFERENCES items(id) ON DELETE CASCADE,
+    quantity INT NOT NULL,
+    total_price INT NOT NULL,
+    purchased_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create indexes for faster lookups
+CREATE INDEX idx_cart_user_id ON cart(user_id);
+CREATE INDEX idx_purchases_user_id ON purchases(user_id);
+
+-- Insert sample data for testing
+
+-- Users
+INSERT INTO users (username, coins, hp) VALUES
+('Player1', 5000, 100),
+('Player2', 3000, 80);
+
+-- Items
+INSERT INTO items (name, price, image_url) VALUES
+('iPhone 15 Pro', 1500, 'https://example.com/iphone.png'),
+('Travel to Japan', 3000, 'https://example.com/japan.png'),
+('15-inch MacBook Air', 2500, 'https://example.com/macbook.png');
+
+-- Hotels
+INSERT INTO hotels (name, price, hp, image_url) VALUES
+('Premium Hotel', 300, 500, '/placeholder.svg'),
+('Ordinary Hotel', 200, 150, '/placeholder.svg'),
+('Budget Hotel', 100, 50, '/placeholder.svg');
+
+-- Black Market Items
+INSERT INTO blackmarket_items (name, price, description) VALUES
+('Check-in Recovery', 50, 'Missed checking a Habit yesterday? Recover here!');
+
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO users (id, username, created_at)
+  VALUES (NEW.id, 'Anonymous', NOW());
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION handle_new_user();
+
+INSERT INTO users (id, username, created_at)  
+SELECT  
+    id,  
+    COALESCE( 'Anonymous') AS username,  
+    NOW() AS created_at  
+FROM auth.users  
+WHERE id NOT IN (SELECT id FROM users); 
+
+CREATE OR REPLACE FUNCTION check_in_hotel(hotel_price INT, hp_gain INT)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE users
+  SET coins = coins - hotel_price, hp = LEAST(hp + hp_gain, max_hp)
+  WHERE id = auth.uid();
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION purchase_item(item_price INT, item_name TEXT, item_id UUID)
+RETURNS VOID AS $$
+BEGIN
+  -- Update the user's coins
+  UPDATE users
+  SET 
+    coins = coins - item_price,
+    purchases = jsonb_insert(
+      COALESCE(purchases, '[]'::jsonb),
+      '{0}',
+      jsonb_build_object(
+        'item_id', item_id,
+        'item_name', item_name,
+        'price', item_price,
+        'purchased_at', NOW()
+      )
+    )
+  WHERE id = auth.uid();
+
+  -- Ensure the user has sufficient coins before purchasing
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Not enough coins or user not found';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+ALTER TABLE users
+ADD COLUMN purchases JSONB DEFAULT '[]';
