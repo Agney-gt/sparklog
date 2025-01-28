@@ -128,7 +128,7 @@ export function AccountOverview({ id }: AccountOverviewProps) {
           </div>
         </CardContent>
       </Card>
-      <Marketplace balance={userData.coins} id={id} />
+      <Marketplace id={id} />
     </>
   );
 }
