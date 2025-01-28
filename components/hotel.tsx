@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface HotelProps {
   id: string; 
+}
 
 type Hotel = {
   id: string;
