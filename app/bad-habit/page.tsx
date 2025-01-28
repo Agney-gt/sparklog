@@ -6,6 +6,7 @@
 // import { HabitItem } from "@/components/habit-item"
 // import { AddHabitForm } from "@/components/add-habit-form"
 // import { DefeatHeatMap } from "@/components/heat-map/defeat-heat-map"
+// import { v4 as uuidv4 } from 'uuid'  
 
 // interface Habit {
 //   id: string
@@ -30,7 +31,7 @@
 
 //   const addHabit = (type: string) => {
 //     const newHabit: Habit = {
-//       id: Math.random().toString(36).substr(2, 9),
+//       id: uuidv4(),  // Use uuid to generate a unique ID
 //       type: type as "scrolling" | "drink" | "smoking",
 //       status: "success",
 //     }
@@ -57,7 +58,7 @@
 //         <div className="space-y-1">
 //           {habits.map((habit) => (
 //             <HabitItem
-//               key={habit.id}
+//               key={habit.id}  // Ensure habit.id is unique
 //               type={habit.type}
 //               status={habit.status}
 //               onToggle={() => toggleHabitStatus(habit.id)}
@@ -78,6 +79,9 @@
 
 
 
+
+
+
 "use client"
 
 import { useState } from "react"
@@ -86,7 +90,7 @@ import Image from "next/image"
 import { HabitItem } from "@/components/habit-item"
 import { AddHabitForm } from "@/components/add-habit-form"
 import { DefeatHeatMap } from "@/components/heat-map/defeat-heat-map"
-import { v4 as uuidv4 } from 'uuid'  
+import { v4 as uuidv4 } from "uuid"
 
 interface Habit {
   id: string
@@ -111,7 +115,7 @@ export default function BattlePage() {
 
   const addHabit = (type: string) => {
     const newHabit: Habit = {
-      id: uuidv4(),  // Use uuid to generate a unique ID
+      id: uuidv4(),
       type: type as "scrolling" | "drink" | "smoking",
       status: "success",
     }
@@ -131,14 +135,14 @@ export default function BattlePage() {
           <div>
             <h2 className="text-xl font-semibold mb-1">Fight</h2>
             <p className="text-muted-foreground mb-2">Fight your Bad Habit! Conquer them!</p>
-            <button className="text-sm text-muted-foreground hover:text-foreground">Need helps</button>
+            <button className="text-sm text-muted-foreground hover:text-foreground">Need help</button>
           </div>
         </div>
 
         <div className="space-y-1">
           {habits.map((habit) => (
             <HabitItem
-              key={habit.id}  // Ensure habit.id is unique
+              key={habit.id}
               type={habit.type}
               status={habit.status}
               onToggle={() => toggleHabitStatus(habit.id)}
@@ -155,3 +159,4 @@ export default function BattlePage() {
     </div>
   )
 }
+
