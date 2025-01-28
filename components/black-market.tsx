@@ -3,17 +3,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 
-export function BlackMarket(props) {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+interface BlackMarketProps {
+  id: string; // User ID passed as a prop
+}
+
+interface Item {
+  id: string;
+  name: string;
+  price: number;
+}
+
+export function BlackMarket({ id }: BlackMarketProps) {
+  const [items, setItems] = useState<Item[]>([]); // Define state type
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
   // Fetch black market items from the backend
   useEffect(() => {
     const fetchItems = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/marketplace?user_id=USER_ID"); // Replace USER_ID dynamically
+        const response = await fetch(`/api/marketplace?user_id=${id}`); // Use dynamic user ID
         const data = await response.json();
 
         if (!response.ok) {
@@ -21,15 +31,15 @@ export function BlackMarket(props) {
         }
 
         setItems(data.data.blackMarketItems || []);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        setError((err as Error).message); // Ensure type safety for error
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchItems();
-  }, []);
+  }, [id]);
 
   const handlePurchase = async (itemId: string) => {
     try {
@@ -39,7 +49,7 @@ export function BlackMarket(props) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: props.id,
+          userId: id,
           itemId,
         }),
       });
@@ -50,8 +60,8 @@ export function BlackMarket(props) {
       }
 
       alert("Item purchased successfully!");
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err) {
+      alert((err as Error).message); // Type-safe error handling
     }
   };
 

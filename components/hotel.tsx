@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface HotelProps {
+  id: string; // User ID passed as a prop
+}
+
 type Hotel = {
   id: string;
   name: string;
@@ -12,16 +16,15 @@ type Hotel = {
   image_url: string;
 };
 
-export function Hotel(props) {
+export function Hotel({ id }: HotelProps) {
   const [coins, setCoins] = useState<number | null>(null);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(false);
-  const [userId, setuserId] = useState(null)
 
+  // Fetch hotel data from the backend
   const fetchHotelData = async () => {
     try {
-
-      const response = await fetch(`/api/marketplace?user_id=${props.id}`, {
+      const response = await fetch(`/api/marketplace?user_id=${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -29,10 +32,8 @@ export function Hotel(props) {
       });
 
       const data = await response.json();
-      setuserId(props.id)
 
-      if (data.success) {
-        console.log(data)
+      if (response.ok && data.success) {
         setCoins(data.data.userBalance || 0);
         setHotels(data.data.hotels || []);
       } else {
@@ -42,6 +43,7 @@ export function Hotel(props) {
       console.error("Unexpected error fetching hotel data:", error);
     }
   };
+
   const handleCheckIn = async (hotelId: string, price: number) => {
     if (coins !== null && coins < price) {
       alert("Not enough coins!");
@@ -49,14 +51,14 @@ export function Hotel(props) {
     }
     setLoading(true);
     try {
-      console.log(props.id)
       const response = await fetch("/api/marketplace", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ hotelId, userId}),
+        body: JSON.stringify({ hotelId, userId: id }),
       });
+
       const result = await response.json();
       if (response.ok && result.success) {
         alert("Hotel stay completed!");
@@ -75,7 +77,7 @@ export function Hotel(props) {
 
   useEffect(() => {
     fetchHotelData();
-  }, []);
+  }, [id]);
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
