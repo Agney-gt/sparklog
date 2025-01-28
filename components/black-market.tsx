@@ -15,14 +15,10 @@ interface Item {
 
 export function BlackMarket({ id }: BlackMarketProps) {
   const [items, setItems] = useState<Item[]>([]); // Define state type
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
-  // Fetch black market items from the backend
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch(`/api/marketplace?user_id=${id}`); // Use dynamic user ID
         const data = await response.json();
 
@@ -34,7 +30,6 @@ export function BlackMarket({ id }: BlackMarketProps) {
       } catch (err) {
         setError((err as Error).message); // Ensure type safety for error
       } finally {
-        setIsLoading(false);
       }
     };
 
@@ -64,11 +59,6 @@ export function BlackMarket({ id }: BlackMarketProps) {
       alert((err as Error).message); // Type-safe error handling
     }
   };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (error) {
     return <p className="text-red-500">Error: {error}</p>;
   }

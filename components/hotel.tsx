@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface HotelProps {
-  id: string; // User ID passed as a prop
-}
+  id: string; 
 
 type Hotel = {
   id: string;
@@ -17,10 +16,28 @@ type Hotel = {
 };
 
 export function Hotel({ id }: HotelProps) {
+
   const [coins, setCoins] = useState<number | null>(null);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(false);
+  const getbalance = async () => {
+    const response = await fetch(`/api/marketplace/user?user_id=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
+    const data = await response.json();
+    if (response.ok && data.success) {
+      setCoins(data.balance);
+    } else {
+      console.error("Error fetching user balance:", data.error);
+      alert(data.error || "Failed to fetch user balance");
+    }
+    setCoins(data.balance);
+    return data.balance;
+  };
   // Fetch hotel data from the backend
   const fetchHotelData = async () => {
     try {
@@ -60,6 +77,7 @@ export function Hotel({ id }: HotelProps) {
       });
 
       const result = await response.json();
+      getbalance();
       if (response.ok && result.success) {
         alert("Hotel stay completed!");
         fetchHotelData(); // Refresh data after successful check-in

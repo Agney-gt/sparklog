@@ -12,14 +12,33 @@ type MarketplaceItem = {
   image: string;
 };
 
-export function Marketplace(props: { balance: number; id: string }) {
+export function Marketplace(props: {id: string }) {
   const [userId, setUserId] = useState<string | null>(props.id || null);
-  const [coins, setCoins] = useState<number>(props.balance || 0);
+  const [coins, setCoins] = useState<number>(0);
   const [items, setItems] = useState<MarketplaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
+  const getbalance = async () => {
+    const response = await fetch(`/api/marketplace/user?user_id=${props.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (response.ok && data.success) {
+      setCoins(data.balance);
+    } else {
+      console.error("Error fetching user balance:", data.error);
+      alert(data.error || "Failed to fetch user balance");
+    }
+    setCoins(data.balance);
+    return data.balance;
+  };
   const fetchMarketplaceData = async () => {
+    
     try {
+      getbalance();
       const response = await fetch("/api/marketplace", {
         method: "GET",
         headers: {
@@ -29,10 +48,7 @@ export function Marketplace(props: { balance: number; id: string }) {
 
       const data = await response.json();
       setUserId(props.id);
-      setCoins(props.balance);
-
       if (response.ok && data.success) {
-        setCoins(data.data.userBalance || 0);
         setItems(data.data.items || []);
       } else {
         console.error("Error fetching marketplace data:", data.error);
@@ -49,9 +65,7 @@ export function Marketplace(props: { balance: number; id: string }) {
       alert("Not enough coins!");
       return;
     }
-
     setLoading(true);
-
     try {
       const response = await fetch("/api/marketplace", {
         method: "PATCH",
@@ -76,6 +90,7 @@ export function Marketplace(props: { balance: number; id: string }) {
     } finally {
       setLoading(false);
     }
+   
   };
 
   useEffect(() => {
@@ -115,7 +130,7 @@ export function Marketplace(props: { balance: number; id: string }) {
                       className={`w-full ${
                         loading ? "cursor-wait" : "cursor-pointer"
                       }`}
-                      onClick={() => handlePurchase(item.id, item.price)}
+                      onClick={() => {handlePurchase(item.id, item.price); getbalance();}}
                       disabled={loading || coins < item.price}
                     >
                       {loading ? "Processing..." : "Purchase"}
