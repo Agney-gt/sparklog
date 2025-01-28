@@ -29,6 +29,7 @@ export function Marketplace(props: { balance: number; id: string }) {
 
       const data = await response.json();
       setUserId(props.id);
+      setCoins(props.balance);
 
       if (response.ok && data.success) {
         setCoins(data.data.userBalance || 0);
