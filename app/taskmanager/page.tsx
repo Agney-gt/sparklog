@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
 
+
 export default function TaskManager() {
   const [expandedSections, setExpandedSections] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
