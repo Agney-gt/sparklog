@@ -142,3 +142,46 @@ END;
 $$ LANGUAGE plpgsql;
 ALTER TABLE users
 ADD COLUMN purchases JSONB DEFAULT '[]';
+
+ALTER TABLE items 
+ADD CONSTRAINT unique_name UNIQUE (name);
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Sage’s Scroll of Phoenix', 100, 'https://images.mapletip.com/maplestory-monsters/02040002.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Elder’s Scroll of Heron', 100, 'https://images.mapletip.com/maplestory-monsters/02040008.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Master’s Scroll of Eagle', 100, 'https://images.mapletip.com/maplestory-monsters/02040019.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Adept’s Scroll of Owl', 100, 'https://images.mapletip.com/maplestory-monsters/02049100.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Artisan’s Scroll of Hawk', 100, 'https://images.mapletip.com/maplestory-monsters/02040315.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Journeyman’s Scroll of Falcon', 100, 'https://images.mapletip.com/maplestory-monsters/02040009.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Initiate’s Scroll of Swallow', 100, 'https://images.mapletip.com/maplestory-monsters/02040020.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;
+
+INSERT INTO items (name, price, image_url) VALUES 
+('Beginner''s Scroll of Sparrow', 100, 'https://images.mapletip.com/maplestory-monsters/02040020.png')
+ON CONFLICT (name) 
+DO UPDATE SET price = EXCLUDED.price, image_url = EXCLUDED.image_url;

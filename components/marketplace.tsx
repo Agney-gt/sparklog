@@ -1,73 +1,73 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ShoppingCart } from "lucide-react"
 
 type MarketplaceItem = {
-  id: number;
-  image_url:string;
-  name: string;
-  price: number;
-  image: string;
-};
+  id: number
+  image_url: string
+  name: string
+  price: number
+  image: string
+}
 
-export function Marketplace(props: {id: string }) {
-  const [userId, setUserId] = useState<string | null>(props.id || null);
-  const [coins, setCoins] = useState<number>(0);
-  const [items, setItems] = useState<MarketplaceItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+export function Marketplace(props: { id: string }) {
+  const [userId, setUserId] = useState<string | null>(props.id || null)
+  const [coins, setCoins] = useState<number>(0)
+  const [items, setItems] = useState<MarketplaceItem[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
   const getbalance = async () => {
     const response = await fetch(`/api/marketplace/user?user_id=${props.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    })
 
-    const data = await response.json();
+    const data = await response.json()
     if (response.ok && data.success) {
-      setCoins(data.balance);
+      setCoins(data.balance)
     } else {
-      console.error("Error fetching user balance:", data.error);
-      alert(data.error || "Failed to fetch user balance");
+      console.error("Error fetching user balance:", data.error)
+      alert(data.error || "Failed to fetch user balance")
     }
-    setCoins(data.balance);
-    return data.balance;
-  };
+    return data.balance
+  }
+
   const fetchMarketplaceData = async () => {
-    
     try {
-      getbalance();
+      getbalance()
       const response = await fetch("/api/marketplace", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
       console.log(data)
-      setUserId(props.id);
+      setUserId(props.id)
       if (response.ok && data.success) {
-        setItems(data.data.items || []);
+        setItems(data.data.items || [])
       } else {
-        console.error("Error fetching marketplace data:", data.error);
-        alert(data.error || "Failed to fetch marketplace data");
+        console.error("Error fetching marketplace data:", data.error)
+        alert(data.error || "Failed to fetch marketplace data")
       }
     } catch (error) {
-      console.error("Unexpected error fetching marketplace data:", error);
-      alert("An error occurred while fetching marketplace data.");
+      console.error("Unexpected error fetching marketplace data:", error)
+      alert("An error occurred while fetching marketplace data.")
     }
-  };
+  }
 
   const handlePurchase = async (itemId: number, price: number) => {
     if (coins < price) {
-      alert("Not enough coins!");
-      return;
+      alert("Not enough coins!")
+      return
     }
-    setLoading(true);
+    setLoading(true)
     try {
       const response = await fetch("/api/marketplace", {
         method: "PATCH",
@@ -75,29 +75,28 @@ export function Marketplace(props: {id: string }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemId, userId }),
-      });
+      })
 
-      const result = await response.json();
+      const result = await response.json()
 
       if (response.ok && result.success) {
-        alert("Item purchased successfully!");
-        fetchMarketplaceData(); // Refresh data after successful purchase
+        alert("Item purchased successfully!")
+        fetchMarketplaceData() // Refresh data after successful purchase
       } else {
-        console.error("Error during purchase:", result.error);
-        alert(result.error || "Failed to complete purchase.");
+        console.error("Error during purchase:", result.error)
+        alert(result.error || "Failed to complete purchase.")
       }
     } catch (error) {
-      console.error("Unexpected error during purchase:", error);
-      alert("An error occurred during purchase.");
+      console.error("Unexpected error during purchase:", error)
+      alert("An error occurred during purchase.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-   
-  };
+  }
 
   useEffect(() => {
-    fetchMarketplaceData();
-  }, []);
+    fetchMarketplaceData()
+  }, [props.id]) // Added props.id as a dependency
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -108,31 +107,30 @@ export function Marketplace(props: {id: string }) {
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">
-        {coins !== null && (
-          <p className="text-base mb-4">Available Coins: {coins}</p>
-        )}
-        <div className="grid grid-cols-2 gap-4">
+        {coins !== null && <p className="text-base mb-4">Available Coins: {coins}</p>}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.length > 0 ? (
             items.map((item) => (
               <Card key={item.id}>
                 <CardContent className="pt-8">
                   <div className="space-y-6">
-                    <img
-                      src={item.image_url || "/placeholder.svg"}
-                      alt={item.name}
-                      className="h-52 w-full rounded-lg object-cover"
-                    />
+                    <div className="h-64 w-64 mx-auto flex items-center justify-center overflow-hidden bg-gray-100 rounded-lg">
+                      <img
+                        src={item.image_url || "/placeholder.svg"}
+                        alt={item.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
                     <div className="space-y-3">
                       <p className="text-lg font-medium">{item.name}</p>
-                      <p className="text-base text-muted-foreground">
-                        {item.price} Coins
-                      </p>
+                      <p className="text-base text-muted-foreground">{item.price} Coins</p>
                     </div>
                     <Button
-                      className={`w-full ${
-                        loading ? "cursor-wait" : "cursor-pointer"
-                      }`}
-                      onClick={() => {handlePurchase(item.id, item.price); getbalance();}}
+                      className={`w-full ${loading ? "cursor-wait" : "cursor-pointer"}`}
+                      onClick={() => {
+                        handlePurchase(item.id, item.price)
+                        getbalance()
+                      }}
                       disabled={loading || coins < item.price}
                     >
                       {loading ? "Processing..." : "Purchase"}
@@ -142,12 +140,11 @@ export function Marketplace(props: {id: string }) {
               </Card>
             ))
           ) : (
-            <p className="text-center text-gray-500 col-span-2">
-              No items available in the marketplace.
-            </p>
+            <p className="text-center text-gray-500 col-span-2">No items available in the marketplace.</p>
           )}
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
+
