@@ -1,4 +1,4 @@
-interface Task {
+export interface Task {
   id: number; 
   user_id: string; 
   text: string; 

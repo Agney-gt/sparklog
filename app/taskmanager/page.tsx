@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import {isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
+import {Task} from "@/types/task"
 
 
 export default function TaskManager() {
