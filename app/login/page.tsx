@@ -20,7 +20,8 @@ export default function Component() {
   
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase.auth.getSession();
+      
       if (session) {
         router.push('/journal')
         router.refresh()

@@ -15,6 +15,7 @@ import LevelProgress from '@/components/level-progress'
 import QuestLog from "@/components/quest-log"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
+import TaskManager from '../taskmanager/page'
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -42,6 +43,7 @@ export default function Component() {
     { title: 'Habit Stack', component: <HabitTrackerGuide /> },
     { title: 'Action Workbook', component: <ActionWorkbook /> },
     { title: 'Quest Log', component: <QuestLog /> },
+    { title: 'Task Manager', component: <TaskManager /> },
   ]
 
   const [date, setDate] = React.useState<Date | undefined>(new Date())
