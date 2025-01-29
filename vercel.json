@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/auth/v1/callback",
+      "dest": "/auth/callback"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://skpvagolynsnuryeelar.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrcHZhZ29seW5zbnVyeWVlbGFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc5MDMxMzksImV4cCI6MjA1MzQ3OTEzOX0.flybl9MU_LuG7v7rY5g_nsYTxdqHC_GOpBUmL8pWdOA"
+  }
+}
