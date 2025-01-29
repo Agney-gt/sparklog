@@ -6,9 +6,8 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import {isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
-import {Task} from "@/types/task"
-
+import { isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
+import { Task } from "@/types/task"
 
 export default function TaskManager() {
   const [expandedSections, setExpandedSections] = useState<string[]>([])
@@ -34,25 +33,27 @@ export default function TaskManager() {
     fetchUserId()
   }, [])
 
-  // Fetch tasks from Supabase
+  // Fetch tasks from the new API route
   useEffect(() => {
     const fetchTasks = async () => {
       if (userId) {
-        const { data, error } = await supabase
-          .from('tasks')
-          .select('*')
-          .eq('user_id', userId)
+        try {
+          const response = await fetch('/api/tasks') // Adjust the endpoint as necessary
+          const result = await response.json()
 
-        if (error) {
+          if (response.ok) {
+            setTasks(result.data)
+          } else {
+            console.error("Error fetching tasks:", result.error)
+          }
+        } catch (error) {
           console.error("Error fetching tasks:", error)
-        } else {
-          setTasks(data)
         }
       }
     }
 
     fetchTasks()
-  }, [userId, supabase])
+  }, [userId])
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => 
@@ -76,22 +77,23 @@ export default function TaskManager() {
     }
 
     try {
-      // Insert task into Supabase
-      const { data, error } = await supabase
-        .from('tasks')
-        .insert([
-          { 
-            user_id: userId, 
-            text: taskText, 
-            date: taskDate, 
-            time: taskTime,
-            completed: false // Default to not completed
-          }
-        ])
-        .select()
+      // Insert task into Supabase via the API
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: taskText,
+          date: taskDate,
+          time: taskTime,
+        }),
+      });
 
-      if (error) {
-        throw error
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error);
       }
 
       // Reset form fields
@@ -101,7 +103,7 @@ export default function TaskManager() {
       setIsModalOpen(false)
 
       // Update local tasks state
-      setTasks((prev) => [...prev, ...data]) // Add the new task to the local state
+      setTasks((prev) => [...prev, result.data]) // Add the new task to the local state
     } catch (error) {
       console.error("Error adding task:", error)
     }
@@ -134,7 +136,7 @@ export default function TaskManager() {
       const { error } = await supabase
         .from('tasks')
         .delete()
-        .eq('id', taskId)
+        .eq(' id', taskId)
 
       if (error) {
         throw error
@@ -173,7 +175,7 @@ export default function TaskManager() {
   };
 
   return (
-    <div className="max-w-2xl start mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6">
       <div className="space-y-6">
         <header className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -254,7 +256,7 @@ export default function TaskManager() {
 
       {/* Modal for Adding New Task */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w -[425px]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add New Task</DialogTitle>
             <DialogDescription>
