@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { format, isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
+import {isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
 
 export default function TaskManager() {
   const [expandedSections, setExpandedSections] = useState<string[]>([])
@@ -15,7 +15,7 @@ export default function TaskManager() {
   const [taskDate, setTaskDate] = useState("")
   const [taskTime, setTaskTime] = useState("")
   const [userId, setUserId] = useState<string | null>(null)
-  const [tasks, setTasks] = useState<any[]>([]) // Store tasks here
+  const [tasks, setTasks] = useState<Task[]>([]) // Store tasks here
 
   // Create Supabase client
   const supabase = createClientComponentClient()

@@ -1,11 +1,8 @@
-export interface Task {
-    id: string
-    title: string
-    isUrgent: boolean
-    date: Date
-    completed: boolean
-  }
-  
-  export type TimeFrame = "today" | "tomorrow" | "next7days"
-  
-  
+interface Task {
+  id: number; 
+  user_id: string; 
+  text: string; 
+  date: string; 
+  time: string; 
+  completed: boolean; 
+}
