@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCart, User, Package } from "lucide-react";
+import { User, Package } from "lucide-react";
 import { Marketplace } from "./marketplace";
 
 type UserData = {
   coins: number;
-  cartItems: number;
-  cartTotal: number;
+  cartItems?: number;
+  cartTotal?: number;
   purchaseItems: number;
   purchaseTotal: number;
 };
@@ -20,8 +20,6 @@ interface AccountOverviewProps {
 export function AccountOverview({ id }: AccountOverviewProps) {
   const [userData, setUserData] = useState<UserData>({
     coins: 0,
-    cartItems: 0,
-    cartTotal: 0,
     purchaseItems: 0,
     purchaseTotal: 0,
   });
@@ -40,29 +38,22 @@ export function AccountOverview({ id }: AccountOverviewProps) {
 
         const res = await fetch(`/api/marketplace?user_id=${id}`);
         const marketplaceData = await res.json();
-
+        console.log(marketplaceData);
         if (!res.ok) {
           throw new Error(marketplaceData.error || "Failed to fetch data");
         }
 
-        const { userBalance, cartItems, purchases } = marketplaceData.data;
+        const { userBalance, inventory } = marketplaceData.data;
 
-        const cartTotal = cartItems.reduce(
-          (sum: number, item: { quantity: number; price: number }) =>
-            sum + item.quantity * item.price,
-          0
-        );
-        const purchaseTotal = purchases.reduce(
+        const purchaseTotal = inventory?.reduce(
           (sum: number, purchase: { price: number }) => sum + purchase.price,
           0
-        );
+        ) || 0;
 
         setUserData({
           coins: userBalance || 0,
-          cartItems: cartItems.length,
-          cartTotal,
-          purchaseItems: purchases.length,
-          purchaseTotal,
+          purchaseItems: inventory?.length || 0,
+          purchaseTotal: purchaseTotal,
         });
       } catch (err) {
         if (err instanceof Error) {
@@ -99,19 +90,6 @@ export function AccountOverview({ id }: AccountOverviewProps) {
             <CardTitle className="text-2xl">My Account</CardTitle>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <ShoppingCart className="h-6 w-6" />
-                  <div>
-                    <p className="text-lg font-medium">My Cart</p>
-                    <p className="text-base text-muted-foreground">
-                      Total: {userData.cartItems} items • {userData.cartTotal} coins
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">

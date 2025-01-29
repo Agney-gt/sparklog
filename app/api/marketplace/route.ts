@@ -2,7 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-// Fetch all marketplace items, cart items, hotels, black market items, and purchase history
+// Fetch all marketplace items, user balance, inventory, hotels, and black market items
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
@@ -22,30 +22,20 @@ export async function GET(request: Request) {
       .select('*');
     if (blackMarketError) throw new Error('Failed to fetch black market items');
 
-    let userBalance = null;
-    let cartItems = [];
-    let purchases = [];
+    let userBalance = 0;
+    let inventory = [];
 
     if (userId) {
       const { data: user, error: userError } = await supabase
-        .from('users')
-        .select('coins')
-        .eq('id', userId)
+        .from('user_progress')
+        .select('balance, inventory')
+        .eq('user_id', userId)
         .single();
-      if (!userError) userBalance = user?.coins;
 
-      const { data: cartData, error: cartError } = await supabase
-        .from('cart')
-        .select('*')
-        .eq('user_id', userId);
-      if (!cartError) cartItems = cartData;
-
-      const { data: purchaseData, error: purchaseError } = await supabase
-        .from('users')
-        .select('purchases')
-        .eq('id', userId)
-        .single();
-      if (!purchaseError && purchaseData) purchases = purchaseData.purchases || [];
+      if (!userError && user) {
+        userBalance = user.balance;
+        inventory = user.inventory || [];
+      }
     }
 
     return NextResponse.json({
@@ -55,8 +45,7 @@ export async function GET(request: Request) {
         hotels,
         blackMarketItems,
         userBalance,
-        cartItems,
-        purchases,
+        inventory,
       },
     });
   } catch (error) {
@@ -95,14 +84,13 @@ export async function POST(request: Request) {
   }
 }
 
-// Deduct coins and handle purchases or hotel stays
+// Handle purchases or hotel stays
 export async function PATCH(request: Request) {
   try {
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
     const { userId, itemId, hotelId } = await request.json();
 
-    // Validate required fields
     if (!userId || (!itemId && !hotelId)) {
       return NextResponse.json(
         { error: 'User ID and either itemId or hotelId are required' },
@@ -110,11 +98,11 @@ export async function PATCH(request: Request) {
       );
     }
 
-    // Fetch user details
+    // Fetch user progress details
     const { data: user, error: userError } = await supabase
-      .from('users')
-      .select('id, coins, hp, purchases')
-      .eq('id', userId)
+      .from('user_progress')
+      .select('user_id, balance, inventory')
+      .eq('user_id', userId)
       .single();
 
     if (userError || !user) {
@@ -123,14 +111,13 @@ export async function PATCH(request: Request) {
     }
 
     let cost = 0;
-    let hpGain = 0;
     let newPurchase = null;
 
     if (hotelId) {
       // Fetch hotel details
       const { data: hotel, error: hotelError } = await supabase
         .from('hotels')
-        .select('id, name, price, hp')
+        .select('id, name, price')
         .eq('id', hotelId)
         .single();
 
@@ -140,7 +127,6 @@ export async function PATCH(request: Request) {
       }
 
       cost = hotel.price;
-      hpGain = hotel.hp;
       newPurchase = { id: hotel.id, name: hotel.name, price: hotel.price, type: 'hotel', date: new Date() };
     } else {
       // Fetch item details from 'items' table
@@ -151,7 +137,7 @@ export async function PATCH(request: Request) {
         .single();
 
       if (itemError || !item) {
-        // If item is not found in 'items', check in 'blackmarket_items' table
+        // If item is not found in 'items', check 'blackmarket_items'
         const { data: blackMarketItem, error: blackMarketError } = await supabase
           .from('blackmarket_items')
           .select('id, name, price')
@@ -163,7 +149,6 @@ export async function PATCH(request: Request) {
           return NextResponse.json({ error: 'Item not found' }, { status: 404 });
         }
 
-        // If found in 'blackmarket_items'
         cost = blackMarketItem.price;
         newPurchase = {
           id: blackMarketItem.id,
@@ -173,35 +158,34 @@ export async function PATCH(request: Request) {
           date: new Date(),
         };
       } else {
-        // If found in 'items'
         cost = item.price;
         newPurchase = { id: item.id, name: item.name, price: item.price, type: 'item', date: new Date() };
       }
     }
 
     // Check user's balance
-    if (user.coins < cost) {
-      return NextResponse.json({ error: 'Insufficient coins' }, { status: 400 });
+    if (user.balance < cost) {
+      return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 });
     }
 
-    // Update user records
-    const updatedPurchases = [...(user.purchases || []), newPurchase];
-    const updates = {
-      coins: user.coins - cost,
-      purchases: updatedPurchases,
-      ...(hotelId ? { hp: Math.min(user.hp + hpGain, 100) } : {}),
-    };
+    // Update user progress
+    const updatedInventory = [...(user.inventory || []), newPurchase];
 
-    const { error: updateError } = await supabase.from('users').update(updates).eq('id', userId);
+    const { error: updateError } = await supabase
+      .from('user_progress')
+      .update({ balance: user.balance - cost, inventory: updatedInventory })
+      .eq('user_id', userId);
+
     if (updateError) {
       console.error('User update error:', updateError);
-      throw new Error('Failed to update user');
+      throw new Error('Failed to update user progress');
     }
 
     return NextResponse.json({
       success: true,
       message: hotelId ? 'Hotel stay completed' : 'Item purchased successfully',
       purchase: newPurchase,
+      newBalance: user.balance - cost,
     });
   } catch (error) {
     console.error('Error in PATCH handler:', error);

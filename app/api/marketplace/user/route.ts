@@ -19,9 +19,9 @@ export async function GET(request: Request) {
 
     // Fetch user balance from 'users' table
     const { data: user, error } = await supabase
-      .from('users')
-      .select('coins')
-      .eq('id', userId)
+      .from('user_progress')
+      .select('balance')
+      .eq('user_id', userId)
       .single();
 
     if (error || !user) {
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      balance: user.coins,
+      balance: user.balance,
     });
   } catch (error) {
     console.error('Error in GET handler:', error);

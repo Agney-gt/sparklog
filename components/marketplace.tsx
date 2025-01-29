@@ -4,99 +4,83 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ShoppingCart } from "lucide-react"
+import WisdomQuiz from "@/components/wisdom-quiz"
 
 type MarketplaceItem = {
   id: number
   image_url: string
   name: string
   price: number
-  image: string
 }
 
 export function Marketplace(props: { id: string }) {
-  const [userId, setUserId] = useState<string | null>(props.id || null)
+  const userId = props.id;
   const [coins, setCoins] = useState<number>(0)
   const [items, setItems] = useState<MarketplaceItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [isQuizActive, setIsQuizActive] = useState<boolean>(false)
+  const [pendingPurchase, setPendingPurchase] = useState<{ itemId: number; price: number } | null>(null)
 
-  const getbalance = async () => {
-    const response = await fetch(`/api/marketplace/user?user_id=${props.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-
+  const getBalance = async () => {
+    const response = await fetch(`/api/marketplace/user?user_id=${props.id}`)
     const data = await response.json()
-    if (response.ok && data.success) {
+    if (response.ok && data.success) setCoins(data.balance)
       setCoins(data.balance)
-    } else {
-      console.error("Error fetching user balance:", data.error)
-      alert(data.error || "Failed to fetch user balance")
-    }
-    return data.balance
   }
 
   const fetchMarketplaceData = async () => {
     try {
-      getbalance()
-      const response = await fetch("/api/marketplace", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
+      await getBalance()
+      const response = await fetch("/api/marketplace")
       const data = await response.json()
-      console.log(data)
-      setUserId(props.id)
-      if (response.ok && data.success) {
-        setItems(data.data.items || [])
-      } else {
-        console.error("Error fetching marketplace data:", data.error)
-        alert(data.error || "Failed to fetch marketplace data")
-      }
+
+      if (response.ok && data.success) setItems(data.data.items || [])
     } catch (error) {
-      console.error("Unexpected error fetching marketplace data:", error)
-      alert("An error occurred while fetching marketplace data.")
+      console.error("Error fetching marketplace data:", error)
     }
   }
 
-  const handlePurchase = async (itemId: number, price: number) => {
+  const handleAttemptPurchase = (itemId: number, price: number) => {
     if (coins < price) {
       alert("Not enough coins!")
       return
     }
+    setPendingPurchase({ itemId, price }) // Store item details
+    setIsQuizActive(true) // Show quiz
+  }
+
+  const handleQuizCompletion = async () => {
+    setIsQuizActive(false) // Hide quiz
+    if (!pendingPurchase) return
+
+    const { itemId } = pendingPurchase
     setLoading(true)
     try {
       const response = await fetch("/api/marketplace", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ itemId, userId }),
       })
 
       const result = await response.json()
-
       if (response.ok && result.success) {
         alert("Item purchased successfully!")
-        fetchMarketplaceData() // Refresh data after successful purchase
+        fetchMarketplaceData()
       } else {
-        console.error("Error during purchase:", result.error)
         alert(result.error || "Failed to complete purchase.")
       }
     } catch (error) {
-      console.error("Unexpected error during purchase:", error)
+      console.error("Error during purchase:", error)
       alert("An error occurred during purchase.")
     } finally {
       setLoading(false)
+      setPendingPurchase(null)
     }
   }
 
   useEffect(() => {
     fetchMarketplaceData()
-  }, [props.id]) // Added props.id as a dependency
+  }, [props.id])
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -127,10 +111,7 @@ export function Marketplace(props: { id: string }) {
                     </div>
                     <Button
                       className={`w-full ${loading ? "cursor-wait" : "cursor-pointer"}`}
-                      onClick={() => {
-                        handlePurchase(item.id, item.price)
-                        getbalance()
-                      }}
+                      onClick={() => handleAttemptPurchase(item.id, item.price)}
                       disabled={loading || coins < item.price}
                     >
                       {loading ? "Processing..." : "Purchase"}
@@ -144,7 +125,15 @@ export function Marketplace(props: { id: string }) {
           )}
         </div>
       </CardContent>
+
+      {/* Wisdom Quiz Popup */}
+      {isQuizActive && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
+            <WisdomQuiz onComplete={handleQuizCompletion} />
+          </div>
+        </div>
+      )}
     </Card>
   )
 }
-
