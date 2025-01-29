@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
   try {
     // Use cookies() function here to pass it to Supabase client
-    const cookieStore = cookies(); // Call cookies() as a function
+    const cookieStore = cookies(); // Call cookies() to retrieve cookies
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     // Exchange the authorization code for a session
