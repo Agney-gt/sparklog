@@ -37,8 +37,8 @@ export function AccountOverview({ id }: AccountOverviewProps) {
         }
 
         const res = await fetch(`/api/marketplace?user_id=${id}`);
+        
         const marketplaceData = await res.json();
-        console.log(marketplaceData);
         if (!res.ok) {
           throw new Error(marketplaceData.error || "Failed to fetch data");
         }
