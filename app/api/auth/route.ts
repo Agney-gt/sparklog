@@ -1,33 +1,38 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
+
+export async function POST(request: Request) {
+  const requestUrl = new URL(request.url)
+  const formData = await request.formData()
+  const email = String(formData.get("email"))
+  const password = String(formData.get("password"))
+  const supabase = createRouteHandlerClient({ cookies })
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 })
+  }
+
+  return NextResponse.redirect(requestUrl.origin, {
+    status: 301,
+  })
+}
 
 export async function GET(request: Request) {
-  // Extract code from the query string
-  const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get("code")
 
-  if (!code) {
-    return NextResponse.json({ message: 'Code parameter is missing' }, { status: 400 });
+  if (code) {
+    const supabase = createRouteHandlerClient({ cookies })
+    await supabase.auth.exchangeCodeForSession(code)
   }
 
-  try {
-    // Use cookies() function here to pass it to Supabase client
-    const cookieStore = cookies(); // Call cookies() to retrieve cookies
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-
-    // Exchange the authorization code for a session
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-    if (error) {
-      console.error('Supabase Auth error:', error.message);
-      return NextResponse.json({ message: 'Authorization failed' }, { status: 401 });
-    }
-
-    // Redirect to /journal after successful authentication
-    return NextResponse.redirect(new URL('/journal', requestUrl.origin));
-  } catch (error) {
-    console.error('Auth callback error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-  }
+  // URL to redirect to after sign in process completes
+  return NextResponse.redirect(requestUrl.origin)
 }
+
