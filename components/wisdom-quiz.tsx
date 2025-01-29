@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { quizData, type QuizQuestion } from "@/lib/quiz-data"
 
-export default function WisdomQuiz({ onComplete }: { onComplete: () => void }) {
+export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => void, userId: string }) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
@@ -28,6 +28,21 @@ export default function WisdomQuiz({ onComplete }: { onComplete: () => void }) {
       setShowResult(false)
     } else {
       setShowResult(true)
+      increaseUserBalance()
+    }
+  }
+
+  const increaseUserBalance = async () => {
+    try {
+      await fetch("/api/marketplace/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: userId }),
+      })
+    } catch (error) {
+      console.error("Error increasing user balance:", error)
     }
   }
 
@@ -38,6 +53,7 @@ export default function WisdomQuiz({ onComplete }: { onComplete: () => void }) {
   const renderQuestion = (question: QuizQuestion) => (
     <>
       <CardHeader>
+        <p>You will get 50 coins for answering these questions</p>
         <CardTitle className="text-2xl mb-2">Wisdom Riddle #{currentQuestion + 1}</CardTitle>
         <CardDescription className="text-lg">{question.question}</CardDescription>
       </CardHeader>

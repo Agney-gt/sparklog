@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Fetch user balance from 'users' table
+    // Fetch user balance from 'user_progress' table
     const { data: user, error } = await supabase
       .from('user_progress')
       .select('balance')
@@ -38,6 +38,63 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error('Error in GET handler:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const { user_id } = await request.json();
+
+    if (!user_id) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Fetch the current balance
+    const { data: user, error: fetchError } = await supabase
+      .from('user_progress')
+      .select('balance')
+      .eq('user_id', user_id)
+      .single();
+
+    if (fetchError || !user) {
+      console.error('Error fetching user balance:', fetchError || 'User not found');
+      return NextResponse.json(
+        { error: 'Failed to fetch user balance' },
+        { status: 404 }
+      );
+    }
+
+    const newBalance = user.balance + 50;
+
+    // Update the balance
+    const { error: updateError } = await supabase
+      .from('user_progress')
+      .update({ balance: newBalance })
+      .eq('user_id', user_id);
+
+    if (updateError) {
+      console.error('Error updating balance:', updateError);
+      return NextResponse.json(
+        { error: 'Failed to update balance' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      balance: newBalance,
+    });
+  } catch (error) {
+    console.error('Error in POST handler:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
