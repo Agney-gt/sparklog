@@ -25,7 +25,13 @@ export function Marketplace(props: { id: string }) {
     const response = await fetch(`/api/marketplace/user?user_id=${props.id}`)
     const data = await response.json()
     if (response.ok && data.success) setCoins(data.balance)
-      setCoins(data.balance)
+      if(data.balance>0){
+        setCoins(data.balance)
+      }
+      else{
+        setCoins(0)
+      }
+
   }
 
   const fetchMarketplaceData = async () => {
@@ -91,7 +97,7 @@ export function Marketplace(props: { id: string }) {
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">
-        {coins !== null && <p className="text-base mb-4">Available Coins: {coins}</p>}
+        {coins !== null && <p className="text-base mb-4">Available Coins: {coins || 0}</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {items.length > 0 ? (
             items.map((item) => (
