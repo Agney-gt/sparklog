@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
+import Alert from "@/components/ui/alert"
 import { Task } from "@/types/task"
+
 
 export default function TaskManager() {
   const [expandedSections, setExpandedSections] = useState<string[]>([])
@@ -16,7 +18,8 @@ export default function TaskManager() {
   const [taskDate, setTaskDate] = useState("")
   const [taskTime, setTaskTime] = useState("")
   const [userId, setUserId] = useState<string | null>(null)
-  const [tasks, setTasks] = useState<Task[]>([]) // Store tasks here
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   // Create Supabase client
   const supabase = createClientComponentClient()
@@ -63,16 +66,46 @@ export default function TaskManager() {
     )
   }
 
+  const validateTaskInput = () => {
+    // Clear previous validation errors
+    setValidationError(null)
+
+    // Validate each input
+    if (!taskText.trim()) {
+      setValidationError("Task description is required")
+      return false
+    }
+
+    if (!taskDate) {
+      setValidationError("Please select a date for the task")
+      return false
+    }
+
+    if (!taskTime) {
+      setValidationError("Please select a time for the task")
+      return false
+    }
+
+    // Validate date is not in the past
+    const selectedDateTime = new Date(`${taskDate}T${taskTime}`)
+    const now = new Date()
+    if (selectedDateTime < now) {
+      setValidationError("Task date and time cannot be in the past")
+      return false
+    }
+
+    return true
+ }
+
   const handleAddTask = async () => {
     // Validate inputs
-    if (!taskText || !taskDate || !taskTime) {
-      console.error("Please fill in all task details")
+    if (!validateTaskInput()) {
       return
     }
 
     // Ensure user is logged in
     if (!userId) {
-      console.error("You must be logged in to add a task")
+      setValidationError("You must be logged in to add a task")
       return
     }
 
@@ -101,11 +134,13 @@ export default function TaskManager() {
       setTaskDate("")
       setTaskTime("")
       setIsModalOpen(false)
+      setValidationError(null)
 
       // Update local tasks state
-      setTasks((prev) => [...prev, result.data]) // Add the new task to the local state
+      setTasks((prev) => [...prev, result.data])
     } catch (error) {
       console.error("Error adding task:", error)
+      setValidationError("Failed to add task. Please try again.")
     }
   }
 
@@ -184,29 +219,32 @@ export default function TaskManager() {
           </div>
         </header>
 
-        <Button 
-          variant="ghost" 
-          className="w-full justify-start text-muted-foreground hover:text-foreground" 
-          onClick={() => setIsModalOpen(true)}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          New Task
-        </Button>
-
         {/* Display upcoming tasks */}
         {getUpcomingTasks().length > 0 && (
-          <div className="border-t">
+          <div className="border-t bg-slate-200 p-5 text-start ">
             <h3 className="font-semibold">Upcoming Tasks (Next Hour)</h3>
             {getUpcomingTasks().map((task, index) => (
-              <div key={index} className="pb-4 pl-6">
-                <p className="text-sm text-muted-foreground">{task.text} - {task.date} at {task.time}</p>
+              <div key={index} className="pb-2 pl-6">
+                <p className="text-sm text-muted-foreground ">{task.text} - {task.date} at {task.time}</p>
               </div>
             ))}
           </div>
         )}
 
+        <Button 
+          variant="ghost" 
+          className="w-full justify-start text-muted-foreground hover:text-foreground bg-slate-300 text-black font-bold" 
+          onClick={() => setIsModalOpen(true)}
+        >
+          <Plus className=" mr-1 h-4 w-4 text-center text-black" />
+          New Task
+        </Button>
+
+        
+        
+
         {(["today", "tomorrow", "next7days"] as const).map((timeframe) => (
-          <div key={timeframe} className="border-t">
+          <div key={timeframe} className="border-t  bg-slate-200 p-5 text-start">
             <button
               onClick={() => toggleSection(timeframe)}
               className={cn(
@@ -263,6 +301,16 @@ export default function TaskManager() {
               Create a new task with details
             </DialogDescription>
           </DialogHeader>
+
+          {/* Validation Alert */}
+          {validationError && (
+            <Alert 
+              variant="error" 
+              title="Error" 
+              description={validationError} 
+              onClose={() => setValidationError(null)} 
+            />
+          )}
           
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -272,7 +320,11 @@ export default function TaskManager() {
               <input
                 id="task-text"
                 value={taskText}
-                onChange={(e) => setTaskText(e.target.value)}
+                onChange={(e) => {setTaskText(e.target.value)
+                  if (validationError?.includes('description')) {
+                    setValidationError(null)
+                  }
+                }}
                 className="col-span-3 border p-2 rounded"
                 placeholder="Enter task description"
               />
@@ -286,7 +338,13 @@ export default function TaskManager() {
                 id="task-date"
                 type="date"
                 value={taskDate}
-                onChange={(e) => setTaskDate(e.target.value)}
+                onChange={(e) => {
+                  setTaskDate(e.target.value)
+                
+                  if (validationError?.includes('date')) {
+                    setValidationError(null)
+                  }
+                }}
                 className="col-span-3 border p-2 rounded"
               />
             </div>
@@ -299,7 +357,13 @@ export default function TaskManager() {
                 id="task-time"
                 type="time"
                 value={taskTime}
-                onChange={(e) => setTaskTime(e.target.value)}
+                onChange={(e) => {
+                  setTaskTime(e.target.value)
+                  
+                  if (validationError?.includes('time')) {
+                    setValidationError(null)
+                  }
+                }}
                 className="col-span-3 border p-2 rounded"
               />
             </div>
@@ -308,7 +372,9 @@ export default function TaskManager() {
           <div className="flex justify-end space-x-2">
             <Button 
               variant="outline" 
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => {setIsModalOpen(false)
+                setValidationError(null)
+              }}
             >
               Cancel
             </Button>
