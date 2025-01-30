@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { isToday, isTomorrow, isWithinInterval, addHours } from 'date-fns'
 import Alert from "@/components/ui/alert"
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation';
 import { Task } from "@/types/task"
 
 
@@ -21,10 +21,10 @@ export default function TaskManager() {
   const [userId, setUserId] = useState<string | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
   const [validationError, setValidationError] = useState<string | null>(null)
-
+  const router = useRouter()
   // Create Supabase client
   const supabase = createClientComponentClient()
-  const router = useRouter()
+  
 
   // Fetch user ID on component mount
   useEffect(() => {
