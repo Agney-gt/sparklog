@@ -11,7 +11,7 @@ export async function GET(request: Request) {
       ];
     
     try {
-        
+        console.log(request)
         const response = await fetch(htmlUrls[currentIndex], { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`Failed to fetch content: ${response.status}`);
