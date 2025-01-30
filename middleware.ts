@@ -22,14 +22,14 @@ export async function middleware(req: NextRequest) {
 
   // Protect routes except public paths
   if (!session && !isPublicPath) {
-    const redirectUrl = new URL("https://sparklog-delta.vercel.app/auth/callback", req.url)
+    const redirectUrl = new URL("/login", req.url)
     redirectUrl.searchParams.set("redirect", req.nextUrl.pathname)
     return NextResponse.redirect(redirectUrl)
   }
 
   // Redirect logged-in users away from public pages
   if (session && isPublicPath) {
-    const redirectUrl = new URL("https://sparklog-delta.vercel.app/auth/callback", req.url)
+    const redirectUrl = new URL("/journal", req.url)
     return NextResponse.redirect(redirectUrl)
   }
 
@@ -44,3 +44,5 @@ export const config = {
     "/journal",
   ],
 }
+
+

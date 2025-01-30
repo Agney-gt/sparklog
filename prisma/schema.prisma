@@ -49,6 +49,7 @@ model JournalEntry {
 model User {
   id            String         @id @default(uuid())
   journalEntries JournalEntry[]
+  checklistItems ChecklistItem[] // Added relation for checklist items
   // ... other user fields
 }
 
@@ -59,4 +60,18 @@ model Attachment {
   journalEntry  JournalEntry @relation(fields: [journalEntryId], references: [id])
   journalEntryId String
   createdAt     DateTime     @default(now())
+}
+
+model ChecklistItem {
+  id            String   @id @default(uuid())
+  user_id       String   @map("user_id")
+  date          DateTime @db.Date
+  text          String
+  classifier     String
+  is_completed  Boolean  @default(false)
+  created_at    DateTime @default(now()) @map("created_at")
+  updated_at    DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  user          User     @relation(fields: [user_id], references: [id])
 }
