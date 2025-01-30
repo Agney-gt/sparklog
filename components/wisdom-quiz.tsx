@@ -38,7 +38,7 @@ export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete:
     const fetchQuizData = async () => {
       const data = await getQuiz(itemId);
       console.log(data)
-      const createdQuizQuestions = data['quiz_questions'].map((quiz: any) => 
+      const createdQuizQuestions = data['quiz_questions'].map((quiz: { question: string, options: string[], correctAnswer: string, insight: string }) =>
         createQuizQuestion(
           quiz.question,
           quiz.options,
