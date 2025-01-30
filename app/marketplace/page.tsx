@@ -60,7 +60,7 @@ const GoalsPage: React.FC = () => {
       <main className="flex-1">
         <AccountOverview id={userId} />
         <BlackMarket id={userId} />
-        <ZenModeTimer initialTime={1} id={userId}  /> 
+        <ZenModeTimer initialTime={300} id={userId}  /> 
       </main>
       <Footer />
     </div>
