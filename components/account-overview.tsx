@@ -6,9 +6,7 @@ import { User, Package } from "lucide-react";
 import { Marketplace } from "./marketplace";
 
 type UserData = {
-  coins: number;
-  cartItems?: number;
-  cartTotal?: number;
+  balance: number;
   purchaseItems: number;
   purchaseTotal: number;
 };
@@ -19,41 +17,37 @@ interface AccountOverviewProps {
 
 export function AccountOverview({ id }: AccountOverviewProps) {
   const [userData, setUserData] = useState<UserData>({
-    coins: 0,
+    balance: 0,
     purchaseItems: 0,
     purchaseTotal: 0,
   });
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
     async function fetchUserData() {
       try {
-        setLoading(true);
         setError("");
-
         if (!id) {
           throw new Error("User not logged in");
         }
 
-        const res = await fetch(`/api/marketplace?user_id=${id}`);
-        
-        const marketplaceData = await res.json();
+        const res = await fetch(`/api/marketplace/user?user_id=${id}`);
+        const userData = await res.json();
+
         if (!res.ok) {
-          throw new Error(marketplaceData.error || "Failed to fetch data");
+          throw new Error(userData.error || "Failed to fetch user data");
         }
 
-        const { userBalance, inventory } = marketplaceData.data;
-
-        const purchaseTotal = inventory?.reduce(
-          (sum: number, purchase: { price: number }) => sum + purchase.price,
-          0
-        ) || 0;
+        const { user } = userData; // Assuming API response is { success: true, user: { ... } }
 
         setUserData({
-          coins: userBalance || 0,
-          purchaseItems: inventory?.length || 0,
-          purchaseTotal: purchaseTotal,
+          balance: user.balance || 0,
+          purchaseItems: user.inventory?.length || 0,
+          purchaseTotal:
+            user.inventory?.reduce(
+              (sum: number, purchase: { price: number }) => sum + purchase.price,
+              0
+            ) || 0,
         });
       } catch (err) {
         if (err instanceof Error) {
@@ -61,15 +55,11 @@ export function AccountOverview({ id }: AccountOverviewProps) {
         } else {
           setError("An unexpected error occurred");
         }
-      } finally {
-        setLoading(false);
-      }
+      } 
     }
 
     fetchUserData();
   }, [id]);
-
-  if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (

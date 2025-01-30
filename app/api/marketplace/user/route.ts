@@ -17,24 +17,24 @@ export async function GET(request: Request) {
       );
     }
 
-    // Fetch user balance from 'user_progress' table
+    // Fetch full user data from 'user_progress' table
     const { data: user, error } = await supabase
       .from('user_progress')
-      .select('balance')
+      .select('*') // Fetch all user details
       .eq('user_id', userId)
       .single();
 
     if (error || !user) {
-      console.error('Error fetching user balance:', error || 'User not found');
+      console.error('Error fetching user data:', error || 'User not found');
       return NextResponse.json(
-        { error: 'Failed to fetch user balance' },
+        { error: 'Failed to fetch user data' },
         { status: 404 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      balance: user.balance,
+      user, // Return full user details
     });
   } catch (error) {
     console.error('Error in GET handler:', error);
@@ -44,13 +44,15 @@ export async function GET(request: Request) {
     );
   }
 }
-
+// Updates the user_prpogress table (provide the columns and user_id)
 export async function POST(request: Request) {
   try {
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-    const { user_id } = await request.json();
+    const requestData = await request.json();
 
+    const { user_id, ...updateFields } = requestData;
+    
     if (!user_id) {
       return NextResponse.json(
         { error: 'User ID is required' },
@@ -58,40 +60,51 @@ export async function POST(request: Request) {
       );
     }
 
-    // Fetch the current balance
-    const { data: user, error: fetchError } = await supabase
-      .from('user_progress')
-      .select('balance')
-      .eq('user_id', user_id)
-      .single();
-
-    if (fetchError || !user) {
-      console.error('Error fetching user balance:', fetchError || 'User not found');
+    if (Object.keys(updateFields).length === 0) {
       return NextResponse.json(
-        { error: 'Failed to fetch user balance' },
-        { status: 404 }
+        { error: 'No fields provided for update' },
+        { status: 400 }
       );
     }
-
-    const newBalance = user.balance + 50;
-
-    // Update the balance
+    if(updateFields.type=="reward"){  // Handling question rewards
+      updateFields.balance = (updateFields.balance ?? 0) + 50;
+      delete updateFields.type;
+    }
+    if (updateFields.type === "zen_alert") { //Handling zen alerts
+      updateFields.zen_alerts = (updateFields.zen_alerts || 0) + 1; 
+      delete updateFields.type;
+    }
+    // Update the user data with the provided fields
     const { error: updateError } = await supabase
       .from('user_progress')
-      .update({ balance: newBalance })
+      .update(updateFields)
       .eq('user_id', user_id);
 
     if (updateError) {
-      console.error('Error updating balance:', updateError);
+      console.error('Error updating user data:', updateError);
       return NextResponse.json(
-        { error: 'Failed to update balance' },
+        { error: 'Failed to update user data' },
+        { status: 500 }
+      );
+    }
+
+    // Fetch the updated user data
+    const { data: updatedUser, error: fetchError } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', user_id)
+      .single();
+
+    if (fetchError || !updatedUser) {
+      return NextResponse.json(
+        { error: 'Failed to retrieve updated user data' },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      balance: newBalance,
+      user: updatedUser,
     });
   } catch (error) {
     console.error('Error in POST handler:', error);

@@ -1,28 +1,79 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { quizData, type QuizQuestion } from "@/lib/quiz-data"
+import { type QuizQuestion } from "@/lib/quiz-data"
 
-export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => void, userId: string }) {
+export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onComplete: () => void, userId: string, itemId: number, coins:number }) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [score, setScore] = useState(0)
+  const [quizData, setQuizData] = useState<QuizQuestion[] | null>(null);
+  const getQuiz = async (itemId: number) => {
+    try {
 
+      const response = await fetch(`/api/get-quiz?itemId=${itemId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch quiz");
+      }
+  
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching quiz:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      const data = await getQuiz(itemId);
+      const createdQuizQuestions = data['quiz_questions'].map((quiz: { question: string, options: string[], correctAnswer: string, insight: string }) =>
+        createQuizQuestion(
+          quiz.question,
+          quiz.options,
+          quiz.correctAnswer,
+          quiz.insight
+        )
+      );
+      setQuizData(createdQuizQuestions);
+      
+      
+      
+    };
+    fetchQuizData();
+  }, [itemId]);
+  // Function to create a quiz question  
+  const createQuizQuestion = (  
+    question: string,  
+    options: string[],  
+    correctAnswer: string,  
+    insight: string  
+  ): QuizQuestion => ({  
+    question,  
+    options,  
+    correctAnswer,  
+    insight,  
+  });  
+  
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer)
   }
 
   const handleNextQuestion = () => {
-    if (selectedAnswer === quizData[currentQuestion].correctAnswer) {
+    if (quizData && selectedAnswer === quizData[currentQuestion].correctAnswer) {
       setScore(score + 1)
     }
 
-    if (currentQuestion < quizData.length - 1) {
+    if (quizData && currentQuestion < quizData.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer(null)
       setShowResult(false)
@@ -39,13 +90,14 @@ export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => v
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id: userId }),
+        body: JSON.stringify({ user_id: userId, balance:coins, type:"reward"}),
       })
     } catch (error) {
       console.error("Error increasing user balance:", error)
     }
   }
-
+  
+  
   const handleFinishQuiz = () => {
     onComplete() // Notify parent component (Marketplace) that the quiz is done
   }
@@ -69,7 +121,7 @@ export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => v
       </CardContent>
       <CardFooter>
         <Button onClick={handleNextQuestion} disabled={!selectedAnswer}>
-          {currentQuestion < quizData.length - 1 ? "Next Question" : "Finish Quiz"}
+          {quizData && currentQuestion < quizData.length - 1 ? "Next Question" : "Finish Quiz"}
         </Button>
       </CardFooter>
     </>
@@ -79,15 +131,18 @@ export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => v
     <>
       <CardHeader>
         <CardTitle className="text-2xl mb-2">Quiz Completed!</CardTitle>
-        <CardDescription className="text-lg">
-          You scored {score} out of {quizData.length}
-        </CardDescription>
+        {quizData && (
+          <CardDescription className="text-lg">
+            You scored {score} out of {quizData.length}
+          </CardDescription>
+        )}
       </CardHeader>
-      <CardContent>
-        <p className="mb-4">Wisdom Insight:</p>
-        <p className="italic">{quizData[currentQuestion].insight}</p>
-      </CardContent>
-      <CardFooter>
+      {quizData && (
+        <CardContent>
+          <p className="mb-4">Wisdom Insight:</p>
+          <p className="italic">{quizData[currentQuestion].insight}</p>
+        </CardContent>)}
+        <CardFooter>
         <Button onClick={handleFinishQuiz}>Finish</Button>
       </CardFooter>
     </>
@@ -95,7 +150,7 @@ export default function WisdomQuiz({ onComplete, userId }: { onComplete: () => v
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
-      {showResult ? renderResult() : renderQuestion(quizData[currentQuestion])}
+      {showResult ? renderResult() : quizData && renderQuestion(quizData[currentQuestion])}
     </Card>
   )
 }

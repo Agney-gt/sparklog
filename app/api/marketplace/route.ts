@@ -2,16 +2,15 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-// Fetch all marketplace items, user balance, inventory, hotels, and black market items
-export async function GET(request: Request) {
+// Fetch all marketplace items, hotels, and black market items
+export async function GET() {
   try {
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('user_id');
-
-    const { data: items, error: itemsError } = await supabase.from('items').select('*');
+    const { data: items, error: itemsError } = await supabase
+  .from('items')
+  .select('* except(quiz_questions)');
     if (itemsError) throw new Error('Failed to fetch marketplace items');
 
     const { data: hotels, error: hotelsError } = await supabase.from('hotels').select('*');
@@ -22,30 +21,12 @@ export async function GET(request: Request) {
       .select('*');
     if (blackMarketError) throw new Error('Failed to fetch black market items');
 
-    let userBalance = 0;
-    let inventory = [];
-
-    if (userId) {
-      const { data: user, error: userError } = await supabase
-        .from('user_progress')
-        .select('balance, inventory')
-        .eq('user_id', userId)
-        .single();
-
-      if (!userError && user) {
-        userBalance = user.balance;
-        inventory = user.inventory || [];
-      }
-    }
-
     return NextResponse.json({
       success: true,
       data: {
         items,
         hotels,
         blackMarketItems,
-        userBalance,
-        inventory,
       },
     });
   } catch (error) {
@@ -84,7 +65,7 @@ export async function POST(request: Request) {
   }
 }
 
-// Handle purchases or hotel stays
+// Handle purchases 
 export async function PATCH(request: Request) {
   try {
     const cookieStore = cookies();

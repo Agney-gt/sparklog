@@ -11,6 +11,7 @@ export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    // create an array of html urls. Each successive request from clients should fetch the next url in the array
     // Create a container for the editor
     
     const fetchHtmlContent = async () => {
