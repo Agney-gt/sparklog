@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     );
   }
 }
-// Updates the user_prpogress table
+// Updates the user_prpogress table (provide the columns and user_id)
 export async function POST(request: Request) {
   try {
     const cookieStore = cookies();
@@ -66,11 +66,11 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    if(updateFields.type=="reward"){  // Handling rewards
-      updateFields.balance += 50;
+    if(updateFields.type=="reward"){  // Handling question rewards
+      updateFields.balance = (updateFields.balance ?? 0) + 50;
       delete updateFields.type;
     }
-    if (updateFields.type === "zen_alert") { //Handling alerts
+    if (updateFields.type === "zen_alert") { //Handling zen alerts
       updateFields.zen_alerts = (updateFields.zen_alerts || 0) + 1; 
       delete updateFields.type;
     }
