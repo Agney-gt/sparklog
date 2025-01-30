@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { type QuizQuestion } from "@/lib/quiz-data"
 
-export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete: () => void, userId: string, itemId: number }) {
+export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onComplete: () => void, userId: string, itemId: number, coins:number }) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
@@ -15,6 +15,7 @@ export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete:
   const [quizData, setQuizData] = useState<QuizQuestion[] | null>(null);
   const getQuiz = async (itemId: number) => {
     try {
+
       const response = await fetch(`/api/get-quiz?itemId=${itemId}`, {
         method: "GET",
         headers: {
@@ -27,8 +28,6 @@ export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete:
       }
   
       const result = await response.json();
-      console.log("WQ data:", result.data['quiz_questions'][0]);
-      
       return result.data;
     } catch (error) {
       console.error("Error fetching quiz:", error);
@@ -37,7 +36,6 @@ export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete:
   useEffect(() => {
     const fetchQuizData = async () => {
       const data = await getQuiz(itemId);
-      console.log(data)
       const createdQuizQuestions = data['quiz_questions'].map((quiz: { question: string, options: string[], correctAnswer: string, insight: string }) =>
         createQuizQuestion(
           quiz.question,
@@ -92,7 +90,7 @@ export default function WisdomQuiz({ onComplete, userId, itemId }: { onComplete:
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id: userId }),
+        body: JSON.stringify({ user_id: userId, balance:coins, type:"reward"}),
       })
     } catch (error) {
       console.error("Error increasing user balance:", error)
