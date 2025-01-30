@@ -3,38 +3,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 
+const createCategory = (title, subtitle, tasks) => ({ title, subtitle, tasks });
+
 const categories = [
-  {
-    title: "Learning · Growing",
-    subtitle: "♦ Achieve skill refinement! ♦",
-    tasks: ["Complete 10+ online courses", "Stick to learning Japanese", "Pass the advanced exams"],
-  },
-  {
-    title: "Health · self-discipline",
-    subtitle: "♦ Wellness as Wealth ♦",
-    tasks: ["Early bedtime", "Control snacks and beverage intake", "Maintain hydration"],
-  },
-  {
-    title: "Work · Career",
-    subtitle: "♦ Empower the workforce ♦",
-    tasks: ["Proactively complete tasks", "Maintain weekly updates on YouTube", "Expand side hustle"],
-  },
-  {
-    title: "Interpersonal · Relationships",
-    subtitle: "♦ Venture into connections ♦",
-    tasks: ["Meet old friends", "Make new friends", "Participate in activities with friends"],
-  },
-  {
-    title: "Finance · Money",
-    subtitle: "♦ Smart Money Moves ♦",
-    tasks: ["Review finances monthly", "Say no to credit cards", "Regularly deposit 100,000"],
-  },
-  {
-    title: "Family · Life",
-    subtitle: "♦ Love yourself ♦",
-    tasks: ["Take a family portrait", "Stay in touch with family daily", "Take the family on a trip"],
-  },
-]
+  createCategory("Learning · Growing", "♦ Achieve skill refinement! ♦", [
+    "Complete 10+ online courses",
+    "Stick to learning Japanese",
+    "Pass the advanced exams",
+  ]),
+  createCategory("Health · self-discipline", "♦ Wellness as Wealth ♦", [
+    "Early bedtime",
+    "Control snacks and beverage intake",
+    "Maintain hydration",
+  ]),
+  createCategory("Work · Career", "♦ Empower the workforce ♦", [
+    "Proactively complete tasks",
+    "Maintain weekly updates on YouTube",
+    "Expand side hustle",
+  ]),
+  createCategory("Interpersonal · Relationships", "♦ Venture into connections ♦", [
+    "Meet old friends",
+    "Make new friends",
+    "Participate in activities with friends",
+  ]),
+  createCategory("Finance · Money", "♦ Smart Money Moves ♦", [
+    "Review finances monthly",
+    "Say no to credit cards",
+    "Regularly deposit 100,000",
+  ]),
+  createCategory("Family · Life", "♦ Love yourself ♦", [
+    "Take a family portrait",
+    "Stay in touch with family daily",
+    "Take the family on a trip",
+  ]),
+];
+
 
 export function VisionBoard() {
   return (
