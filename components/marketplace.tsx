@@ -20,6 +20,8 @@ export function Marketplace(props: { id: string }) {
   const [loading, setLoading] = useState<boolean>(false)
   const [isQuizActive, setIsQuizActive] = useState<boolean>(false)
   const [pendingPurchase, setPendingPurchase] = useState<{ itemId: number; price: number } | null>(null)
+  
+  
 
   const getBalance = async () => {
     const response = await fetch(`/api/marketplace/user?user_id=${props.id}`)
@@ -46,13 +48,15 @@ export function Marketplace(props: { id: string }) {
     }
   }
 
-  const handleAttemptPurchase = (itemId: number, price: number) => {
+  const handleAttemptPurchase = async (itemId: number, price: number) => {
     if (coins < price) {
       alert("Not enough coins!")
       return
     }
-    setPendingPurchase({ itemId, price }) // Store item details
-    setIsQuizActive(true) // Show quiz
+    setPendingPurchase({ itemId, price })
+    setIsQuizActive(true);
+    
+      
   }
 
   const handleQuizCompletion = async () => {
@@ -114,6 +118,7 @@ export function Marketplace(props: { id: string }) {
                     <div className="space-y-3">
                       <p className="text-lg font-medium">{item.name}</p>
                       <p className="text-base text-muted-foreground">{item.price} Coins</p>
+                      
                     </div>
                     <Button
                       className={`w-full ${loading ? "cursor-wait" : "cursor-pointer"}`}
@@ -133,10 +138,10 @@ export function Marketplace(props: { id: string }) {
       </CardContent>
 
       {/* Wisdom Quiz Popup */}
-      {isQuizActive && (
+      {isQuizActive && pendingPurchase && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
-            <WisdomQuiz userId={props.id} onComplete={handleQuizCompletion} />
+            <WisdomQuiz itemId = {pendingPurchase.itemId} userId={props.id} onComplete={handleQuizCompletion} />
           </div>
         </div>
       )}

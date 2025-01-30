@@ -19,7 +19,7 @@ const createQuizQuestion = (
 });  
 
 // Array of quiz questions data  
-export const quizData: QuizQuestion[] = [  
+export const quizDatas: QuizQuestion[] = [  
   createQuizQuestion(  
       "What truly determines a person's impact on others?",  
       [  
