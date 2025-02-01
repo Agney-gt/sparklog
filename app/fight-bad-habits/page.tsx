@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { Swords } from "lucide-react";
 import Image from "next/image";
@@ -9,52 +10,82 @@ import HabitTracker from "@/components/battle-logs";
 
 interface Habit {
   id: string;
+  user_id: string;
+  name: string;
   type: string;
   status: "success" | "failed";
+  date: string;
+  calendar_entries: Record<string, "success" | "failed">;
 }
 
 export default function BattlePage() {
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchHabits();
   }, []);
 
-  // Fetch habits from the API
   const fetchHabits = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch("/api/habits");
-      const result = await response.json();
-      if (response.ok) {
-        setHabits(result.data || []);
-      } else {
-        console.error("Error fetching habits:", result.error);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch habits: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error("Network error fetching habits:", error);
+      const result = await response.json();
+      setHabits(result.data || []);
+    } catch (err) {
+      console.error("Error fetching habits:", err);
+      setError("Failed to load habits. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Toggle habit status through the API
   const toggleHabitStatus = async (id: string) => {
     try {
       const response = await fetch(`/api/habits`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, toggleOnly: true }), // ✅ Toggle only the status
+        body: JSON.stringify({ id, toggleOnly: true }),
       });
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error: ${errorText}`);
+        throw new Error(`Error updating habit: ${response.statusText}`);
       }
+
       const result = await response.json();
-      setHabits(habits.map((h) => (h.id === id ? { ...h, status: result.updatedFields.status } : h)));
-    } catch (error) {
-      console.error("Error updating habit:", error);
+      setHabits((prev) =>
+        prev.map((habit) =>
+          habit.id === id ? { ...habit, status: result.updatedFields.status } : habit
+        )
+      );
+    } catch (err) {
+      console.error("Error updating habit:", err);
     }
   };
 
-  // Add a new habit through the API
+  const deleteHabit = async (id: string) => {
+    try {
+      const response = await fetch(`/api/habits?id=${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete habit");
+      }
+
+      setHabits((prev) => prev.filter((habit) => habit.id !== id));
+    } catch (err) {
+      console.error("Failed to delete habit:", err);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
@@ -70,17 +101,29 @@ export default function BattlePage() {
             <button className="text-sm text-muted-foreground hover:text-foreground">Need help</button>
           </div>
         </div>
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
         <div className="space-y-1">
-          {habits.map((habit) => (
-            <HabitItem key={habit.id} type={habit.type} status={habit.status} onToggle={() => toggleHabitStatus(habit.id)} />
-          ))}
+          {loading ? (
+            <p>Loading habits...</p>
+          ) : (
+            habits.map((habit) => (
+              <HabitItem
+                key={habit.id}
+                id={habit.id}
+                type={habit.type}
+                status={habit.status}
+                onToggle={() => toggleHabitStatus(habit.id)}
+                onDelete={() => deleteHabit(habit.id)}
+              />
+            ))
+          )}
         </div>
         <div className="mt-4">
-          <AddHabitForm/>
+          <AddHabitForm onHabitAdded={fetchHabits} />
         </div>
       </div>
-      <DefeatHeatMap />
-      <HabitTracker />
+      <DefeatHeatMap habits={habits} />
+      <HabitTracker habits={habits} />
     </div>
   );
 }

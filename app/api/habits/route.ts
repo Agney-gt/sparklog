@@ -139,3 +139,30 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+export async function DELETE(request: Request) {
+  try {
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user) throw userError;
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "Habit ID is required" }, { status: 400 });
+    }
+
+    const { error } = await supabase.from("habits").delete().eq("id", id).eq("user_id", userData.user.id);
+    if (error) {
+      console.error("Error deleting habit:", error);
+      return NextResponse.json({ error: "Error deleting habit" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: "Habit deleted successfully" });
+  } catch (error) {
+    console.error("Unexpected error deleting habit:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

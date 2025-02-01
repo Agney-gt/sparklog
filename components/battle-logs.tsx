@@ -1,89 +1,65 @@
-"use client"
+"use client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle2, XCircle, Cigarette, Phone, Wine } from "lucide-react";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, XCircle, Cigarette, Phone, Wine } from "lucide-react"
-
-type Habit = {
-  id: string
-  user_id: string
-  name: string
-  type: string
-  status: "success" | "failed"
-  date: string
-  calendar_entries: Record<string, "success" | "failed">
+interface Habit {
+  id: string;
+  user_id: string;
+  name: string;
+  type: string;
+  status: "success" | "failed";
+  date: string;
+  calendar_entries: Record<string, "success" | "failed">;
 }
 
-type Statistics = {
-  weekly: { success: number; failed: number }
-  monthly: { success: number; failed: number }
-  annually: { success: number; failed: number }
+interface Statistics {
+  weekly: { success: number; failed: number };
+  monthly: { success: number; failed: number };
+  annually: { success: number; failed: number };
 }
 
-export default function HabitTracker() {
-  const [habits, setHabits] = useState<Habit[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    fetchHabits()
-  }, [])
-
-  const fetchHabits = async () => {
-    try {
-      const response = await fetch("/api/habits")
-      if (response.ok) {
-        const result = await response.json()
-        setHabits(result.data || [])
-      }
-    } catch (error) {
-      console.error("Error fetching habits:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
+export default function HabitTracker({ habits }: { habits: Habit[] }) {
   const getIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case "smoking":
-        return <Cigarette className="h-6 w-6" />
+        return <Cigarette className="h-6 w-6" />;
       case "scrolling":
-        return <Phone className="h-6 w-6" />
+        return <Phone className="h-6 w-6" />;
       case "drink":
-        return <Wine className="h-6 w-6" />
+        return <Wine className="h-6 w-6" />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const calculateStatistics = (habit: Habit): Statistics => {
-    const entries = habit.calendar_entries || {}
-
-    const now = new Date()
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
-    const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate())
+    const entries = habit.calendar_entries || {};
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
 
     const calculatePeriodStats = (startDate: Date) => {
       return Object.entries(entries).reduce(
         (acc, [date, status]) => {
           if (new Date(date) >= startDate) {
-            acc[status]++
+            acc[status]++;
           }
-          return acc
+          return acc;
         },
-        { success: 0, failed: 0 },
-      )
-    }
+        { success: 0, failed: 0 }
+      );
+    };
 
     return {
       weekly: calculatePeriodStats(oneWeekAgo),
       monthly: calculatePeriodStats(oneMonthAgo),
       annually: calculatePeriodStats(oneYearAgo),
-    }
-  }
+    };
+  };
 
-  if (isLoading) {
-    return <div className="flex justify-center items-center min-h-[200px]">Loading habits...</div>
+  if (!habits.length) {
+    return <div className="flex justify-center items-center min-h-[200px]">No habits tracked yet.</div>;
   }
 
   return (
@@ -97,7 +73,7 @@ export default function HabitTracker() {
         </CardHeader>
         <CardContent className="space-y-6">
           {habits.map((habit) => {
-            const stats = calculateStatistics(habit)
+            const stats = calculateStatistics(habit);
             return (
               <Card key={habit.id} className="p-4">
                 <div className="flex items-center justify-between">
@@ -109,7 +85,7 @@ export default function HabitTracker() {
                         {habit.status === "success" ? (
                           <span className="text-green-600 flex items-center gap-1">
                             <CheckCircle2 className="h-4 w-4" />
-                            You&apos;re doing great!
+                            You're doing great!
                           </span>
                         ) : (
                           <span className="text-red-600 flex items-center gap-1">
@@ -139,11 +115,10 @@ export default function HabitTracker() {
                   </div>
                 </div>
               </Card>
-            )
+            );
           })}
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

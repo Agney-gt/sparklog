@@ -13,7 +13,11 @@ interface ApiResponse {
   error?: string;
 }
 
-export function AddHabitForm() {
+interface AddHabitFormProps {
+  onHabitAdded: () => void; // Function to trigger a re-fetch
+}
+
+export function AddHabitForm({ onHabitAdded }: AddHabitFormProps) {
   const [open, setOpen] = useState(false);
   const [habitName, setHabitName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,9 +44,9 @@ export function AddHabitForm() {
       if (!response.ok) {
         throw new Error(data.error || "Failed to add habit");
       }
-
       setHabitName("");
       setOpen(false);
+      onHabitAdded(); // ✅ Refresh the habit list after adding
     } catch (error) {
       console.error("Error adding habit:", error);
       setErrorMessage((error as Error).message || "Something went wrong.");
