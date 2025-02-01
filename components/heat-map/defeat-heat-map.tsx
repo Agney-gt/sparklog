@@ -1,65 +1,58 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardHeader, CardContent } from "../ui/card";
 import { HabitHeatMap } from "./habit-heat-map";
 
+// Define Habit type based on backend response
+interface Habit {
+  user_id: string;
+  type: string;
+}
+
 export function DefeatHeatMap() {
-  const [supabase] = useState(() => createBrowserSupabaseClient());
   const [userId, setUserId] = useState<string | null>(null);
   const [habitTypes, setHabitTypes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUserAndHabits = async () => {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error("Error fetching session:", sessionError);
+    const fetchHabits = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch habits from the API route
+        const response = await fetch("/api/habits");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch habits: ${response.statusText}`);
+        }
+
+        const result: { data?: Habit[]; error?: string } = await response.json();
+        if (result.error) {
+          throw new Error(result.error);
+        }
+
+        if (!result.data || result.data.length === 0) {
+          setHabitTypes([]);
+          setUserId(null);
+        } else {
+          // Extract unique habit types
+          const uniqueTypes = Array.from(new Set(result.data.map((habit) => habit.type)));
+          setHabitTypes(uniqueTypes);
+          setUserId(result.data[0]?.user_id || null);
+        }
+      } catch (err) {
+        console.error("Error fetching habits:", err);
+        setError((err as Error).message);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const user = sessionData?.session?.user;
-      if (!user) {
-        setUserId(null);
-        setLoading(false);
-        return;
-      }
-
-      setUserId(user.id);
-
-      // Fetch distinct habit types from the database
-      const { data, error: habitsError } = await supabase
-        .from("habits")
-        .select("type")
-        .eq("user_id", user.id);
-
-      if (habitsError) {
-        console.error("Error fetching habit types:", habitsError);
-      } else {
-        // Extract unique habit types
-        const uniqueTypes = Array.from(new Set(data.map((habit) => habit.type)));
-        setHabitTypes(uniqueTypes);
-        
-      }
-
-      setLoading(false);
     };
 
-    fetchUserAndHabits();
-
-    // Listen for authentication state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id || null);
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [supabase]);
+    fetchHabits();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
   if (!userId) return <p>User not logged in</p>;
 
   return (

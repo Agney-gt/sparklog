@@ -1,16 +1,19 @@
 "use client";
-
 import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 
-interface AddHabitFormProps {
-  onAdd: (habitName: string) => void; // Expect habit name as argument
+interface ApiResponse {
+  data: {
+    id: string;
+    name: string;
+  };
+  error?: string;
 }
 
-export function AddHabitForm({ onAdd }: AddHabitFormProps) {
+export function AddHabitForm() {
   const [open, setOpen] = useState(false);
   const [habitName, setHabitName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,12 +21,12 @@ export function AddHabitForm({ onAdd }: AddHabitFormProps) {
 
   const handleAdd = async () => {
     setErrorMessage("");
-  
+
     if (!habitName.trim()) {
       setErrorMessage("Habit name cannot be empty.");
       return;
     }
-  
+
     try {
       setLoading(true);
       const response = await fetch("/api/habits", {
@@ -31,22 +34,23 @@ export function AddHabitForm({ onAdd }: AddHabitFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: habitName.trim() }),
       });
-  
-      const data = await response.json();
+
+      const data: ApiResponse = await response.json();
+
       if (!response.ok) {
         throw new Error(data.error || "Failed to add habit");
       }
-  
-      onAdd(data.data); // ✅ Pass the habit returned from API instead of manually adding
+
       setHabitName("");
       setOpen(false);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error adding habit:", error);
-      setErrorMessage(error.message || "Something went wrong.");
+      setErrorMessage((error as Error).message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

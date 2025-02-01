@@ -9,6 +9,16 @@ import {
   isToday,
 } from "date-fns";
 
+
+interface Habit {
+  id: string;
+  calendar_entries: Record<string, string>;
+}
+
+interface ApiResponse {
+  data: Habit[];
+}
+
 interface CalendarGridProps {
   currentDate: Date;
   habitId: string;
@@ -21,16 +31,19 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
 
   useEffect(() => {
     async function fetchCalendarData() {
+      if (!habitId) return;
+
       try {
         const response = await fetch(`/api/habits?id=${habitId}`);
-        const result = await response.json();
+        const result: ApiResponse = await response.json();
 
-        console.log("Fetched Data:", result);
+        if (!response.ok) {
+          console.error("Error fetching habit data:", result);
+          return;
+        }
 
-        const habit = result.data.find((h: any) => h.id === habitId);
-
+        const habit = result.data.find((h) => h.id === habitId);
         if (habit) {
-          console.log("Setting calendar data:", habit.calendar_entries);
           setData(habit.calendar_entries || {});
         } else {
           console.error("Habit not found in fetched data");
@@ -39,8 +52,7 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
         console.error("Error fetching habit data:", error);
       }
     }
-
-    if (habitId) fetchCalendarData();
+    fetchCalendarData();
   }, [habitId]);
 
   function handleDateToggle(date: Date) {
@@ -52,17 +64,15 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
     const dateKey = format(date, "yyyy-MM-dd");
     const currentStatus = data[dateKey];
     const newStatus = currentStatus === "success" ? "failed" : "success";
-
-    console.log(`Toggling date ${dateKey} from ${currentStatus} to ${newStatus}`);
-
+    
     setData((prev) => ({ ...prev, [dateKey]: newStatus }));
     setPendingUpdates((prev) => ({ ...prev, [dateKey]: newStatus }));
   }
 
   async function handleSave() {
     if (Object.keys(pendingUpdates).length === 0) return;
-
     setIsSaving(true);
+
     try {
       const updatesArray = Object.entries(pendingUpdates).map(([date, status]) => ({
         id: habitId,
@@ -71,7 +81,6 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
       }));
 
       for (const update of updatesArray) {
-        console.log("Sending update:", update);
         const response = await fetch("/api/habits", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -83,19 +92,17 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
           console.error("Error saving updates:", errorData);
         }
       }
-
-      console.log("Updates saved successfully");
       setPendingUpdates({});
     } catch (error) {
       console.error("Network error:", error);
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   }
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
-
   const startingDayIndex = monthStart.getDay();
   const daysToAdd = startingDayIndex === 0 ? 6 : startingDayIndex - 1;
   const paddedDays = Array(daysToAdd).fill(null);
@@ -108,11 +115,9 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
             {day}
           </div>
         ))}
-
         {paddedDays.map((_, index) => (
           <div key={`pad-${index}`} className="aspect-square" />
         ))}
-
         {daysInMonth.map((date) => {
           const dateKey = format(date, "yyyy-MM-dd");
           return (
@@ -133,7 +138,6 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
           );
         })}
       </div>
-
       <button
         onClick={handleSave}
         disabled={Object.keys(pendingUpdates).length === 0 || isSaving}
