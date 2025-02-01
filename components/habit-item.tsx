@@ -1,6 +1,5 @@
-import { Smartphone, Wine, Cigarette } from "lucide-react"
-import { cn } from "@/lib/utils"
-
+import { Smartphone, Wine, Cigarette} from "lucide-react"
+import { cn } from "@/lib/utils";
 interface HabitItemProps {
   type: "scrolling" | "drink" | "smoking"
   status: "success" | "fail"
@@ -19,7 +18,8 @@ export function HabitItem({ type, status, onToggle }: HabitItemProps) {
   return (
     <div className="flex items-center justify-between py-2 px-4 hover:bg-muted/50 rounded-lg">
       <div className="flex items-center gap-3">
-        <Icon className="w-5 h-5 text-muted-foreground" />
+      {Icon ? <Icon className="w-5 h-5 text-muted-foreground" /> : <></>}
+
         <span className="capitalize">{type}</span>
       </div>
       <div className="flex items-center gap-4">

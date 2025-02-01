@@ -1,54 +1,79 @@
+"use client";
 
-import Image from "next/image"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { HabitHeatMap } from "./habit-heat-map"
-
-const defaultData = {
-  smoking: {
-    status: "success",
-    data: {
-      "2024-09-02": "success",
-      "2024-09-14": "success",
-      "2024-09-21": "success",
-    },
-  },
-  scrolling: {
-    status: "success",
-    data: {
-      "2024-09-03": "success",
-    },
-  },
-  drink: {
-    status: "fail",
-    data: {
-      "2024-09-14": "fail",
-      "2024-09-22": "fail",
-    },
-  },
-}
+import { useEffect, useState } from "react";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Card, CardHeader, CardContent } from "../ui/card";
+import { HabitHeatMap } from "./habit-heat-map";
 
 export function DefeatHeatMap() {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+  const [userId, setUserId] = useState<string | null>(null);
+  const [habitTypes, setHabitTypes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserAndHabits = async () => {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Error fetching session:", sessionError);
+        setLoading(false);
+        return;
+      }
+
+      const user = sessionData?.session?.user;
+      if (!user) {
+        setUserId(null);
+        setLoading(false);
+        return;
+      }
+
+      setUserId(user.id);
+
+      // Fetch distinct habit types from the database
+      const { data, error: habitsError } = await supabase
+        .from("habits")
+        .select("type")
+        .eq("user_id", user.id);
+
+      if (habitsError) {
+        console.error("Error fetching habit types:", habitsError);
+      } else {
+        // Extract unique habit types
+        const uniqueTypes = Array.from(new Set(data.map((habit) => habit.type)));
+        setHabitTypes(uniqueTypes);
+        
+      }
+
+      setLoading(false);
+    };
+
+    fetchUserAndHabits();
+
+    // Listen for authentication state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id || null);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!userId) return <p>User not logged in</p>;
+
   return (
     <Card className="mt-8">
-      <CardHeader className="flex-row items-start gap-4 space-y-0">
-        <Image src="/cal.png" alt="Calendar icon" width={80} height={80} className="rounded-lg" />
-        <div>
-          <h2 className="text-xl font-semibold mb-1">Defeat Heat Map</h2>
-          <p className="text-muted-foreground mb-2">Check out your battle heat map here.</p>
-          <button className="text-sm text-muted-foreground hover:text-foreground">Need help</button>
-        </div>
+      <CardHeader>
+        <h2 className="text-xl font-semibold mb-1">Defeat Heat Map</h2>
       </CardHeader>
-      <CardContent className="grid gap-4">
-        {Object.entries(defaultData).map(([type, data]) => (
-          <HabitHeatMap
-            key={type}
-            type={type as "scrolling" | "drink" | "smoking"}
-            initialStatus={data.status as "success" | "fail"}
-            initialData={data.data}
-          />
-        ))}
+      <CardContent>
+        {habitTypes.length > 0 ? (
+          habitTypes.map((type) => <HabitHeatMap key={type} type={type} userId={userId} />)
+        ) : (
+          <p>No habits tracked yet.</p>
+        )}
       </CardContent>
     </Card>
-  )
+  );
 }
-

@@ -1,27 +1,52 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 
 interface AddHabitFormProps {
-  onAdd: (type: string) => void
+  onAdd: (habitName: string) => void; // Expect habit name as argument
 }
 
 export function AddHabitForm({ onAdd }: AddHabitFormProps) {
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<string>("")
+  const [open, setOpen] = useState(false);
+  const [habitName, setHabitName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAdd = () => {
-    if (selected) {
-      onAdd(selected)
-      setOpen(false)
-      setSelected("")
+  const handleAdd = async () => {
+    setErrorMessage("");
+  
+    if (!habitName.trim()) {
+      setErrorMessage("Habit name cannot be empty.");
+      return;
     }
-  }
-
+  
+    try {
+      setLoading(true);
+      const response = await fetch("/api/habits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: habitName.trim() }),
+      });
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to add habit");
+      }
+  
+      onAdd(data.data); // ✅ Pass the habit returned from API instead of manually adding
+      setHabitName("");
+      setOpen(false);
+    } catch (error: any) {
+      console.error("Error adding habit:", error);
+      setErrorMessage(error.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -32,25 +57,22 @@ export function AddHabitForm({ onAdd }: AddHabitFormProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add new habit to battle</DialogTitle>
+          <DialogTitle>Add a new habit to battle</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <Select value={selected} onValueChange={setSelected}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select habit type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="scrolling">Scrolling</SelectItem>
-              <SelectItem value="drink">Drink</SelectItem>
-              <SelectItem value="smoking">Smoking</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={handleAdd} disabled={!selected}>
-            Add Habit
+          <Input
+            type="text"
+            placeholder="Enter habit (e.g., Procrastination, Junk Food)"
+            value={habitName}
+            onChange={(e) => setHabitName(e.target.value)}
+            disabled={loading}
+          />
+          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+          <Button onClick={handleAdd} disabled={!habitName.trim() || loading}>
+            {loading ? "Adding..." : "Add Habit"}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
