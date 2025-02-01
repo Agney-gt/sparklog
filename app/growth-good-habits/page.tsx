@@ -13,6 +13,7 @@ interface Habit {
   user_id: string;
   name: string;
   type: string;
+  category: "good" | "bad"; // 
   status: "success" | "failed";
   date: string;
   calendar_entries: Record<string, "success" | "failed">;
@@ -31,11 +32,12 @@ export default function BattlePage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/habits?category=bad");
+      const response = await fetch("/api/habits?category=good"); // ✅ Fetch only good habits
       if (!response.ok) {
         throw new Error(`Failed to fetch habits: ${response.statusText}`);
       }
       const result = await response.json();
+      console.log(result);
       setHabits(result.data || []);
     } catch (err) {
       console.error("Error fetching habits:", err);
@@ -90,14 +92,14 @@ export default function BattlePage() {
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
         <Swords className="w-8 h-8" />
-        <h1 className="text-3xl font-bold">Battle · Bad Habits</h1>
+        <h1 className="text-3xl font-bold">Growth · Good Habits</h1>
       </div>
       <div className="mb-8">
         <div className="flex items-start gap-4 p-4 bg-muted/30 rounded-lg mb-6">
-          <Image src="/fight.png" alt="Fighting illustration" width={80} height={80} className="rounded-lg" />
+          <Image src="/growth.png" alt="Fighting illustration" width={80} height={80} className="rounded-lg" />
           <div>
-            <h2 className="text-xl font-semibold mb-1">Fight</h2>
-            <p className="text-muted-foreground mb-2">Fight your Bad Habit! Conquer them!</p>
+            <h2 className="text-xl font-semibold mb-1">Growth here!</h2>
+            <p className="text-muted-foreground mb-2">Nurturing and growth</p>
             <button className="text-sm text-muted-foreground hover:text-foreground">Need help</button>
           </div>
         </div>
@@ -119,11 +121,11 @@ export default function BattlePage() {
           )}
         </div>
         <div className="mt-4">
-          <AddHabitForm onHabitAdded={fetchHabits} category="bad"/>
+          <AddHabitForm onHabitAdded={fetchHabits} category="good" /> {/* ✅ Ensuring only good habits are added */}
         </div>
       </div>
-      <DefeatHeatMap habits={habits} text="Defeat Heat Map" />
-      <HabitTracker habits={habits} text="Battle Log"/>
+      <DefeatHeatMap habits={habits} text="Growth Heat Map" />
+      <HabitTracker habits={habits} text="Growth Statistic"/>
     </div>
   );
 }

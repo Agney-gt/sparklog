@@ -1,7 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, XCircle, Cigarette, Phone, Wine } from "lucide-react";
-
+import { CheckCircle2, XCircle} from "lucide-react";
 interface Habit {
   id: string;
   user_id: string;
@@ -18,20 +17,7 @@ interface Statistics {
   annually: { success: number; failed: number };
 }
 
-export default function HabitTracker({ habits }: { habits: Habit[] }) {
-  const getIcon = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "smoking":
-        return <Cigarette className="h-6 w-6" />;
-      case "scrolling":
-        return <Phone className="h-6 w-6" />;
-      case "drink":
-        return <Wine className="h-6 w-6" />;
-      default:
-        return null;
-    }
-  };
-
+export default function HabitTracker({ habits,text }: { habits: Habit[],text:string }) {
   const calculateStatistics = (habit: Habit): Statistics => {
     const entries = habit.calendar_entries || {};
     const now = new Date();
@@ -68,7 +54,7 @@ export default function HabitTracker({ habits }: { habits: Habit[] }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <div className="p-2 bg-muted rounded-lg">🥊</div>
-            Battle Log
+            {text}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -78,7 +64,6 @@ export default function HabitTracker({ habits }: { habits: Habit[] }) {
               <Card key={habit.id} className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {getIcon(habit.type)}
                     <div>
                       <h3 className="font-semibold">{habit.name}</h3>
                       <div className="flex items-center gap-2 text-sm">
