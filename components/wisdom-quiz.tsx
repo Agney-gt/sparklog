@@ -28,7 +28,6 @@ export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onCom
       }
   
       const result = await response.json();
-      console.log(result)
       return result.data;
     } catch (error) {
       console.error("Error fetching quiz:", error);
