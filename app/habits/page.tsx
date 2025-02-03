@@ -1,37 +1,65 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Swords } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { Swords, Sprout } from "lucide-react";
 import Image from "next/image";
 import { HabitItem } from "@/components/habit-item";
 import { AddHabitForm } from "@/components/add-habit-form";
 import { DefeatHeatMap } from "@/components/heat-map/defeat-heat-map";
 import HabitTracker from "@/components/battle-logs";
+import { useCategoryParam } from "./SearchParamsHandler"; // ✅ Use extracted category logic
 
 interface Habit {
   id: string;
   user_id: string;
   name: string;
   type: string;
+  category: "good" | "bad";
   status: "success" | "failed";
   date: string;
   calendar_entries: Record<string, "success" | "failed">;
 }
 
-export default function BattlePage() {
+export default function HabitCategoryPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CategoryFetcher />
+    </Suspense>
+  );
+}
+
+// ✅ Separate component for fetching category
+function CategoryFetcher() {
+  const category = useCategoryParam();
+
+  if (category !== "good" && category !== "bad") {
+    return (
+      <div className="max-w-2xl mx-auto p-6 text-center">
+        <h2 className="text-2xl font-bold text-red-500">Invalid category</h2>
+        <p>Please use ?category=good or ?category=bad in the URL.</p>
+      </div>
+    );
+  }
+
+  return <HabitsPageContent category={category} />;
+}
+
+// ✅ Extracted habits logic into a separate component
+function HabitsPageContent({ category }: { category: "good" | "bad" }) {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchHabits();
-  }, []);
+  }, [category]);
 
   const fetchHabits = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const response = await fetch("/api/habits");
+      const response = await fetch(`/api/habits?category=${category}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch habits: ${response.statusText}`);
       }
@@ -89,16 +117,32 @@ export default function BattlePage() {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
-        <Swords className="w-8 h-8" />
-        <h1 className="text-3xl font-bold">Battle · Bad Habit</h1>
+        {category === "bad" ? <Swords className="w-8 h-8" /> : <Sprout className="w-8 h-8" />}
+        <h1 className="text-3xl font-bold">
+          {category === "bad" ? "Battle · Bad Habits" : "Growth · Good Habits"}
+        </h1>
       </div>
       <div className="mb-8">
         <div className="flex items-start gap-4 p-4 bg-muted/30 rounded-lg mb-6">
-          <Image src="/fight.png" alt="Fighting illustration" width={80} height={80} className="rounded-lg" />
+          <Image
+            src={category === "bad" ? "/fight.png" : "/growth.png"}
+            alt={category === "bad" ? "Fighting illustration" : "Growth illustration"}
+            width={80}
+            height={80}
+            className="rounded-lg"
+          />
           <div>
-            <h2 className="text-xl font-semibold mb-1">Fight</h2>
-            <p className="text-muted-foreground mb-2">Fight your Bad Habit! Conquer them!</p>
-            <button className="text-sm text-muted-foreground hover:text-foreground">Need help</button>
+            <h2 className="text-xl font-semibold mb-1">
+              {category === "bad" ? "Fight" : "Growth here!"}
+            </h2>
+            <p className="text-muted-foreground mb-2">
+              {category === "bad"
+                ? "Fight your Bad Habit! Conquer them!"
+                : "Nurturing and growth"}
+            </p>
+            <button className="text-sm text-muted-foreground hover:text-foreground">
+              Need help
+            </button>
           </div>
         </div>
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
@@ -119,11 +163,11 @@ export default function BattlePage() {
           )}
         </div>
         <div className="mt-4">
-          <AddHabitForm onHabitAdded={fetchHabits} />
+          <AddHabitForm onHabitAdded={fetchHabits} category={category} />
         </div>
       </div>
-      <DefeatHeatMap habits={habits} />
-      <HabitTracker habits={habits} />
+      <DefeatHeatMap habits={habits} text={category === "bad" ? "Defeat Heat Map" : "Growth Heat Map"} />
+      <HabitTracker habits={habits} text={category === "bad" ? "Battle Log" : "Growth Statistics"} />
     </div>
   );
 }

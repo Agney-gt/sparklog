@@ -36,11 +36,11 @@ export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onCom
   useEffect(() => {
     const fetchQuizData = async () => {
       const data = await getQuiz(itemId);
-      const createdQuizQuestions = data['quiz_questions'].map((quiz: { question: string, options: string[], correctAnswer: string, insight: string }) =>
+      const createdQuizQuestions = data['quiz_questions'].map((quiz: { question: string, options: string[], correct_answer: string, insight: string }) =>
         createQuizQuestion(
           quiz.question,
           quiz.options,
-          quiz.correctAnswer,
+          quiz.correct_answer,
           quiz.insight
         )
       );
@@ -55,12 +55,12 @@ export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onCom
   const createQuizQuestion = (  
     question: string,  
     options: string[],  
-    correctAnswer: string,  
+    correct_answer: string,  
     insight: string  
   ): QuizQuestion => ({  
     question,  
     options,  
-    correctAnswer,  
+    correct_answer,  
     insight,  
   });  
   
@@ -69,19 +69,19 @@ export default function WisdomQuiz({coins, onComplete, userId, itemId }: { onCom
   }
 
   const handleNextQuestion = () => {
-    if (quizData && selectedAnswer === quizData[currentQuestion].correctAnswer) {
-      setScore(score + 1)
+    if (quizData && selectedAnswer === quizData[currentQuestion].correct_answer) {
+      setScore((prevScore) => prevScore + 1);
     }
-
+  
     if (quizData && currentQuestion < quizData.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setSelectedAnswer(null)
-      setShowResult(false)
+      setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
     } else {
-      setShowResult(true)
-      increaseUserBalance()
+      setShowResult(true);
+      increaseUserBalance();
     }
-  }
+  };
 
   const increaseUserBalance = async () => {
     try {

@@ -7,6 +7,7 @@ type Habit = {
   user_id: string;
   name: string;
   type: string;
+  category: "good" | "bad";
   status: "success" | "failed";
   date: string;
   calendar_entries?: Record<string, string>;
@@ -19,34 +20,31 @@ type HabitUpdate = {
   toggleOnly?: boolean;
 };
 
+// Create a new habit
 export async function POST(request: Request) {
   try {
     const cookieStore = cookies();
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-    // Parse the body of the request
     const body = await request.json();
-    const name = typeof body.name === "string" ? body.name.trim() : null;
+    const { name, category } = body;
 
-    // Ensure that name is a valid string and not empty
-    if (!name) {
-      return NextResponse.json({ error: "Invalid habit name" }, { status: 400 });
+    if (!name || !["good", "bad"].includes(category)) {
+      return NextResponse.json({ error: "Invalid habit data" }, { status: 400 });
     }
 
-    // Get the current user from the authentication service
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData?.user) throw userError;
 
-    // Prepare the habit data to insert into the database
     const habitData: Habit = {
       user_id: userData.user.id,
-      name,
+      name: name.trim(),
       type: name.toLowerCase(),
+      category,
       status: "success",
-      date: new Date().toISOString().split("T")[0], // Date formatted as YYYY-MM-DD
+      date: new Date().toISOString().split("T")[0],
     };
 
-    // Insert habit into the database
     const { data, error } = await supabase.from("habits").insert(habitData).select().single();
 
     if (error) {
@@ -54,7 +52,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Return success response with the habit data
     return NextResponse.json({ success: true, data, message: "Habit added successfully" });
   } catch (error) {
     console.error("Error processing request:", error);
@@ -62,6 +59,7 @@ export async function POST(request: Request) {
   }
 }
 
+// Fetch habits (optionally filter by category)
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
@@ -71,10 +69,10 @@ export async function GET(request: Request) {
     if (userError || !userData?.user) throw userError;
 
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get("type");
+    const category = searchParams.get("category");
 
     let query = supabase.from("habits").select("*").eq("user_id", userData.user.id);
-    if (type) query = query.eq("type", type);
+    if (category) query = query.eq("category", category);
 
     const { data, error } = await query;
 

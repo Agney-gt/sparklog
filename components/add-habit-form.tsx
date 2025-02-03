@@ -14,10 +14,11 @@ interface ApiResponse {
 }
 
 interface AddHabitFormProps {
-  onHabitAdded: () => void; // Function to trigger a re-fetch
+  onHabitAdded: () => void; 
+  category :"good" | "bad"; 
 }
 
-export function AddHabitForm({ onHabitAdded }: AddHabitFormProps) {
+export function AddHabitForm({ onHabitAdded,category }: AddHabitFormProps) {
   const [open, setOpen] = useState(false);
   const [habitName, setHabitName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ export function AddHabitForm({ onHabitAdded }: AddHabitFormProps) {
       const response = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: habitName.trim() }),
+        body: JSON.stringify({ name: habitName.trim(), category:category  }),
       });
 
       const data: ApiResponse = await response.json();
