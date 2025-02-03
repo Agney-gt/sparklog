@@ -52,7 +52,6 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) =
       });
 
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         console.error("Failed to update zen_alerts:", data.error);
       }
