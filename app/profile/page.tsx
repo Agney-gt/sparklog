@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Brain, Camera, Heart, Lightbulb, PenTool, Wallet } from "lucide-react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
@@ -42,14 +42,6 @@ interface UserProgress {
 }
 
 const skills = ["Writing", "Financial", "Learning", "Video Editing", "Health", "Creativity"];
-const skillIcons = {
-  Health: Heart,
-  Creativity: Lightbulb,
-  Writing: PenTool,
-  "Video Editing": Camera,
-  Financial: Wallet,
-  Learning: Brain,
-};
 
 export default function CharacterProfile() {
   const [userData, setUserData] = useState<UserProgress | null>(null);
