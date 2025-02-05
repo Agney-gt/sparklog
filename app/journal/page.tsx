@@ -42,10 +42,10 @@ export default function Component() {
   }, [emblaApi, onSelect])
 
   const cards = [
-    { title: 'Habit Stack', component: <HabitTrackerGuide /> },
-    { title: 'Action Workbook', component: <ActionWorkbook /> },
-    { title: 'Quest Log', component: <QuestLog /> },
-    { title: 'Goals', component: <GoalsPage/> },
+    //{ title: 'Habit Stack', component: <HabitTrackerGuide /> },
+    //{ title: 'Action Workbook', component: <ActionWorkbook /> },
+   // { title: 'Quest Log', component: <QuestLog /> },
+    //{ title: 'Goals', component: <GoalsPage/> },
     { title: 'Profile', component: <CharacterProfile/> },
     { title: 'Marketplace', component: <MarketplacePage /> }
 
