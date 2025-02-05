@@ -26,8 +26,7 @@ export function AccountOverview({ id }: AccountOverviewProps) {
           throw new Error(userData.error || "Failed to fetch user data");
         }
 
-        const { user } = userData; // Assuming API response is { success: true, user: { ... } }
-
+        
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message || "An unexpected error occurred");
