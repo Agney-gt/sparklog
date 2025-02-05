@@ -17,8 +17,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
 import GoalsPage from '../Goals/page'
 import CharacterProfile from '../profile/page'
-import { ZenModeTimer } from '@/components/zen-mode'
-import { Marketplace } from '@/components/marketplace'
 import MarketplacePage from '../marketplace/page'
 
 export default function Component() {
