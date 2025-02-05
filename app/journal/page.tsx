@@ -1,6 +1,5 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
-import HabitTrackerGuide from "@/components/habit-tracker-guide"
 import CodeMirrorEditor from "@/components/CodeMirrorEditor" // Import the new CodeMirror component
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
@@ -9,13 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Loader2 } from 'lucide-react'
-import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
-import QuestLog from "@/components/quest-log"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
-import GoalsPage from '../Goals/page'
 import CharacterProfile from '../profile/page'
 import MarketplacePage from '../marketplace/page'
 
