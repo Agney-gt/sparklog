@@ -99,7 +99,7 @@ export function Marketplace(props: { id: string }) {
       <CardHeader className="pb-8">
         <div className="flex items-center gap-3">
           <ShoppingCart className="h-6 w-6" />
-          <CardTitle className="text-2xl">Marketplace</CardTitle>
+          <CardTitle className="text-2xl">Archives</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">

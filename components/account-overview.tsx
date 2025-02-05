@@ -68,33 +68,13 @@ export function AccountOverview({ id }: AccountOverviewProps) {
         <CardHeader>
           <div className="relative h-52 w-full overflow-hidden rounded-t-lg bg-black">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UyJlafCvkvI4stCm8gkypp9kACO1XG.png"
-              alt="Life RPG Marketplace - Isometric View"
+              src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//2.jpg"
+              alt="Marketplace - Isometric View"
               className="h-full w-full object-cover opacity-90"
             />
           </div>
         </CardHeader>
-        <CardContent className="grid gap-4 pt-8">
-          <div className="flex items-center gap-3">
-            <User className="h-6 w-6" />
-            <CardTitle className="text-2xl">My Account</CardTitle>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <Package className="h-6 w-6" />
-                  <div>
-                    <p className="text-lg font-medium">My Purchases</p>
-                    <p className="text-base text-muted-foreground">
-                      Total: {userData.purchaseItems} items • {userData.purchaseTotal} coins
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
+        
       </Card>
       <Marketplace id={id} />
     </>

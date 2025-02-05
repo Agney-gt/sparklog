@@ -43,7 +43,7 @@ export default function Component() {
    // { title: 'Quest Log', component: <QuestLog /> },
     //{ title: 'Goals', component: <GoalsPage/> },
     { title: 'Profile', component: <CharacterProfile/> },
-    { title: 'Marketplace', component: <MarketplacePage /> }
+    { title: 'Archives', component: <MarketplacePage /> }
 
   ]
 
