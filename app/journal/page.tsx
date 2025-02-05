@@ -15,6 +15,11 @@ import LevelProgress from '@/components/level-progress'
 import QuestLog from "@/components/quest-log"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
+import GoalsPage from '../Goals/page'
+import CharacterProfile from '../profile/page'
+import { ZenModeTimer } from '@/components/zen-mode'
+import { Marketplace } from '@/components/marketplace'
+import MarketplacePage from '../marketplace/page'
 
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
@@ -42,6 +47,10 @@ export default function Component() {
     { title: 'Habit Stack', component: <HabitTrackerGuide /> },
     { title: 'Action Workbook', component: <ActionWorkbook /> },
     { title: 'Quest Log', component: <QuestLog /> },
+    { title: 'Goals', component: <GoalsPage/> },
+    { title: 'Profile', component: <CharacterProfile/> },
+    { title: 'Marketplace', component: <MarketplacePage /> }
+
   ]
 
   const [date, setDate] = React.useState<Date | undefined>(new Date())
