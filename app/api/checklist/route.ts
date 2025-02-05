@@ -12,8 +12,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Date parameter is required' }, { status: 400 })
     }
 
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    // Pass `cookies` directly to `createRouteHandlerClient`
+    const supabase = createRouteHandlerClient({ cookies })
 
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
@@ -22,6 +22,7 @@ export async function GET(request: Request) {
       .from('checklist_items')
       .select('*')
       .eq('user_id', user?.id)
+      .eq('date', date) // Include the date filter
       .order('created_at', { ascending: true })
 
     if (error) throw error
@@ -36,8 +37,7 @@ export async function GET(request: Request) {
 // POST: Create new checklist item
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({ cookies })
 
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
@@ -75,8 +75,7 @@ export async function POST(request: Request) {
 // PATCH: Update item status
 export async function PATCH(request: Request) {
   try {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({ cookies })
 
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
@@ -117,8 +116,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Item ID is required' }, { status: 400 })
     }
 
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createRouteHandlerClient({ cookies })
 
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
