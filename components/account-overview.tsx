@@ -1,26 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Package } from "lucide-react";
+import { Card, CardHeader } from "@/components/ui/card";
 import { Marketplace } from "./marketplace";
-
-type UserData = {
-  balance: number;
-  purchaseItems: number;
-  purchaseTotal: number;
-};
 
 interface AccountOverviewProps {
   id: string; // User ID passed as a prop
 }
 
 export function AccountOverview({ id }: AccountOverviewProps) {
-  const [userData, setUserData] = useState<UserData>({
-    balance: 0,
-    purchaseItems: 0,
-    purchaseTotal: 0,
-  });
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -40,15 +28,6 @@ export function AccountOverview({ id }: AccountOverviewProps) {
 
         const { user } = userData; // Assuming API response is { success: true, user: { ... } }
 
-        setUserData({
-          balance: user.balance || 0,
-          purchaseItems: user.inventory?.length || 0,
-          purchaseTotal:
-            user.inventory?.reduce(
-              (sum: number, purchase: { price: number }) => sum + purchase.price,
-              0
-            ) || 0,
-        });
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message || "An unexpected error occurred");
