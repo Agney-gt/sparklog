@@ -8,7 +8,7 @@ import { AccountOverview } from "@/components/account-overview";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"; // Ensure you have this library installed
 import { Loader2 } from "lucide-react"; // Icon for loading spinner
 import { ZenModeTimer } from "@/components/zen-mode";
-const GoalsPage: React.FC = () => {
+const MarketplacePage: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const supabase = createClientComponentClient();
@@ -67,4 +67,4 @@ const GoalsPage: React.FC = () => {
   );
 };
 
-export default GoalsPage;
+export default MarketplacePage;
