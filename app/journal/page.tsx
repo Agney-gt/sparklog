@@ -1,11 +1,11 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
 import HabitTrackerGuide from "@/components/habit-tracker-guide"
-import MarkdownEditor from "@/components/markdown-editor"
+import CodeMirrorEditor from "@/components/CodeMirrorEditor" // Import the new CodeMirror component
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader,CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Loader2 } from 'lucide-react'
@@ -15,6 +15,10 @@ import LevelProgress from '@/components/level-progress'
 import QuestLog from "@/components/quest-log"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
+import GoalsPage from '../Goals/page'
+import CharacterProfile from '../profile/page'
+import MarketplacePage from '../marketplace/page'
+
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -38,10 +42,13 @@ export default function Component() {
   }, [emblaApi, onSelect])
 
   const cards = [
-   
     { title: 'Habit Stack', component: <HabitTrackerGuide /> },
     { title: 'Action Workbook', component: <ActionWorkbook /> },
     { title: 'Quest Log', component: <QuestLog /> },
+    { title: 'Goals', component: <GoalsPage/> },
+    { title: 'Profile', component: <CharacterProfile/> },
+    { title: 'Marketplace', component: <MarketplacePage /> }
+
   ]
 
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -128,36 +135,36 @@ export default function Component() {
     <div className="flex flex-col min-h-screen">
       <Banner />
       <LevelProgress />
-    <div className="flex flex-col lg:flex-row min-h-screen w-full gap-4 p-4">
-      <Card className="lg:w-80 w-full flex-shrink-0 ">
-        <CardHeader className="p-4">
-          <h2 className="font-semibold">Calendar</h2>
-        </CardHeader>
-        <CardContent className="p-2 ">
-          <ScrollArea className="h-[300px] lg:h-[calc((100vh-8rem)/2)]">
-            {calendarMonths.map((month, index) => (
-              <div key={index} className="mb-4">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(newDate) => {
-                    setDate(newDate);
-                    // On mobile, automatically scroll to the entry section when a date is selected
-                    if (window.innerWidth < 1024) {
-                      document.getElementById('journal-entry')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  month={month}
-                  className="w-full"
-                  markedDates={markedDates}
-                  setDate={setDate}
-                  fetchJournalEntry={fetchJournalEntry}
-                />
-              </div>
-            ))}
-          </ScrollArea>
-        </CardContent>
-        <CardContent className="p-2">
+      <div className="flex flex-col lg:flex-row min-h-screen w-full gap-4 p-4">
+        <Card className="lg:w-80 w-full flex-shrink-0 ">
+          <CardHeader className="p-4">
+            <h2 className="font-semibold">Calendar</h2>
+          </CardHeader>
+          <CardContent className="p-2 ">
+            <ScrollArea className="h-[300px] lg:h-[calc((100vh-8rem)/2)]">
+              {calendarMonths.map((month, index) => (
+                <div key={index} className="mb-4">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(newDate) => {
+                      setDate(newDate);
+                      // On mobile, automatically scroll to the entry section when a date is selected
+                      if (window.innerWidth < 1024) {
+                        document.getElementById('journal-entry')?.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    month={month}
+                    className="w-full"
+                    markedDates={markedDates}
+                    setDate={setDate}
+                    fetchJournalEntry={fetchJournalEntry}
+                  />
+                </div>
+              ))}
+            </ScrollArea>
+          </CardContent>
+          <CardContent className="p-2">
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-semibold">Chat</h3>
               <Button 
@@ -186,95 +193,88 @@ export default function Component() {
               />
             </div>
           </CardContent>
-      </Card>
-      <Card id="journal-entry" className="flex-grow min-h-[500px] lg:h-full overflow-auto">
-        <CardHeader className="p-4">
-          <h2 className="text-xl font-semibold">Journal out of inspiration, not obligation!</h2>
-          <p className="text-sm text-muted-foreground">
-            {date?.toLocaleDateString('en-US', { 
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </p>
-        </CardHeader>
-        <CardContent className="p-4">
-          
-          {isLoading ? (
-            <div className="flex items-center justify-center min-h-[200px] lg:min-h-[300px]">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-          ) : (
-            <>
-              {
-                <MarkdownEditor 
-                value={journalContent}
-                onChange={(value) => setJournalContent(value)}
-                
-              />
-              } 
-              {/* ... other entry types ... */}
-              <Button 
-                className="mt-4 w-full lg:w-auto"
-                onClick={handleSubmit}
-                disabled={isSaving}
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  'Save Entry'
-                )}
-              </Button>
-            </>
-          )}
-        </CardContent>
-        <div className="container mx-auto p-4">
-      <div className="relative">
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex">
-            {cards.map((card, index) => (
-              <div className="flex-[0_0_100%]" key={index}>
-                <Card className="h-[calc(100vh-12rem)] mx-4">
-                  <CardHeader>
-                    <CardTitle>{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="overflow-y-auto h-[calc(100%-5rem)]">
-                    {card.component}
-                  </CardContent>
-                </Card>
+        </Card>
+        <Card id="journal-entry" className="flex-grow min-h-[500px] lg:h-full overflow-auto">
+          <CardHeader className="p-4">
+            <h2 className="text-xl font-semibold">Journal out of inspiration, not obligation!</h2>
+            <p className="text-sm text-muted-foreground">
+              {date?.toLocaleDateString('en-US', { 
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </p>
+          </CardHeader>
+          <CardContent className="p-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center min-h-[200px] lg:min-h-[300px]">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
               </div>
-            ))}
+            ) : (
+              <>
+                <CodeMirrorEditor 
+                  value={journalContent}
+                  onChange={(value) => setJournalContent(value)}
+                />
+                <div id="image-preview" className="mt-4"></div> {/* Container for pasted images */}
+                <Button 
+                  className="mt-4 w-full lg:w-auto"
+                  onClick={handleSubmit}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Entry'
+                  )}
+                </Button>
+              </>
+            )}
+          </CardContent>
+          <div className="container mx-auto p-4">
+            <div className="relative">
+              <div className="overflow-hidden" ref={emblaRef}>
+                <div className="flex">
+                  {cards.map((card, index) => (
+                    <div className="flex-[0_0_100%]" key={index}>
+                      <Card className="h-[calc(100vh-12rem)] mx-4">
+                        <CardHeader>
+                          <CardTitle>{card.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="overflow-y-auto h-[calc(100%-5rem)]">
+                          {card.component}
+                        </CardContent>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-between mt-4">
+                <Button onClick={scrollPrev} disabled={!canScrollPrev} variant="default" size="icon">
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="flex space-x-2">
+                  {cards.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`h-2 w-2 rounded-full ${
+                        index === selectedIndex ? 'bg-primary' : 'bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <Button onClick={scrollNext} disabled={!canScrollNext} variant="default" size="icon">
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between mt-4">
-          <Button onClick={scrollPrev} disabled={!canScrollPrev} variant="default" size="icon">
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <div className="flex space-x-2">
-            {cards.map((_, index) => (
-              <div
-                key={index}
-                className={`h-2 w-2 rounded-full ${
-                  index === selectedIndex ? 'bg-primary' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-          <Button onClick={scrollNext} disabled={!canScrollNext} variant="default" size="icon">
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        </Card>
       </div>
     </div>
-        
-      </Card>
-      
-      
-      
-    </div></div>
   )
 }

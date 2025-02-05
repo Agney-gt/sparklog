@@ -1,7 +1,7 @@
 export interface QuizQuestion {  
   question: string;  
   options: string[];  
-  correctAnswer: string;  
+  correct_answer: string;  
   insight: string;  
 }  
 
@@ -9,12 +9,12 @@ export interface QuizQuestion {
 const createQuizQuestion = (  
   question: string,  
   options: string[],  
-  correctAnswer: string,  
+  correct_answer: string,  
   insight: string  
 ): QuizQuestion => ({  
   question,  
   options,  
-  correctAnswer,  
+  correct_answer,  
   insight,  
 });  
 
