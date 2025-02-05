@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardContent} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Brain, Camera, Heart, Lightbulb, PenTool, Wallet } from "lucide-react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
 import Image from "next/image";
 import { Button } from "@/components/ui/button"
