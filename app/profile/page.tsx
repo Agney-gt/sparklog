@@ -15,8 +15,8 @@ interface NPC {
 }
 
 const npcs: NPC[] = [
-  { name: "NPC 1", imageSrc: "https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//2.jpg" },
-  { name: "NPC 2", imageSrc: "https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//3.jpg" },
+  { name: "NPC 1", imageSrc: "https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog/2.jpg" },
+  { name: "NPC 2", imageSrc: "https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog/3.jpg" },
 ]
 
 const dialogues = [
