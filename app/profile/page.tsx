@@ -47,6 +47,13 @@ const dialogues = [[
   { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
   { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
   { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
+],[
+  { npc: "Ancient", text: "Broooo" },
+  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
+  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
+  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
+  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
+  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
 ]]
                    
                    
@@ -73,7 +80,7 @@ export default function CharacterProfile() {
   const [currentDialogue, setCurrentDialogue] = useState(0)
 
   const handleNext = () => {
-    if (currentDialogue < dialogues[userData.level].length - 1) {
+    if (userData && currentDialogue < dialogues[userData.level].length - 1) {
       setCurrentDialogue(currentDialogue + 1)
     }
   }
