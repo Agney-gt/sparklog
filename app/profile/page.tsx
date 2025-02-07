@@ -20,13 +20,17 @@ const npcs: NPC[] = [
 ]
 
 const dialogues = [
-  { npc: "NPC 1", text: "Hello, traveler! Welcome to our village." },
-  { npc: "NPC 2", text: "Yes, welcome! It's been a while since we've had visitors." },
-  { npc: "NPC 1", text: "How was your journey? I hope it wasn't too treacherous." },
-  { npc: "NPC 2", text: "Oh, don't scare them! I'm sure it was a pleasant trip." },
-  { npc: "NPC 1", text: "You're right, my apologies. Would you like a tour of our village?" },
-  { npc: "NPC 2", text: "That's a great idea! We have so much to show you." },
-]
+  { npc: "Prophet", text: "Ah, wanderer, you arrive at a time when the cosmic tides shift ever so subtly. You stand at the precipice of transformation, yet beholden to the chains of fear." },
+  { npc: "Wanderer", text: "These shackles are familiar; they speak of comfort in the known. Is it not safer to dwell in certainty, no matter how bleak?" },
+  { npc: "Prophet", text: "Be wary of illusions spun by your mind! Just as the endless cycle of celestial bodies brings change, so must you embrace the unknown. To remain static is to become a shadow of your potential." },
+  { npc: "Wanderer", text: "But what if failure awaits me beyond this veil of certainty? Is not failure the mark of inadequacy?" },
+  { npc: "Prophet", text: "Failure, dear soul, is but the mother of wisdom. With each fall, you gather fragments of knowledge, piecing together the mosaic of your journey." },
+  { npc: "Wanderer", text: "The path seems daunting, yet there is a longing within to shatter these chains." },
+  { npc: "Prophet", text: "Let the starlit wisdom guide you. Embrace the cycle, for within it lies the essence of life's mystery. Fear not the fall, but the absence of striving." },
+  { npc: "Wanderer", text: "Then I shall embark upon this quest, seeking freedom from the constraints that bind my heart." },
+  { npc: "Prophet", text: "Go forth, brave soul, and may the cosmic forces align to illuminate your path. Remember, knowledge is power and the cosmos holds no greater ally." }
+];
+
 
 
 
