@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Brain, Activity } from "lucide-react";
 import TaskList from "@/components/dairy-component";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, subDays } from "date-fns";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface TaskCounts {
   morning: number;
@@ -15,6 +17,8 @@ interface TaskCounts {
 type DateFilter = 'today' | 'yesterday' | 'last7days';
 
 export default function Home() {
+  const router = useRouter();
+  const supabase = createClientComponentClient()
   const [mood, setMood] = useState<TaskCounts>({ morning: 0, noon: 0, evening: 0 });
   const [focus] = useState(2);
   const [stress] = useState(3);
@@ -22,6 +26,20 @@ export default function Home() {
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isSaving, setIsSaving] = useState(false);
+  const [, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const { data: { user } } = await supabase.auth.getUser ()
+      if (user) {
+        setUserId(user.id)
+      } else{
+        router.push('/login')
+      }
+    }
+
+    fetchUserId()
+  }, [])
 
   const handleDateFilterChange = (value: DateFilter) => {
     setDateFilter(value);
@@ -110,7 +128,7 @@ export default function Home() {
       setIsSaving(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
