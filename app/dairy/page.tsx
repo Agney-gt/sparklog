@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { Brain, Activity } from "lucide-react";
 import TaskList from "@/components/dairy-component";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {format, subDays } from "date-fns";
+import { format, subDays } from "date-fns";
 
 interface TaskCounts {
   morning: number;
@@ -16,16 +16,12 @@ type DateFilter = 'today' | 'yesterday' | 'last7days';
 
 export default function Home() {
   const [mood, setMood] = useState<TaskCounts>({ morning: 0, noon: 0, evening: 0 });
-  const [focus, setFocus] = useState(2);
-  const [stress, setStress] = useState(3);
+  const [focus] = useState(2);
+  const [stress] = useState(3);
   const [performance, setPerformance] = useState(1);
   const [dateFilter, setDateFilter] = useState<DateFilter>('today');
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [tasks, setTasks] = useState<{ morning: number; noon: number; evening: number }>({
-    morning: 0,
-    noon: 0,
-    evening: 0,
-  });
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleDateFilterChange = (value: DateFilter) => {
     setDateFilter(value);
@@ -44,7 +40,6 @@ export default function Home() {
 
   const handleTaskCountChange = useCallback((counts: TaskCounts) => {
     setMood(counts);
-    setTasks(counts);
     
     const totalTasks = counts.morning + counts.noon + counts.evening;
     const completedTasks = 
@@ -80,29 +75,42 @@ export default function Home() {
   };
 
   const saveDairyEntry = async () => {
+    if (isSaving) return;
+  
+    setIsSaving(true);
+    const payload = {
+      mood,
+      focus,
+      stress,
+      performance,
+      date: format(selectedDate, 'yyyy-MM-dd'),
+    };
+  
+    console.log('Saving dairy entry with payload:', payload);
+  
     try {
       const response = await fetch('/api/dairy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          mood,
-          focus,
-          stress,
-          performance,
-          date: format(selectedDate, 'yyyy-MM-dd'),
-        }),
+        body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
-        throw new Error('Failed to save dairy entry');
+        const errorData = await response.json();
+        console.error('API error:', errorData);
+        throw new Error(errorData.message || 'Failed to save dairy entry');
       }
+  
+      // Optionally handle success
     } catch (error) {
       console.error('Error saving dairy entry:', error);
+    } finally {
+      setIsSaving(false);
     }
   };
-
+  
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
@@ -162,9 +170,10 @@ export default function Home() {
 
               <button
                 onClick={saveDairyEntry}
-                className="w-full bg-primary text-primary-foreground py-2 rounded-md hover:bg-primary/90 transition-colors"
+                disabled={isSaving}
+                className="w-full bg-primary text-primary-foreground py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Dairy Entry
+                {isSaving ? 'Saving...' : 'Save Dairy Entry'}
               </button>
             </div>
 

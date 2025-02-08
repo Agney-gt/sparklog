@@ -16,14 +16,14 @@ export async function POST(request: Request) {
 
     const dairyData = {
       user_id: user.id,
-      mood: JSON.stringify(mood), // Convert mood object to JSON string
+      mood: JSON.stringify(mood), 
       focus,
       stress,
       performance,
-      date: date || new Date().toISOString().split('T')[0], // Use current date if not provided
+      date: date || new Date().toISOString().split('T')[0], 
     };
 
-    // Try to upsert the dairy entry (update if exists, insert if not)
+    
     const { data, error } = await supabase
       .from('daily_dairy')
       .upsert([dairyData], {
@@ -39,6 +39,40 @@ export async function POST(request: Request) {
       success: true,
       data,
       message: 'Daily dairy entry saved successfully',
+    });
+  } catch (error) {
+    console.error('Error processing request:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser ();
+    if (userError) throw userError;
+    if (!user) throw new Error('User  not authenticated');
+
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get('date') || new Date().toISOString().split('T')[0]; // Default to today if no date is provided
+
+    const { data, error } = await supabase
+      .from('daily_dairy')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('date', date); // Filter by user_id and date
+
+    if (error) {
+      console.error('Database error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: data || [],
+      message: 'Daily dairy entries fetched successfully',
     });
   } catch (error) {
     console.error('Error processing request:', error);
