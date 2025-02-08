@@ -13,12 +13,6 @@ type Habit = {
   calendar_entries?: Record<string, string>;
 };
 
-type HabitUpdate = {
-  id: string;
-  date?: string;
-  status?: "success" | "failed";
-  toggleOnly?: boolean;
-};
 
 // Create a new habit
 export async function POST(request: Request) {
@@ -96,47 +90,41 @@ export async function PUT(request: Request) {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData?.user) throw userError;
 
-    const body = (await request.json()) as HabitUpdate;
-    const { id, date, status, toggleOnly } = body;
+    const { id, date, status, image } = await request.json();
 
-    if (!id || (!toggleOnly && (!date || !status))) {
-      return NextResponse.json({
-        error: "ID is required. Date and status are required unless toggling only status.",
-      }, { status: 400 });
+    if (!id || !date || !status) {
+      return NextResponse.json({ error: "ID, date, and status are required." }, { status: 400 });
     }
 
     const { data: habit, error: fetchError } = await supabase
       .from("habits")
-      .select("status, calendar_entries")
+      .select("calendar_entries")
       .eq("id", id)
       .eq("user_id", userData.user.id)
       .single();
 
     if (fetchError || !habit) {
-      console.error("Error fetching habit:", fetchError);
       return NextResponse.json({ error: "Habit not found" }, { status: 404 });
     }
 
-    const updatedFields: Partial<Habit> = {};
-    if (toggleOnly) {
-      updatedFields.status = habit.status === "success" ? "failed" : "success";
-    } else {
-      updatedFields.status = status;
-      updatedFields.calendar_entries = { ...habit.calendar_entries, [date as string]: status as string };
-    }
+    // Ensure we store both image and status inside calendar_entries
+    const updatedEntries = {
+      ...habit.calendar_entries,
+      [date]: { image: image || "", status },
+    };
 
-    const { error } = await supabase.from("habits").update(updatedFields).eq("id", id).eq("user_id", userData.user.id);
-    if (error) {
-      console.error("Error updating habit:", error);
-      return NextResponse.json({ error: "Error updating habit" }, { status: 500 });
-    }
+    const { error } = await supabase
+      .from("habits")
+      .update({ calendar_entries: updatedEntries })
+      .eq("id", id);
 
-    return NextResponse.json({ success: true, message: "Habit updated successfully", updatedFields });
+    return error ? NextResponse.json({ error: "Error updating habit" }, { status: 500 }) : NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Unexpected error updating habit:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error }, { status: 500 });
   }
 }
+
+
 export async function DELETE(request: Request) {
   try {
     const cookieStore = cookies();

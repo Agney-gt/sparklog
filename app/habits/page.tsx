@@ -17,7 +17,7 @@ interface Habit {
   category: "good" | "bad";
   status: "success" | "failed";
   date: string;
-  calendar_entries: Record<string, "success" | "failed">;
+  calendar_entries: Record<string, { image: string; status: "success" | "failed" }>;
 }
 
 export default function HabitCategoryPage() {
@@ -114,6 +114,14 @@ function HabitsPageContent({ category }: { category: "good" | "bad" }) {
     }
   };
 
+  // ✅ Convert calendar entries format for HabitTracker
+  const formattedHabits = habits.map((habit) => ({
+    ...habit,
+    calendar_entries: Object.fromEntries(
+      Object.entries(habit.calendar_entries || {}).map(([date, entry]) => [date, { ...entry, status: entry.status }])
+    ),
+  }));
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
@@ -166,8 +174,8 @@ function HabitsPageContent({ category }: { category: "good" | "bad" }) {
           <AddHabitForm onHabitAdded={fetchHabits} category={category} />
         </div>
       </div>
-      <DefeatHeatMap habits={habits} text={category === "bad" ? "Defeat Heat Map" : "Growth Heat Map"} />
-      <HabitTracker habits={habits} text={category === "bad" ? "Battle Log" : "Growth Statistics"} />
+      <DefeatHeatMap habits={formattedHabits} text={category === "bad" ? "Defeat Heat Map" : "Growth Heat Map"} />
+      <HabitTracker habits={formattedHabits} text={category === "bad" ? "Battle Log" : "Growth Statistics"} />
     </div>
   );
 }

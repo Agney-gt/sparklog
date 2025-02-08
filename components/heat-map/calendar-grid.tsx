@@ -9,10 +9,9 @@ import {
   isToday,
 } from "date-fns";
 
-
 interface Habit {
   id: string;
-  calendar_entries: Record<string, string>;
+  calendar_entries: Record<string, { image: string; status: "success" | "failed" }>;
 }
 
 interface ApiResponse {
@@ -25,9 +24,12 @@ interface CalendarGridProps {
 }
 
 export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
-  const [data, setData] = useState<Record<string, string>>({});
-  const [pendingUpdates, setPendingUpdates] = useState<Record<string, string>>({});
+  const [data, setData] = useState<Record<string, { image: string; status: "success" | "failed" }>>({});
+  const [pendingUpdates, setPendingUpdates] = useState<Record<string, { image: string; status: "success" | "failed" }>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchCalendarData() {
@@ -55,18 +57,52 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
     fetchCalendarData();
   }, [habitId]);
 
-  function handleDateToggle(date: Date) {
-    if (!habitId) {
-      console.error("Habit ID is missing.");
-      return;
-    }
-
+  function handleDateClick(date: Date) {
     const dateKey = format(date, "yyyy-MM-dd");
-    const currentStatus = data[dateKey];
-    const newStatus = currentStatus === "success" ? "failed" : "success";
-    
-    setData((prev) => ({ ...prev, [dateKey]: newStatus }));
-    setPendingUpdates((prev) => ({ ...prev, [dateKey]: newStatus }));
+    const entry = data[dateKey];
+
+    setSelectedDate(dateKey);
+    setPreviewImage(entry?.image || null);
+    setIsModalOpen(!entry?.image); // Open modal only if no image exists
+
+    setData((prev) => ({
+      ...prev,
+      [dateKey]: {
+        image: entry?.image || "",
+        status: entry?.status === "success" ? "failed" : "success",
+      },
+    }));
+
+    setPendingUpdates((prev) => ({
+      ...prev,
+      [dateKey]: {
+        image: entry?.image || "",
+        status: entry?.status === "success" ? "failed" : "success",
+      },
+    }));
+  }
+
+  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!selectedDate || !habitId) return;
+
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      setData((prev) => ({
+        ...prev,
+        [selectedDate]: { image: base64String, status: prev[selectedDate]?.status || "success" },
+      }));
+      setPendingUpdates((prev) => ({
+        ...prev,
+        [selectedDate]: { image: base64String, status: prev[selectedDate]?.status || "success" },
+      }));
+      setPreviewImage(base64String);
+      setIsModalOpen(false); // Close modal after upload
+    };
+    reader.readAsDataURL(file);
   }
 
   async function handleSave() {
@@ -74,17 +110,11 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
     setIsSaving(true);
 
     try {
-      const updatesArray = Object.entries(pendingUpdates).map(([date, status]) => ({
-        id: habitId,
-        date,
-        status,
-      }));
-
-      for (const update of updatesArray) {
+      for (const [date, entry] of Object.entries(pendingUpdates)) {
         const response = await fetch("/api/habits", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(update),
+          body: JSON.stringify({ id: habitId, date, image: entry.image, status: entry.status }),
         });
 
         if (!response.ok) {
@@ -120,24 +150,54 @@ export function CalendarGrid({ currentDate, habitId }: CalendarGridProps) {
         ))}
         {daysInMonth.map((date) => {
           const dateKey = format(date, "yyyy-MM-dd");
+          const entry = data[dateKey];
+
           return (
             <button
               key={dateKey}
-              onClick={() => handleDateToggle(date)}
+              onClick={() => handleDateClick(date)}
               className={cn(
-                "aspect-square rounded-sm transition-colors flex items-center justify-center",
+                "aspect-square rounded-sm transition-colors flex items-center justify-center border-2",
                 !isSameMonth(date, currentDate) && "opacity-50",
-                isToday(date) && "border border-blue-500",
-                data[dateKey] === "success" && "bg-green-100 hover:bg-green-200",
-                data[dateKey] === "failed" && "bg-red-100 hover:bg-red-200",
-                !data[dateKey] && "bg-muted hover:bg-muted-foreground/10"
+                isToday(date) && "border-blue-500",
+                entry?.status === "success" ? "border-green-500" : "",
+                entry?.status === "failed" ? "border-red-500" : "",
+                entry?.image ? "bg-blue-100 hover:bg-blue-200" : "bg-muted hover:bg-muted-foreground/10"
               )}
             >
-              {format(date, "d")}
+              {entry?.image ? (
+                <img src={entry.image} alt="Uploaded" className="w-full h-full object-cover rounded-sm" />
+              ) : (
+                format(date, "d")
+              )}
             </button>
           );
         })}
       </div>
+
+      {/* Screen Popup Modal for Image Upload */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-2">Upload Image for {selectedDate}</h3>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="mt-2"
+              disabled={!!previewImage} // Disable input if image already uploaded
+            />
+            {previewImage && <img src={previewImage} alt="Preview" className="mt-4 w-full h-40 object-cover rounded-md" />}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <button
         onClick={handleSave}
         disabled={Object.keys(pendingUpdates).length === 0 || isSaving}
