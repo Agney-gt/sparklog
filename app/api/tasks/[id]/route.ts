@@ -2,8 +2,8 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PATCH(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params;
 
   try {
     const cookieStore = cookies();
@@ -12,7 +12,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const { completed } = await request.json();
     const { data: { user }, error: userError } = await supabase.auth.getUser ();
     if (userError) throw userError;
-    if (!user) throw new Error('User not authenticated');
+    if (!user) throw new Error('User  not authenticated');
 
     const { data, error } = await supabase
       .from('tasks')
