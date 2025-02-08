@@ -17,10 +17,15 @@ export default function Component() {
   const router = useRouter()
   const supabase = createClientComponentClient()
   const [, setIsLoading] = useState(false)
+  console.log("from login :")
   
   useEffect(() => {
+    console.log("from login12 :")
+
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession()
+      console.log("from login :",session)
+
       if (session) {
         router.push('/journal')
         router.refresh()
@@ -38,6 +43,8 @@ export default function Component() {
           redirectTo: `${window.location.origin}/auth/callback`,
         }
       })
+
+      console.log("from login :",data,error)
 
       if (error) throw error
       

@@ -54,6 +54,7 @@ export default function ObjectiveList({ category, icon, heading, description }: 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...newObjective, category }),
       });
+      console.log("Objective list :- ", response)
 
       const result = await response.json();
       if (result.success) {
@@ -73,6 +74,7 @@ export default function ObjectiveList({ category, icon, heading, description }: 
       const response = await fetch(`/api/goals?id=${id}`, {
         method: "DELETE",
       });
+
 
       if (response.ok) {
         setObjectives((prev) => prev.filter((objective) => objective.id !== id));
@@ -94,9 +96,14 @@ export default function ObjectiveList({ category, icon, heading, description }: 
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        {objectives.map((objective) => (
-          <ObjectiveCard key={objective.id} {...objective} onDelete={handleDeleteObjective} />
-        ))}
+        {objectives?.length ? (
+          objectives.map((objective) => (
+            <ObjectiveCard key={objective.id} {...objective} onDelete={handleDeleteObjective} />
+          ))
+        ) : (
+          <p>No objectives found.</p>
+        )}
+
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Card className="w-full flex items-center justify-center p-6 cursor-pointer">
@@ -117,7 +124,7 @@ export default function ObjectiveList({ category, icon, heading, description }: 
                     id={field}
                     type={
                       field === "title" ? "text" :
-                      field.includes("date") ? "date" : "number"
+                        field.includes("date") ? "date" : "number"
                     }
                     value={newObjective[field as keyof typeof newObjective]}
                     onChange={(e) => setNewObjective({ ...newObjective, [field]: e.target.value })}

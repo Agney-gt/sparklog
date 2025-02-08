@@ -159,6 +159,113 @@ export default function CharacterProfile() {
           })}
         </CardContent>
       </Card>
+       {/* Vision Board */}
+       <Card className="p-6">
+        <CardHeader>
+          <CardTitle className="text-3xl text-center border-2 border-border inline-block px-10 py-3 mx-auto">
+            VISION BOARD
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid md:grid-cols-2 gap-8">
+          {/* Learning Section */}
+          <div className="space-y-4">
+            <div className="bg-muted/50 px-4 py-2">
+              <h3 className="text-xl font-semibold">Learning · Growing</h3>
+            </div>
+            <div className="space-y-2 px-4">
+              <h4 className="text-primary text-lg font-medium">♦ Achieve skill refinement! ♦</h4>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-primary" />
+                  <span>Complete 10+ online courses</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-primary" />
+                  <span>Stick to learning Japanese</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-primary" />
+                  <span>Pass the advanced exams</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Health Section */}
+          <div className="space-y-4">
+            <div className="bg-muted/50 px-4 py-2">
+              <h3 className="text-xl font-semibold">Health · self-discipline</h3>
+            </div>
+            <div className="space-y-2 px-4">
+              <h4 className="text-violet-500 text-lg font-medium">✧ Wellness as Wealth ✧</h4>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-violet-500" />
+                  <span>Early bedtime</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-violet-500" />
+                  <span>Control snacks and beverage intake</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-violet-500" />
+                  <span>Maintain hydration</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Work Section */}
+          <div className="space-y-4">
+            <div className="bg-muted/50 px-4 py-2">
+              <h3 className="text-xl font-semibold">Work · Career</h3>
+            </div>
+            <div className="space-y-2 px-4">
+              <h4 className="text-pink-500 text-lg font-medium">✧ Empower the workforce ✧</h4>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-pink-500" />
+                  <span>Proactively complete tasks</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-pink-500" />
+                  <span>Maintain weekly updates on YouTube</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-pink-500" />
+                  <span>Expand side hustle</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Interpersonal Section */}
+          <div className="space-y-4">
+            <div className="bg-muted/50 px-4 py-2">
+              <h3 className="text-xl font-semibold">Interpersonal · Relationships</h3>
+            </div>
+            <div className="space-y-2 px-4">
+              <h4 className="text-amber-500 text-lg font-medium">✧ Venture into connections ✧</h4>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-amber-500" />
+                  <span>Meet old friends</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-amber-500" />
+                  <span>Make new friends</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="h-5 w-5 rounded border-amber-500" />
+                  <span>Participate in activities with friends</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
+
+

@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const requestUrl = new URL(request.url)
+    console.log(requestUrl)
     const code = requestUrl.searchParams.get('code')
 
     if (code) {

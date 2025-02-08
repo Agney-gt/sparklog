@@ -38,6 +38,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const supabase = createRouteHandlerClient({ cookies })
+    console.log("Supabase :- ",supabase)
 
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError) throw userError
