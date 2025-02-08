@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { format, isWithinInterval, subDays } from 'date-fns';
 import { CheckCircle2, Circle, Loader2, Sun, Clock, Moon } from 'lucide-react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import {
   Select,
@@ -33,7 +35,9 @@ export default function TaskList({ onTaskCountChange, selectedDate, dateFilter }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('all');
-
+  const [, setUserId] = useState<string | null>(null)
+  const router = useRouter()
+  const supabase = createClientComponentClient()
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
@@ -69,8 +73,23 @@ export default function TaskList({ onTaskCountChange, selectedDate, dateFilter }
   }, [timeFilter, selectedDate, dateFilter]);
 
   useEffect(() => {
+    const fetchUserId = async () => {
+      const { data: { user } } = await supabase.auth.getUser ()
+      if (user) {
+        setUserId(user.id)
+      } else{
+        router.push('/login')
+      }
+    }
+
+    fetchUserId()
+  }, [])
+
+  useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
+
+  
 
   useEffect(() => {
     console.log('Tasks:', tasks);
@@ -102,15 +121,12 @@ export default function TaskList({ onTaskCountChange, selectedDate, dateFilter }
 
   const handleTaskCompletion = async (taskId: string, completed: boolean) => {
     try {
-      const response = await fetch(`/api/tasks/${taskId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ completed }),
-      });
+      const { error } = await supabase
+        .from('tasks')
+        .update({ completed: !completed })
+        .eq('id', taskId)
 
-      if (!response.ok) {
+      if (error) {
         throw new Error('Failed to update task');
       }
 
