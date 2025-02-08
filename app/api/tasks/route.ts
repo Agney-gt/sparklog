@@ -50,19 +50,36 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const cookieStore = cookies()
     const supabase = createRouteHandlerClient({  cookies: () => cookieStore })
     
 
     const { data: { user }, error: userError } = await supabase.auth.getUser ()
+    console.log('User :', user);
     if (userError) throw userError
 
-    const { data, error } = await supabase
+    const {searchParams} = new URL(request.url);
+    const timeFilter = searchParams.get('timeFilter');
+    console.log('Time Filter:', timeFilter);
+
+
+    let query = supabase
       .from('tasks')
       .select('*')
-      .eq('user_id', user?.id)
+      .eq('user_id', user?.id);
+
+      if (timeFilter === 'morning') {
+        query = query.gte('time', '00:00').lt('time', '12:00');
+      } else if (timeFilter === 'noon') {
+        query = query.gte('time', '12:00').lt('time', '17:00');
+      } else if (timeFilter === 'evening') {
+        query = query.gte('time', '17:00').lte('time', '23:59');
+      }
+    const { data, error } = await query
+      .order('date', { ascending: true })
+      .order('time', { ascending: true });
 
     if (error) {
       console.error('Error fetching tasks:', error)
@@ -79,3 +96,4 @@ export async function GET() {
     )
   }
 }
+
