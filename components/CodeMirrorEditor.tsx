@@ -88,7 +88,11 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
   }, [value]);
 
   const convertMarkdownToHTML = (markdownText: string) => {
-    const html = markdownText
+    const unsafeTags = /<(script|iframe|object|embed|form|style|meta|link)[^>]*>.*?<\/\1>/gi;
+ // Manually sanitizing HTML to remove XSS risks
+const sanitizedText = markdownText.replace(unsafeTags, ''); 
+  
+    const html = sanitizedText
       // Headers
       .replace(/^###### (.*)$/gm, '<h6>$1</h6>')
       .replace(/^##### (.*)$/gm, '<h5>$1</h5>')
@@ -96,40 +100,41 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
       .replace(/^### (.*)$/gm, '<h3>$1</h3>')
       .replace(/^## (.*)$/gm, '<h2>$1</h2>')
       .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-
+  
       // Bold & Italics
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/~~(.*?)~~/g, '<del>$1</del>')
-
-      // Code Blocks (Multiline)
-      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')  // Non-greedy for multiline code blocks
+  
+      // Code Blocks
+      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')  
       .replace(/`([^`]+)`/g, '<code>$1</code>')
-
+  
       // Blockquotes
       .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
-
+  
       // Images (Base64 and URLs)
       .replace(/!\[([^\]]+)\]\((data:image\/[a-zA-Z0-9]+;base64,[^\)]+)\)/g, '<img src="$2" alt="$1" />')
       .replace(/!\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<img src="$2" alt="$1" />')
-
-      // Links
-      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-
+  
+      // Links (Whitelist only HTTP(S) URLs)
+      .replace(/\[(.*?)\]\((javascript:|data:|vbscript:|file:|ftp:|mailto:|tel:).*?\)/gi, '[Invalid URL]') 
+      .replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+  
       // Unordered Lists
       .replace(/^\s*[-*] (.*)$/gm, '<li>$1</li>')
       .replace(/(<li>.*<\/li>)(?!\n<li>)/g, '<ul>$1</ul>')
-      
+  
       // Horizontal Rules
       .replace(/^---$/gm, '<hr/>')
-
+  
       // Checkboxes (Interactive)
       .replace(/\[ \]/g, '<input type="checkbox" class="task-checkbox" />')
       .replace(/\[x\]/gi, '<input type="checkbox" class="task-checkbox" checked />');
-
+  
     return '<p>' + html.replace(/\n{2,}/g, '</p><p>') + '</p>';
   };
-
+  
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.textContent = `
