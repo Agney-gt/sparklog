@@ -11,7 +11,6 @@ interface CodeMirrorEditorProps {
 const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView | null>(null);
-  const [images, setImages] = useState<string[]>([]);
   const [previewHTML, setPreviewHTML] = useState<string>('');
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
             if (update.docChanged) {
               const newValue = update.state.doc.toString();
               onChange(newValue);
-              extractImages(newValue);
               setPreviewHTML(convertMarkdownToHTML(newValue));
             }
           }),
@@ -42,17 +40,6 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     };
   }, []);
 
-  // ✅ Secure Image Extraction Regex (No excessive wildcards)
-  const extractImages = (text: string) => {
-    const imageRegex = /!\[[^\[\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/gi;
-    const extractedImages: string[] = [];
-    let match;
-    while ((match = imageRegex.exec(text)) !== null) {
-      extractedImages.push(match[1]);
-    }
-    setImages(extractedImages);
-  };
-
   const handlePaste = (event: React.ClipboardEvent) => {
     const items = event.clipboardData?.items;
     if (items) {
@@ -64,13 +51,15 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
             reader.onload = (e) => {
               const base64Image = e.target?.result as string;
               const markdownImage = `\n\n![Pasted Image](${base64Image})\n\n`;
+
               const currentText = viewRef.current?.state.doc.toString() || '';
               const newText = currentText + markdownImage;
+
               viewRef.current?.dispatch({
                 changes: { from: currentText.length, insert: markdownImage },
               });
+
               onChange(newText);
-              extractImages(newText);
               setPreviewHTML(convertMarkdownToHTML(newText));
             };
             reader.readAsDataURL(file);
@@ -81,67 +70,66 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
   };
 
   useEffect(() => {
-    extractImages(value);
     setPreviewHTML(convertMarkdownToHTML(value));
   }, [value]);
 
-  // ✅ Secure Markdown-to-HTML Converter
   const convertMarkdownToHTML = (markdownText: string) => {
-    // ✅ Secure HTML Removal (No excessive backtracking)
-    const forbiddenTags = /<\/?(?:script|iframe|object|embed|form|style|meta|link)(\s[^>]*)?>/gi;
-    const sanitizedText = markdownText.replace(forbiddenTags, '');
+    const unsafeTags = /<(?:script|iframe|object|embed|form|style|meta|link)\b[^>]*>[\s\S]*?<\/(?:script|iframe|object|embed|form|style|meta|link)>/gi;
+    const sanitizedText = markdownText.replace(unsafeTags, '');
 
-    // ✅ Efficient Markdown Parsing
-    const html = sanitizedText
-      .replace(/^###### (.+)$/gm, '<h6>$1</h6>')
-      .replace(/^##### (.+)$/gm, '<h5>$1</h5>')
-      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/~~(.+?)~~/g, '<del>$1</del>')
-      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-      .replace(/!\[[^\[\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/g, '<img src="$1" alt="Image" />')
-      .replace(/!\[[^\[\]]*\]\((https?:\/\/[^\s)]+)\)/g, '<img src="$1" alt="Image" />')
+    let html = sanitizedText
+      .replace(/^(#{1,6})\s*(.+)$/gm, (match, hashes, content) => {
+        const level = hashes.length;
+        return `<h${level}>${content}</h${level}>`;
+      })
+      .replace(/^>\s*(.+)$/gm, '<blockquote>$1</blockquote>')
+      .replace(/^\s*[-*]\s(.+)$/gm, '<li>$1</li>')
+      .replace(/<\/li>\s*(?=<li>)/g, '') // Ensure proper list formatting
+      .replace(/^---$/gm, '<hr/>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/~~(.*?)~~/g, '<del>$1</del>')
+      .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+      .replace(
+        /!\[.*?\]\((data:image\/(?:png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+)\)/g,
+        '<img src="$1" alt="Embedded Image" />'
+      )
+      .replace(
+        /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g,
+        '<img src="$1" alt="Image" />'
+      )
+      .replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+      .replace(/\[[ \t]?\]/g, '<input type="checkbox" class="task-checkbox" />')
+      .replace(/\[[xX]\]/g, '<input type="checkbox" class="task-checkbox" checked />');
 
-      // ✅ Safe Link Handling (Prevents JavaScript/FTP-based XSS)
-      .replace(/\[(.+?)\]\((?:javascript|data|vbscript|file|ftp|mailto|tel):[^\)]*\)/gi, '[Unsafe Link]')
-      .replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
-      .replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.+<\/li>)(?!\n<li>)/g, '<ul>$1</ul>')
-      .replace(/^---$/gm, '<hr/>');
-
-    return '<p>' + html.replace(/\n{2,}/g, '</p><p>') + '</p>';
+    return html.replace(/<li>/g, '<ul><li>').replace(/<\/li>(?!\s*<li>)/g, '</li></ul>');
   };
 
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.textContent = `
-h1 { font-size: 2em; }
-h2 { font-size: 1.5em; }
-h3 { font-size: 1.17em; }
-h4 { font-size: 1em; }
-h5 { font-size: 0.83em; }
-h6 { font-size: 0.67em; }
-code { font-family: monospace; }
-pre { font-family: monospace; padding: 10px; border: 1px solid #ccc; overflow: auto;}
-a { color: blue; text-decoration: underline; }
-del { text-decoration: line-through; }
-blockquote { border-left: 5px solid #ccc; padding-left: 10px; margin: 10px 0; }
-hr { border-top: 1px solid #ccc; margin: 10px 0; }
-ul { list-style-type: disc; padding-left: 20px; }
-ol { list-style-type: decimal; padding-left: 20px; }
-li { margin-bottom: 5px; }
-img { max-width: 100%; height: auto; }
-p { margin-bottom: 1em; }
-.task-checkbox { margin-right: 8px; cursor: pointer; }
-`;
+      h1 { font-size: 2em; }
+      h2 { font-size: 1.5em; }
+      h3 { font-size: 1.17em; }
+      code { font-family: monospace; }
+      pre { font-family: monospace; padding: 10px; border: 1px solid #ccc; overflow: auto;}
+      a { color: blue; text-decoration: underline; }
+      del { text-decoration: line-through; }
+      blockquote { border-left: 5px solid #ccc; padding-left: 10px; margin: 10px 0; }
+      hr { border-top: 1px solid #ccc; margin: 10px 0; }
+      ul { list-style-type: disc; padding-left: 20px; }
+      li { margin-bottom: 5px; }
+      img { max-width: 100%; height: auto; }
+      p { margin-bottom: 1em; }
+      .task-checkbox { margin-right: 8px; cursor: pointer; }
+    `;
+
     document.head.appendChild(styleElement);
+
     return () => {
       document.head.removeChild(styleElement);
     };
@@ -149,14 +137,18 @@ p { margin-bottom: 1em; }
 
   return (
     <div className="flex flex-row space-x-4">
-      <div ref={editorRef} className="border rounded-md p-2 w-1/2 h-96 overflow-auto" onPaste={handlePaste} />
-      <div className="w-1/2 border rounded-md p-2 h-96 overflow-auto flex flex-col space-y-4">
-        <div className="whitespace-pre-wrap text-gray-800" dangerouslySetInnerHTML={{ __html: previewHTML }} />
-        <div className="flex flex-col space-y-2">
-          {images.map((src, index) => (
-            <img key={index} src={src} alt={`Embedded ${index}`} className="w-full h-auto border rounded-md object-contain" />
-          ))}
-        </div>
+      <div
+        ref={editorRef}
+        className="border rounded-md p-2 w-1/2 h-96 overflow-auto"
+        style={{ whiteSpace: 'pre-wrap' }}
+        onPaste={handlePaste}
+      />
+
+      <div className="w-1/2 border rounded-md p-2 h-96 overflow-auto">
+        <div
+          className="whitespace-pre-wrap text-gray-800"
+          dangerouslySetInnerHTML={{ __html: previewHTML }}
+        />
       </div>
     </div>
   );
