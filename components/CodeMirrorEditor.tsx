@@ -113,7 +113,7 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
         return `<h${level}>${match.slice(level + 1)}</h${level}>`;
       })
       .replace(/^>\s+.+/gm, (match) => `<blockquote>${match.slice(2)}</blockquote>`)
-      .replace(/^\s*[-*]\s+.+/gm, (match) => `<li>${match.slice(2)}</li>`)
+      .replace(/^\s*[-*]\s+(\S.*)/gm, "<li>$1</li>")
       .replace(/^---$/gm, "<hr/>")
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
