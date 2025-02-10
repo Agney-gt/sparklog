@@ -30,7 +30,7 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
             if (update.docChanged) {
               let newValue = update.state.doc.toString();
 
-              // Enforce character limit
+              
               if (newValue.length > MAX_CHAR_LIMIT) {
                 newValue = newValue.slice(0, MAX_CHAR_LIMIT);
                 viewRef.current?.dispatch({
@@ -57,7 +57,7 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     const pastedText = event.clipboardData?.getData("text/plain") || "";
     const items = event.clipboardData?.items;
 
-    // Check if pasted text exceeds the limit
+    
     if (pastedText.length > MAX_PASTE_SIZE) {
       alert(`Pasted text exceeds the limit of ${MAX_PASTE_SIZE} characters.`);
       event.preventDefault();
@@ -103,27 +103,29 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
   };
 
   const convertMarkdownToHTML = (markdownText: string) => {
+    
     const unsafeTags =
       /<(?:script|iframe|object|embed|form|style|meta|link)\b[^>]*>([\s\S]*?)<\/(?:script|iframe|object|embed|form|style|meta|link)>/gi;
     const sanitizedText = markdownText.replace(unsafeTags, "");
   
+    
     const html = sanitizedText
       .replace(/^#{1,6} .+/gm, (match) => {
         const level = match.split(" ")[0].length;
         return `<h${level}>${match.slice(level + 1)}</h${level}>`;
       })
-      .replace(/^>\s+(.*)/gm, "<blockquote>$1</blockquote>") // ✅ Fixed
-      .replace(/^\s*[-*]\s+(.+)/gm, "<li>$1</li>") // ✅ Fixed
+      .replace(/^>\s+(.*)/gm, "<blockquote>$1</blockquote>") 
+      .replace(/^\s*[-*]\s+([^\n]*)/gm, "<li>$1</li>") 
       .replace(/^---$/gm, "<hr/>")
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
       .replace(/~~(.+?)~~/g, "<del>$1</del>")
       .replace(/```([\s\S]+?)```/g, "<pre><code>$1</code></pre>")
-      .replace(/`([^`\n]*)`/g, "<code>$1</code>") // ✅ Fixed
+      .replace(/`([^`\n]*)`/g, "<code>$1</code>") 
       .replace(
         /\[([^\[\]]+)]\((https?:\/\/[^\s)]+)\)/g,
         '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-      ) // ✅ Fixed
+      ) 
       .replace(/\[(\s*|x)\]/g, (match) =>
         match === "[x]" ? '<input type="checkbox" checked />' : '<input type="checkbox" />'
       )
