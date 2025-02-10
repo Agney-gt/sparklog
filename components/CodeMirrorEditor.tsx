@@ -42,9 +42,9 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     };
   }, []);
 
-  // ✅ Optimized Image Extraction Regex (Prevents ReDoS)
+  // ✅ Secure Image Extraction Regex (No excessive wildcards)
   const extractImages = (text: string) => {
-    const imageRegex = /!\[[^\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/gi;
+    const imageRegex = /!\[[^\[\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/gi;
     const extractedImages: string[] = [];
     let match;
     while ((match = imageRegex.exec(text)) !== null) {
@@ -85,34 +85,35 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     setPreviewHTML(convertMarkdownToHTML(value));
   }, [value]);
 
-  // ✅ Optimized Convert Markdown to HTML Function (Prevents XSS & ReDoS)
+  // ✅ Secure Markdown-to-HTML Converter
   const convertMarkdownToHTML = (markdownText: string) => {
-    // ✅ Safe HTML Removal (No Backtracking)
-    const unsafeTags = /<(?:script|iframe|object|embed|form|style|meta|link)[\s\S]*?>/gi;
-    const sanitizedText = markdownText.replace(unsafeTags, '');
+    // ✅ Secure HTML Removal (No excessive backtracking)
+    const forbiddenTags = /<\/?(?:script|iframe|object|embed|form|style|meta|link)(\s[^>]*)?>/gi;
+    const sanitizedText = markdownText.replace(forbiddenTags, '');
 
+    // ✅ Efficient Markdown Parsing
     const html = sanitizedText
-      .replace(/^###### (.*)$/gm, '<h6>$1</h6>')
-      .replace(/^##### (.*)$/gm, '<h5>$1</h5>')
-      .replace(/^#### (.*)$/gm, '<h4>$1</h4>')
-      .replace(/^### (.*)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/~~(.*?)~~/g, '<del>$1</del>')
+      .replace(/^###### (.+)$/gm, '<h6>$1</h6>')
+      .replace(/^##### (.+)$/gm, '<h5>$1</h5>')
+      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/~~(.+?)~~/g, '<del>$1</del>')
       .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')
       .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
-      .replace(/!\[[^\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/g, '<img src="$1" alt="Image" />')
-      .replace(/!\[[^\]]*\]\((https?:\/\/[^\s]+)\)/g, '<img src="$1" alt="Image" />')
-      
-      // ✅ Secure Link Handling
-      .replace(/\[(.*?)\]\((?:javascript|data|vbscript|file|ftp|mailto|tel):[^\)]*\)/gi, '[Invalid URL]')
-      .replace(/\[(.*?)\]\((https?:\/\/[^\s]+)\)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+      .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+      .replace(/!\[[^\[\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/g, '<img src="$1" alt="Image" />')
+      .replace(/!\[[^\[\]]*\]\((https?:\/\/[^\s)]+)\)/g, '<img src="$1" alt="Image" />')
 
-      .replace(/^\s*[-*] (.*)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)(?!\n<li>)/g, '<ul>$1</ul>')
+      // ✅ Safe Link Handling (Prevents JavaScript/FTP-based XSS)
+      .replace(/\[(.+?)\]\((?:javascript|data|vbscript|file|ftp|mailto|tel):[^\)]*\)/gi, '[Unsafe Link]')
+      .replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+
+      .replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>.+<\/li>)(?!\n<li>)/g, '<ul>$1</ul>')
       .replace(/^---$/gm, '<hr/>');
 
     return '<p>' + html.replace(/\n{2,}/g, '</p><p>') + '</p>';
