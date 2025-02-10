@@ -43,11 +43,11 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
   }, []);
 
   const extractImages = (text: string) => {
-    const imageRegex = /!\[.*?\]\((data:image\/.*?;base64,.*?)\)/g;
+    const imageRegex = /!\[([^\]]+)\]\((data:image\/[a-zA-Z0-9]+;base64,[^\)]+)\)/g;
     const extractedImages: string[] = [];
     let match;
     while ((match = imageRegex.exec(text)) !== null) {
-      extractedImages.push(match[1]);
+      extractedImages.push(match[2]);
     }
     setImages(extractedImages);
   };
@@ -110,7 +110,7 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
       .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
 
       // Images
-      .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" />')
+      .replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
 
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
