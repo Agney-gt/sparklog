@@ -106,33 +106,32 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     const unsafeTags =
       /<(?:script|iframe|object|embed|form|style|meta|link)\b[^>]*>([\s\S]*?)<\/(?:script|iframe|object|embed|form|style|meta|link)>/gi;
     const sanitizedText = markdownText.replace(unsafeTags, "");
-
+  
     const html = sanitizedText
       .replace(/^#{1,6} .+/gm, (match) => {
         const level = match.split(" ")[0].length;
         return `<h${level}>${match.slice(level + 1)}</h${level}>`;
       })
-      .replace(/^>\s+.+/gm, (match) => `<blockquote>${match.slice(2)}</blockquote>`)
-      .replace(/^\s*[-*]\s+(\S.*)/gm, "<li>$1</li>")
+      .replace(/^>\s+(.*)/gm, "<blockquote>$1</blockquote>") // ✅ Fixed
+      .replace(/^\s*[-*]\s+(.+)/gm, "<li>$1</li>") // ✅ Fixed
       .replace(/^---$/gm, "<hr/>")
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
       .replace(/\*(.+?)\*/g, "<em>$1</em>")
       .replace(/~~(.+?)~~/g, "<del>$1</del>")
       .replace(/```([\s\S]+?)```/g, "<pre><code>$1</code></pre>")
-      .replace(/`([^`\n]+?)`/g, "<code>$1</code>")
+      .replace(/`([^`\n]*)`/g, "<code>$1</code>") // ✅ Fixed
       .replace(
-        /\[([^\]]+?)\]\((https?:\/\/[^\s)]+?)\)/g,
+        /\[([^\[\]]+)]\((https?:\/\/[^\s)]+)\)/g,
         '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-      )
+      ) // ✅ Fixed
       .replace(/\[(\s*|x)\]/g, (match) =>
         match === "[x]" ? '<input type="checkbox" checked />' : '<input type="checkbox" />'
       )
-      // ✅ Handle Markdown image syntax
       .replace(/!\[([^\]]*?)\]\((data:image\/[a-zA-Z]+;base64,[^\s)]+?)\)/g, '<img src="$2" alt="$1" />');
-
+  
     return `<ul>${html}</ul>`.replace(/<\/li>\s*(?=<li>)/g, "");
   };
-
+  
   useEffect(() => {
     setPreviewHTML(convertMarkdownToHTML(value));
   }, [value]);
