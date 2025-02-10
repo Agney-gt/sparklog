@@ -103,14 +103,15 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
       .replace(/~~(.*?)~~/g, '<del>$1</del>')
 
       // Code Blocks (Multiline)
-      .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')  // Non-greedy for multiline code blocks
       .replace(/`([^`]+)`/g, '<code>$1</code>')
 
       // Blockquotes
       .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
 
-      // Images
-      .replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
+      // Images (Base64 and URLs)
+      .replace(/!\[([^\]]+)\]\((data:image\/[a-zA-Z0-9]+;base64,[^\)]+)\)/g, '<img src="$2" alt="$1" />')
+      .replace(/!\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<img src="$2" alt="$1" />')
 
       // Links
       .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
@@ -190,3 +191,4 @@ p { margin-bottom: 1em; }
 };
 
 export default CodeMirrorEditor;
+      
