@@ -77,7 +77,7 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     const unsafeTags = /<(?:script|iframe|object|embed|form|style|meta|link)\b[^>]*>[\s\S]*?<\/(?:script|iframe|object|embed|form|style|meta|link)>/gi;
     const sanitizedText = markdownText.replace(unsafeTags, '');
 
-    let html = sanitizedText
+   const html = sanitizedText
       .replace(/^(#{1,6})\s*(.+)$/gm, (match, hashes, content) => {
         const level = hashes.length;
         return `<h${level}>${content}</h${level}>`;
