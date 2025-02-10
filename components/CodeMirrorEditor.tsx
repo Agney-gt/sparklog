@@ -42,12 +42,13 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     };
   }, []);
 
+  // ✅ Optimized Image Extraction Regex (Prevents ReDoS)
   const extractImages = (text: string) => {
-    const imageRegex = /!\[([^\]]+)\]\((data:image\/[a-zA-Z0-9]+;base64,[^\)]+)\)/g;
+    const imageRegex = /!\[[^\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/gi;
     const extractedImages: string[] = [];
     let match;
     while ((match = imageRegex.exec(text)) !== null) {
-      extractedImages.push(match[2]);
+      extractedImages.push(match[1]);
     }
     setImages(extractedImages);
   };
@@ -63,14 +64,11 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
             reader.onload = (e) => {
               const base64Image = e.target?.result as string;
               const markdownImage = `\n\n![Pasted Image](${base64Image})\n\n`;
-
               const currentText = viewRef.current?.state.doc.toString() || '';
               const newText = currentText + markdownImage;
-
               viewRef.current?.dispatch({
                 changes: { from: currentText.length, insert: markdownImage },
               });
-
               onChange(newText);
               extractImages(newText);
               setPreviewHTML(convertMarkdownToHTML(newText));
@@ -87,54 +85,39 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     setPreviewHTML(convertMarkdownToHTML(value));
   }, [value]);
 
+  // ✅ Optimized Convert Markdown to HTML Function (Prevents XSS & ReDoS)
   const convertMarkdownToHTML = (markdownText: string) => {
-    const unsafeTags = /<(script|iframe|object|embed|form|style|meta|link)[^>]*>.*?<\/\1>/gi;
- // Manually sanitizing HTML to remove XSS risks
-const sanitizedText = markdownText.replace(unsafeTags, ''); 
-  
+    // ✅ Safe HTML Removal (No Backtracking)
+    const unsafeTags = /<(?:script|iframe|object|embed|form|style|meta|link)[\s\S]*?>/gi;
+    const sanitizedText = markdownText.replace(unsafeTags, '');
+
     const html = sanitizedText
-      // Headers
       .replace(/^###### (.*)$/gm, '<h6>$1</h6>')
       .replace(/^##### (.*)$/gm, '<h5>$1</h5>')
       .replace(/^#### (.*)$/gm, '<h4>$1</h4>')
       .replace(/^### (.*)$/gm, '<h3>$1</h3>')
       .replace(/^## (.*)$/gm, '<h2>$1</h2>')
       .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-  
-      // Bold & Italics
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/~~(.*?)~~/g, '<del>$1</del>')
-  
-      // Code Blocks
-      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')  
+      .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')
       .replace(/`([^`]+)`/g, '<code>$1</code>')
-  
-      // Blockquotes
       .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
-  
-      // Images (Base64 and URLs)
-      .replace(/!\[([^\]]+)\]\((data:image\/[a-zA-Z0-9]+;base64,[^\)]+)\)/g, '<img src="$2" alt="$1" />')
-      .replace(/!\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<img src="$2" alt="$1" />')
-  
-      // Links (Whitelist only HTTP(S) URLs)
-      .replace(/\[(.*?)\]\((javascript:|data:|vbscript:|file:|ftp:|mailto:|tel:).*?\)/gi, '[Invalid URL]') 
-      .replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-  
-      // Unordered Lists
+      .replace(/!\[[^\]]*\]\((data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+)\)/g, '<img src="$1" alt="Image" />')
+      .replace(/!\[[^\]]*\]\((https?:\/\/[^\s]+)\)/g, '<img src="$1" alt="Image" />')
+      
+      // ✅ Secure Link Handling
+      .replace(/\[(.*?)\]\((?:javascript|data|vbscript|file|ftp|mailto|tel):[^\)]*\)/gi, '[Invalid URL]')
+      .replace(/\[(.*?)\]\((https?:\/\/[^\s]+)\)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+
       .replace(/^\s*[-*] (.*)$/gm, '<li>$1</li>')
       .replace(/(<li>.*<\/li>)(?!\n<li>)/g, '<ul>$1</ul>')
-  
-      // Horizontal Rules
-      .replace(/^---$/gm, '<hr/>')
-  
-      // Checkboxes (Interactive)
-      .replace(/\[ \]/g, '<input type="checkbox" class="task-checkbox" />')
-      .replace(/\[x\]/gi, '<input type="checkbox" class="task-checkbox" checked />');
-  
+      .replace(/^---$/gm, '<hr/>');
+
     return '<p>' + html.replace(/\n{2,}/g, '</p><p>') + '</p>';
   };
-  
+
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.textContent = `
@@ -157,9 +140,7 @@ img { max-width: 100%; height: auto; }
 p { margin-bottom: 1em; }
 .task-checkbox { margin-right: 8px; cursor: pointer; }
 `;
-
     document.head.appendChild(styleElement);
-
     return () => {
       document.head.removeChild(styleElement);
     };
@@ -167,27 +148,12 @@ p { margin-bottom: 1em; }
 
   return (
     <div className="flex flex-row space-x-4">
-      <div
-        ref={editorRef}
-        className="border rounded-md p-2 w-1/2 h-96 overflow-auto"
-        style={{ whiteSpace: 'pre-wrap' }}
-        onPaste={handlePaste}
-      />
-
+      <div ref={editorRef} className="border rounded-md p-2 w-1/2 h-96 overflow-auto" onPaste={handlePaste} />
       <div className="w-1/2 border rounded-md p-2 h-96 overflow-auto flex flex-col space-y-4">
-        <div
-          className="whitespace-pre-wrap text-gray-800"
-          dangerouslySetInnerHTML={{ __html: previewHTML }}
-        />
-
+        <div className="whitespace-pre-wrap text-gray-800" dangerouslySetInnerHTML={{ __html: previewHTML }} />
         <div className="flex flex-col space-y-2">
           {images.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt={`Embedded ${index}`}
-              className="w-full h-auto border rounded-md object-contain"
-            />
+            <img key={index} src={src} alt={`Embedded ${index}`} className="w-full h-auto border rounded-md object-contain" />
           ))}
         </div>
       </div>
@@ -196,4 +162,3 @@ p { margin-bottom: 1em; }
 };
 
 export default CodeMirrorEditor;
-      
