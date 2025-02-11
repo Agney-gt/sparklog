@@ -81,7 +81,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
 export async function PUT(request: Request) {
   try {
     const cookieStore = cookies();
@@ -91,36 +90,83 @@ export async function PUT(request: Request) {
     if (userError || !userData?.user) throw userError;
 
     const { id, date, status, image } = await request.json();
+    const today = new Date().toISOString().split("T")[0];
 
     if (!id || !date || !status) {
       return NextResponse.json({ error: "ID, date, and status are required." }, { status: 400 });
     }
 
-    const { data: habit, error: fetchError } = await supabase
+    // Fetch existing habit entry
+    const { data: habit, error: habitError } = await supabase
       .from("habits")
-      .select("calendar_entries")
+      .select("calendar_entries, category")
       .eq("id", id)
       .eq("user_id", userData.user.id)
       .single();
 
-    if (fetchError || !habit) {
+    if (habitError || !habit) {
       return NextResponse.json({ error: "Habit not found" }, { status: 404 });
     }
 
-    // Ensure we store both image and status inside calendar_entries
-    const updatedEntries = {
-      ...habit.calendar_entries,
-      [date]: { image: image || "", status },
-    };
+    // ✅ Remove the restriction that prevents multiple habit updates per day
 
-    const { error } = await supabase
+    // Compute streak and reward
+    const updatedEntries = { ...habit.calendar_entries };
+    const previousEntry = updatedEntries[date];
+    updatedEntries[date] = { image: image || previousEntry?.image || "", status, last_updated: today };
+
+    let streak = 0;
+    let reward = 5;
+    const sortedDates = Object.keys(updatedEntries).sort();
+
+    for (const d of sortedDates.reverse()) {
+      if (updatedEntries[d].status === "success") {
+        streak++;
+        reward = Math.pow(2, streak) * 5; // Exponential reward calculation
+      } else if(updatedEntries[d].status === "failed"){
+        reward=0;
+      }
+       else {
+        break;
+      }
+    }
+
+    // Update habit
+    const { error: updateError } = await supabase
       .from("habits")
       .update({ calendar_entries: updatedEntries })
       .eq("id", id);
 
-    return error ? NextResponse.json({ error: "Error updating habit" }, { status: 500 }) : NextResponse.json({ success: true });
+    if (updateError) {
+      return NextResponse.json({ error: "Error updating habit" }, { status: 500 });
+    }
+
+    // Update user balance
+    const { data: userProgress, error: progressError } = await supabase
+      .from("user_progress")
+      .select("balance")
+      .eq("user_id", userData.user.id)
+      .single();
+
+    if (progressError || !userProgress) {
+      return NextResponse.json({ error: "User progress not found" }, { status: 500 });
+    }
+
+    const newBalance = userProgress.balance + reward;
+
+    const { error: balanceError } = await supabase
+      .from("user_progress")
+      .update({ balance: newBalance })
+      .eq("user_id", userData.user.id);
+
+    if (balanceError) {
+      return NextResponse.json({ error: "Error updating balance" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: "Habit updated successfully", newBalance, reward, streak });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    console.error("Error updating habit:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

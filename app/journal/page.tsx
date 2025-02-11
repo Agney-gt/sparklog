@@ -14,6 +14,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
 import CharacterProfile from '../profile/page'
 import MarketplacePage from '../marketplace/page'
+import { HabitCategoryPage } from '@/components/habits-category'
 
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
@@ -43,7 +44,8 @@ export default function Component() {
    // { title: 'Quest Log', component: <QuestLog /> },
     //{ title: 'Goals', component: <GoalsPage/> },
     { title: 'Profile', component: <CharacterProfile/> },
-    { title: 'Archives', component: <MarketplacePage /> }
+    { title: 'Archives', component: <MarketplacePage /> },
+    {title:'Combat', component: <HabitCategoryPage category="bad"/>}
 
   ]
 
