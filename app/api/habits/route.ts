@@ -117,7 +117,8 @@ export async function PUT(request: Request) {
 
     let streak = 0;
     let reward = 5;
-    const sortedDates = Object.keys(updatedEntries).sort();
+    const sortedDates = Object.keys(updatedEntries).sort((a, b) => a.localeCompare(b));
+
 
     for (const d of sortedDates.reverse()) {
       if (updatedEntries[d].status === "success") {
