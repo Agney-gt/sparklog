@@ -15,6 +15,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import CharacterProfile from '../profile/page'
 import MarketplacePage from '../marketplace/page'
 import { HabitCategoryPage } from '@/components/habits-category'
+import { ZenModeTimer } from '@/components/zen-mode'
 
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
@@ -45,7 +46,8 @@ export default function Component() {
     //{ title: 'Goals', component: <GoalsPage/> },
     { title: 'Profile', component: <CharacterProfile/> },
     { title: 'Archives', component: <MarketplacePage /> },
-    {title:'Combat', component: <HabitCategoryPage category="bad"/>}
+    {title:'Combat', component: <HabitCategoryPage category="bad"/>},
+    {title:'Recharge', component: <ZenModeTimer initialTime={600}/>}
 
   ]
 
