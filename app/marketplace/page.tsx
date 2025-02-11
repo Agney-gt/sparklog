@@ -1,13 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import HeaderHome from "@/components/HeaderHome"; // Adjust the import path as necessary
-import Footer from "@/components/Footer"; // Adjust the import path as necessary
 import { BlackMarket } from "@/components/black-market";
 import { AccountOverview } from "@/components/account-overview";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"; // Ensure you have this library installed
 import { Loader2 } from "lucide-react"; // Icon for loading spinner
-import { ZenModeTimer } from "@/components/zen-mode";
 const MarketplacePage: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -56,13 +53,14 @@ const MarketplacePage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <HeaderHome />
       <main className="flex-1">
         <AccountOverview id={userId} />
         <BlackMarket id={userId} />
-        <ZenModeTimer initialTime={300} id={userId}  /> 
+        {
+        //<ZenModeTimer initialTime={300} id={userId}  /> 
+        }
       </main>
-      <Footer />
+      
     </div>
   );
 };

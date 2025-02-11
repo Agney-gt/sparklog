@@ -1,6 +1,5 @@
 'use client'
 import { useState, useCallback, useEffect } from 'react'
-import HabitTrackerGuide from "@/components/habit-tracker-guide"
 import CodeMirrorEditor from "@/components/CodeMirrorEditor" // Import the new CodeMirror component
 import * as React from "react"
 import { addMonths, subYears, format } from "date-fns"
@@ -9,15 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Maximize2, Loader2 } from 'lucide-react'
-import { ActionWorkbook } from "@/components/action-workbook"
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
-import QuestLog from "@/components/quest-log"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import useEmblaCarousel from 'embla-carousel-react'
-import GoalsPage from '../Goals/page'
 import CharacterProfile from '../profile/page'
 import MarketplacePage from '../marketplace/page'
+import { HabitCategoryPage } from '@/components/habits-category'
+import { ZenModeTimer } from '@/components/zen-mode'
 
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
@@ -42,12 +40,14 @@ export default function Component() {
   }, [emblaApi, onSelect])
 
   const cards = [
-    { title: 'Habit Stack', component: <HabitTrackerGuide /> },
-    { title: 'Action Workbook', component: <ActionWorkbook /> },
-    { title: 'Quest Log', component: <QuestLog /> },
-    { title: 'Goals', component: <GoalsPage/> },
+    //{ title: 'Habit Stack', component: <HabitTrackerGuide /> },
+    //{ title: 'Action Workbook', component: <ActionWorkbook /> },
+   // { title: 'Quest Log', component: <QuestLog /> },
+    //{ title: 'Goals', component: <GoalsPage/> },
     { title: 'Profile', component: <CharacterProfile/> },
-    { title: 'Marketplace', component: <MarketplacePage /> }
+    { title: 'Archives', component: <MarketplacePage /> },
+    {title:'Combat', component: <HabitCategoryPage category="bad"/>},
+    {title:'Recharge', component: <ZenModeTimer initialTime={600}/>}
 
   ]
 

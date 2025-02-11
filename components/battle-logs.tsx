@@ -1,14 +1,11 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, XCircle} from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
+
 interface Habit {
   id: string;
-  user_id: string;
   name: string;
-  type: string;
-  status: "success" | "failed";
-  date: string;
-  calendar_entries: Record<string, "success" | "failed">;
+  calendar_entries: Record<string, { image: string; status: "success" | "failed" }>;
 }
 
 interface Statistics {
@@ -17,7 +14,7 @@ interface Statistics {
   annually: { success: number; failed: number };
 }
 
-export default function HabitTracker({ habits,text }: { habits: Habit[],text:string }) {
+export default function HabitTracker({ habits, text }: { habits: Habit[]; text: string }) {
   const calculateStatistics = (habit: Habit): Statistics => {
     const entries = habit.calendar_entries || {};
     const now = new Date();
@@ -27,13 +24,19 @@ export default function HabitTracker({ habits,text }: { habits: Habit[],text:str
 
     const calculatePeriodStats = (startDate: Date) => {
       return Object.entries(entries).reduce(
-        (acc, [date, status]) => {
-          if (new Date(date) >= startDate) {
-            acc[status]++;
+        (acc, [date, entry]) => {
+          try {
+            const entryDate = new Date(date);
+            if (!isNaN(entryDate.getTime()) && entryDate >= startDate) {
+              if (entry.status === "success") acc.success++;
+              else if (entry.status === "failed") acc.failed++;
+            }
+          } catch (error) {
+            console.error(error, date);
           }
           return acc;
         },
-        { success: 0, failed: 0 }
+        { success: 0, failed: 0 } as { success: number; failed: number } // ✅ Ensure the accumulator has correct types
       );
     };
 
@@ -67,7 +70,7 @@ export default function HabitTracker({ habits,text }: { habits: Habit[],text:str
                     <div>
                       <h3 className="font-semibold">{habit.name}</h3>
                       <div className="flex items-center gap-2 text-sm">
-                        {habit.status === "success" ? (
+                        {stats.weekly.success > stats.weekly.failed ? (
                           <span className="text-green-600 flex items-center gap-1">
                             <CheckCircle2 className="h-4 w-4" />
                             You're doing great!
@@ -75,7 +78,7 @@ export default function HabitTracker({ habits,text }: { habits: Habit[],text:str
                         ) : (
                           <span className="text-red-600 flex items-center gap-1">
                             <XCircle className="h-4 w-4" />
-                            You lose.
+                            You need to improve!
                           </span>
                         )}
                       </div>
