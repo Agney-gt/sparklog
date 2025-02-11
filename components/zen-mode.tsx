@@ -1,16 +1,33 @@
+"use client";
+
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Clock } from "lucide-react";
+import Image from "next/image";
 
 interface ZenModeTimerProps {
   initialTime: number; // in seconds
-  id: string; // User ID required for API request
 }
 
-export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) => {
+export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   const [time, setTime] = useState(initialTime);
   const [isActive, setIsActive] = useState(false);
-  const hasTriggeredAlert = useRef(false); // Prevents duplicate API calls
+  const [userId, setUserId] = useState<string | null>(null);
+  const hasTriggeredAlert = useRef(false);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching user:", error);
+      } else {
+        setUserId(data.user?.id || null);
+      }
+    };
+    fetchUser();
+  }, [supabase]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -21,24 +38,24 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) =
       }, 1000);
     } else if (time === 0 && !hasTriggeredAlert.current) {
       setIsActive(false);
-      hasTriggeredAlert.current = true; // Mark that the alert was triggered
+      hasTriggeredAlert.current = true;
 
       alert("Time's up! Great job staying focused! 🎯");
 
-      // Reset timer *after* alert is dismissed
       setTimeout(() => {
         setTime(initialTime);
-        hasTriggeredAlert.current = false; // Reset alert trigger
+        hasTriggeredAlert.current = false;
       }, 100);
 
-      // Call API to update zen_alerts
-      updateZenAlerts(id);
+      if (userId) {
+        updateZenAlerts(userId);
+      }
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, time, id]);
+  }, [isActive, time, userId]);
 
   const updateZenAlerts = async (userId: string) => {
     try {
@@ -47,7 +64,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) =
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: userId,
-          type: "zen_alert", // Using the existing type field
+          type: "zen_alert",
         }),
       });
 
@@ -67,7 +84,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) =
   const resetTimer = () => {
     setTime(initialTime);
     setIsActive(false);
-    hasTriggeredAlert.current = false; // Reset alert trigger
+    hasTriggeredAlert.current = false;
   };
 
   const formatTime = (timeInSeconds: number) => {
@@ -77,8 +94,24 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime, id }) =
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20 mb-20 max-h-500 p-4">
-      <div className="rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen transition-all duration-700 relative ${
+        isActive ? "bg-black" : "bg-white"
+      }`}
+    >
+      {/* Zen Background Image */}
+      <Image
+        src="/background.png" // Image in the public folder
+        alt="Zen Background"
+        layout="fill"
+        objectFit="cover"
+        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ${
+          isActive ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {/* Timer UI */}
+      <div className="relative z-10 rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300 bg-white bg-opacity-90">
         <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
         <div className="flex items-center justify-center space-x-4">
           <Clock className="w-8 h-8 text-gray-700" />

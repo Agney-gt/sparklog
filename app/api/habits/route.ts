@@ -13,12 +13,6 @@ type Habit = {
   calendar_entries?: Record<string, string>;
 };
 
-type HabitUpdate = {
-  id: string;
-  date?: string;
-  status?: "success" | "failed";
-  toggleOnly?: boolean;
-};
 
 // Create a new habit
 export async function POST(request: Request) {
@@ -87,7 +81,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
 export async function PUT(request: Request) {
   try {
     const cookieStore = cookies();
@@ -96,47 +89,99 @@ export async function PUT(request: Request) {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData?.user) throw userError;
 
-    const body = (await request.json()) as HabitUpdate;
-    const { id, date, status, toggleOnly } = body;
+    const { id, date, status, image } = await request.json();
+    const today = new Date().toISOString().split("T")[0];
 
-    if (!id || (!toggleOnly && (!date || !status))) {
-      return NextResponse.json({
-        error: "ID is required. Date and status are required unless toggling only status.",
-      }, { status: 400 });
+    if (!id || !date || !status) {
+      return NextResponse.json({ error: "ID, date, and status are required." }, { status: 400 });
     }
 
-    const { data: habit, error: fetchError } = await supabase
+    // Fetch existing habit entry
+    const { data: habit, error: habitError } = await supabase
       .from("habits")
-      .select("status, calendar_entries")
+      .select("calendar_entries, category")
       .eq("id", id)
       .eq("user_id", userData.user.id)
       .single();
 
-    if (fetchError || !habit) {
-      console.error("Error fetching habit:", fetchError);
+    if (habitError || !habit) {
       return NextResponse.json({ error: "Habit not found" }, { status: 404 });
     }
 
-    const updatedFields: Partial<Habit> = {};
-    if (toggleOnly) {
-      updatedFields.status = habit.status === "success" ? "failed" : "success";
-    } else {
-      updatedFields.status = status;
-      updatedFields.calendar_entries = { ...habit.calendar_entries, [date as string]: status as string };
+    // Compute streak and reward
+    const updatedEntries = { ...habit.calendar_entries };
+    const previousEntry = updatedEntries[date];
+    updatedEntries[date] = { image: image || previousEntry?.image || "", status, last_updated: today };
+
+    let streak = 0;
+    let reward = 5;
+    const sortedDates = Object.keys(updatedEntries).sort((a, b) => a.localeCompare(b));
+
+    for (const d of sortedDates.reverse()) {
+      if (updatedEntries[d].status === "success") {
+        streak++;
+        reward = Math.pow(2, streak) * 5; // Exponential reward calculation
+      } else if (updatedEntries[d].status === "failed") {
+        reward = 0;
+      } else {
+        break;
+      }
     }
 
-    const { error } = await supabase.from("habits").update(updatedFields).eq("id", id).eq("user_id", userData.user.id);
-    if (error) {
-      console.error("Error updating habit:", error);
+    // Update habit
+    const { error: updateError } = await supabase
+      .from("habits")
+      .update({ calendar_entries: updatedEntries })
+      .eq("id", id);
+
+    if (updateError) {
       return NextResponse.json({ error: "Error updating habit" }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: "Habit updated successfully", updatedFields });
+    // Fetch user progress (balance & HP)
+    const { data: userProgress, error: progressError } = await supabase
+      .from("user_progress")
+      .select("balance, HP")
+      .eq("user_id", userData.user.id)
+      .single();
+
+    if (progressError || !userProgress) {
+      return NextResponse.json({ error: "User progress not found" }, { status: 500 });
+    }
+
+    const newBalance = userProgress.balance + reward;
+    let newHP = userProgress.HP;
+
+    // Deduct HP if the habit status is "failed"
+    if (status === "failed") {
+      newHP = Math.max(0, userProgress.HP - 10); // Ensure HP doesn't go below zero
+    }
+
+    // Update user progress
+    const { error: balanceError } = await supabase
+      .from("user_progress")
+      .update({ balance: newBalance, HP: newHP })
+      .eq("user_id", userData.user.id);
+
+    if (balanceError) {
+      return NextResponse.json({ error: "Error updating user progress" }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Habit updated successfully",
+      newBalance,
+      newHP,
+      reward,
+      streak,
+    });
   } catch (error) {
-    console.error("Unexpected error updating habit:", error);
+    console.error("Error updating habit:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+
 export async function DELETE(request: Request) {
   try {
     const cookieStore = cookies();

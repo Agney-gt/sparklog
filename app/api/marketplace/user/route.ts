@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       delete updateFields.type;
     }
     if (updateFields.type === "zen_alert") { //Handling zen alerts
-      updateFields.zen_alerts = (updateFields.zen_alerts || 0) + 1; 
+      updateFields.MP = 100; 
       delete updateFields.type;
     }
     // Update the user data with the provided fields

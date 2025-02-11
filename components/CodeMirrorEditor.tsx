@@ -1,33 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { EditorView, basicSetup } from 'codemirror';
-import { markdown } from '@codemirror/lang-markdown';
-import { EditorState } from '@codemirror/state';
-import ReactMarkdown from 'react-markdown';
+import React, { useEffect, useRef, useState } from "react";
+import { EditorView, basicSetup } from "codemirror";
+import { markdown } from "@codemirror/lang-markdown";
+import { EditorState } from "@codemirror/state";
 
 interface CodeMirrorEditorProps {
   value: string;
   onChange: (value: string) => void;
 }
 
+const MAX_CHAR_LIMIT = 1000000; 
+const MAX_PASTE_SIZE = 500000; 
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; 
+
 const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView | null>(null);
-  const [images, setImages] = useState<string[]>([]); // Store extracted images
+  const [previewHTML, setPreviewHTML] = useState<string>("");
 
   useEffect(() => {
-    if (!editorRef.current || viewRef.current) return; // Prevent re-initialization
+    if (!editorRef.current || viewRef.current) return;
 
     viewRef.current = new EditorView({
       state: EditorState.create({
-        doc: value,
+        doc: value.slice(0, MAX_CHAR_LIMIT),
         extensions: [
           basicSetup,
           markdown(),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
-              const newValue = update.state.doc.toString();
+              let newValue = update.state.doc.toString();
+
+              
+              if (newValue.length > MAX_CHAR_LIMIT) {
+                newValue = newValue.slice(0, MAX_CHAR_LIMIT);
+                viewRef.current?.dispatch({
+                  changes: { from: MAX_CHAR_LIMIT, to: newValue.length, insert: "" },
+                });
+              }
+
               onChange(newValue);
-              extractImages(newValue);
+              setPreviewHTML(convertMarkdownToHTML(newValue));
             }
           }),
         ],
@@ -39,46 +51,50 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
       viewRef.current?.destroy();
       viewRef.current = null;
     };
-  }, []); // Runs only on mount
+  }, []);
 
-  // Extract base64 images from Markdown text and prevent duplicate rendering
-  const extractImages = (text: string) => {
-    const imageRegex = /!\[.*?\]\((data:image\/.*?;base64,.*?)\)/g;
-    const extractedImages: string[] = [];
-    let match;
-    while ((match = imageRegex.exec(text)) !== null) {
-      extractedImages.push(match[1]); // Extract Base64 URL
-    }
-    setImages(extractedImages);
-  };
-
-  // Remove image Markdown before rendering text preview
-  const cleanMarkdownText = value.replace(/!\[.*?\]\((data:image\/.*?;base64,.*?)\)/g, '');
-
-  // Handle image paste
   const handlePaste = (event: React.ClipboardEvent) => {
+    const pastedText = event.clipboardData?.getData("text/plain") || "";
     const items = event.clipboardData?.items;
+
+    
+    if (pastedText.length > MAX_PASTE_SIZE) {
+      alert(`Pasted text exceeds the limit of ${MAX_PASTE_SIZE} characters.`);
+      event.preventDefault();
+      return;
+    }
+
     if (items) {
       for (const item of items) {
-        if (item.type.startsWith('image/')) {
+        if (item.type.startsWith("image/")) {
           const file = item.getAsFile();
           if (file) {
+            if (file.size > MAX_IMAGE_SIZE) {
+              alert(`Image size exceeds the limit of ${MAX_IMAGE_SIZE / (1024 * 1024)}MB.`);
+              return;
+            }
+
             const reader = new FileReader();
             reader.onload = (e) => {
               const base64Image = e.target?.result as string;
               const markdownImage = `\n\n![Pasted Image](${base64Image})\n\n`;
 
-              // Ensure CodeMirror editor updates with the new image
-              const currentText = viewRef.current?.state.doc.toString() || '';
+              const currentText = viewRef.current?.state.doc.toString() || "";
               const newText = currentText + markdownImage;
+
+              if (newText.length > MAX_CHAR_LIMIT) {
+                alert(`Total input limited to ${MAX_CHAR_LIMIT} characters.`);
+                return;
+              }
 
               viewRef.current?.dispatch({
                 changes: { from: currentText.length, insert: markdownImage },
               });
 
-              onChange(newText); // Update parent state
-              extractImages(newText); // Update image preview
+              onChange(newText);
+              setPreviewHTML(convertMarkdownToHTML(newText));
             };
+
             reader.readAsDataURL(file);
           }
         }
@@ -86,38 +102,78 @@ const CodeMirrorEditor: React.FC<CodeMirrorEditorProps> = ({ value, onChange }) 
     }
   };
 
+  const convertMarkdownToHTML = (markdownText: string) => {
+    
+    const unsafeTags =
+      /<(?:script|iframe|object|embed|form|style|meta|link)\b[^>]*>([\s\S]*?)<\/(?:script|iframe|object|embed|form|style|meta|link)>/gi;
+    const sanitizedText = markdownText.replace(unsafeTags, "");
+  
+    
+    const html = sanitizedText
+      .replace(/^#{1,6} .+/gm, (match) => {
+        const level = match.split(" ")[0].length;
+        return `<h${level}>${match.slice(level + 1)}</h${level}>`;
+      })
+      .replace(/^>\s+(.*)/gm, "<blockquote>$1</blockquote>") 
+      .replace(/^\s{0,3}[-*] ([^]*?)(?=\n|$)/gm, "<li>$1</li>") 
+      .replace(/^---$/gm, "<hr/>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/~~(.+?)~~/g, "<del>$1</del>")
+      .replace(/```([\s\S]+?)```/g, "<pre><code>$1</code></pre>")
+      .replace(/`([^`\n]*)`/g, "<code>$1</code>") 
+      .replace(
+        /\[([^\[\]]+)]\((https?:\/\/[^\s)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+      ) 
+      .replace(/\[(\s*|x)\]/g, (match) =>
+        match === "[x]" ? '<input type="checkbox" checked />' : '<input type="checkbox" />'
+      )
+      .replace(/!\[([^\]]*?)\]\((data:image\/[a-zA-Z]+;base64,[^\s)]+?)\)/g, '<img src="$2" alt="$1" />');
+  
+    return `<ul>${html}</ul>`.replace(/<\/li>\s*(?=<li>)/g, "");
+  };
+  
   useEffect(() => {
-    extractImages(value); // Extract images when data is loaded from DB
+    setPreviewHTML(convertMarkdownToHTML(value));
   }, [value]);
+
+  useEffect(() => {
+    const styleElement = document.createElement("style");
+    styleElement.textContent = `
+      h1 { font-size: 2em; }
+      h2 { font-size: 1.5em; }
+      h3 { font-size: 1.17em; }
+      code { font-family: monospace; }
+      pre { font-family: monospace; padding: 10px; border: 1px solid #ccc; overflow: auto; }
+      a { color: blue; text-decoration: underline; }
+      del { text-decoration: line-through; }
+      blockquote { border-left: 5px solid #ccc; padding-left: 10px; margin: 10px 0; }
+      hr { border-top: 1px solid #ccc; margin: 10px 0; }
+      ul { list-style-type: disc; padding-left: 20px; }
+      li { margin-bottom: 5px; }
+      img { max-width: 100%; height: auto; }
+      p { margin-bottom: 1em; }
+      .task-checkbox { margin-right: 8px; cursor: pointer; }
+    `;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
 
   return (
     <div className="flex flex-row space-x-4">
-      {/* Editor Section */}
       <div
         ref={editorRef}
         className="border rounded-md p-2 w-1/2 h-96 overflow-auto"
-        style={{ whiteSpace: 'pre-wrap' }}
-        onPaste={handlePaste} // Attach paste event
+        style={{ whiteSpace: "pre-wrap" }}
+        onPaste={handlePaste}
       />
 
-      {/* Preview Section (Markdown + Images) */}
-      <div className="w-1/2 border rounded-md p-2 h-96 overflow-auto flex flex-col space-y-4">
-        {/* Markdown Preview (without image links) */}
-        <div className="whitespace-pre-wrap text-gray-800">
-          <ReactMarkdown>{cleanMarkdownText}</ReactMarkdown>
-        </div>
-
-        {/* Image Preview (Displays only extracted images) */}
-        <div className="flex flex-col space-y-2">
-          {images.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt={`Embedded ${index}`}
-              className="w-full h-auto border rounded-md object-contain"
-            />
-          ))}
-        </div>
+      <div className="w-1/2 border rounded-md p-2 h-96 overflow-auto">
+        <div className="whitespace-pre-wrap text-gray-800" dangerouslySetInnerHTML={{ __html: previewHTML }} />
       </div>
     </div>
   );

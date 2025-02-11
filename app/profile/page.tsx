@@ -69,6 +69,8 @@ interface UserProgress {
   balance: number;
   zen_alerts: number;
   skill_points: number[];
+  HP:number;
+  MP:number;
 }
 
 const skills = ["Writing", "Financial", "Learning", "Video Editing", "Health", "Creativity"];
@@ -181,9 +183,16 @@ export default function CharacterProfile() {
               <div className="space-y-2">
                 <div className="flex justify-between text-base font-medium">
                   <span>HP:</span>
-                  <span>1000 / 1000</span>
+                  <span>{userData.HP}</span>
                 </div>
-                <Progress value={100} className="h-3" />
+                <Progress value={userData.HP} className="h-3" />
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-base font-medium">
+                  <span>MP:</span>
+                  <span>{userData.MP}</span>
+                </div>
+                <Progress value={userData.MP} className="h-3" />
               </div>
             </div>
             <div className="h-[400px] flex justify-center items-center mx-auto">
