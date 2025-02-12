@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Clock } from "lucide-react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 
@@ -81,12 +80,6 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
     setIsActive(true);
   };
 
-  const resetTimer = () => {
-    setTime(initialTime);
-    setIsActive(false);
-    hasTriggeredAlert.current = false;
-  };
-
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -103,7 +96,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
           <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black bg-opacity-90">
             {/* Background Image */}
             <Image
-              src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//background.png"
+              src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//blackbackground.jpg"
               alt="Zen Background"
               layout="fill"
               objectFit="cover"
@@ -111,34 +104,18 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
             />
 
             {/* Timer UI */}
-            <div className="relative z-10 bg-white bg-opacity-90 p-8 rounded-lg shadow-xl max-w-md w-full border border-gray-300">
-              <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold text-center text-white">Zen Mode</h1>
 
-              {/* Placeholder Message (Before Timer Starts) */}
               {time === initialTime && (
-                <p className="text-center text-gray-600 italic">Take a deep breath & begin...</p>
+                <p className="text-center text-gray-300 italic">Take a deep breath & begin...</p>
               )}
 
-              <div className="flex items-center justify-center space-x-4">
-                <Clock className="w-8 h-8 text-gray-700" />
-                <span className="text-5xl font-bold text-gray-700">{formatTime(time)}</span>
-              </div>
-
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => { setIsActive(false); resetTimer(); }}
-                  className="px-6 py-2 rounded-full font-semibold text-white bg-red-500 hover:bg-red-600 transition duration-300"
-                >
-                  Exit
-                </button>
-                <button
-                  onClick={resetTimer}
-                  className="px-6 py-2 rounded-full font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition duration-300"
-                >
-                  Reset
-                </button>
+              <div className="flex items-center justify-center">
+                <span className="text-5xl font-bold text-white">{formatTime(time)}</span>
               </div>
             </div>
+
           </div>,
           document.body // 🔥 Forces the modal to appear on the full page
         )}
