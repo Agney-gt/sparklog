@@ -1,10 +1,9 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Clock } from "lucide-react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 
 interface ZenModeTimerProps {
   initialTime: number; // in seconds
@@ -78,13 +77,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   };
 
   const toggleTimer = () => {
-    setIsActive(!isActive);
-  };
-
-  const resetTimer = () => {
-    setTime(initialTime);
-    setIsActive(false);
-    hasTriggeredAlert.current = false;
+    setIsActive(true);
   };
 
   const formatTime = (timeInSeconds: number) => {
@@ -93,47 +86,52 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-screen transition-all duration-700 relative ${
-        isActive ? "bg-black" : "bg-white"
-      }`}
-    >
-      {/* Zen Background Image */}
-      <Image
-        src="/background.png" // Image in the public folder
-        alt="Zen Background"
-        layout="fill"
-        objectFit="cover"
-        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ${
-          isActive ? "opacity-100" : "opacity-0"
-        }`}
-      />
 
-      {/* Timer UI */}
-      <div className="relative z-10 rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300 bg-white bg-opacity-90">
-        <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
-        <div className="flex items-center justify-center space-x-4">
-          <Clock className="w-8 h-8 text-gray-700" />
-          <span className="text-5xl font-bold text-gray-700">{formatTime(time)}</span>
-        </div>
-        <div className="flex justify-center space-x-4">
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white transition-all duration-700 relative">
+
+      {/* Fullscreen Zen Mode Popup (Rendered via Portal) */}
+      {isActive &&
+        createPortal(
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black bg-opacity-90">
+            {/* Background Image */}
+            <Image
+              src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//blackbackground.jpg"
+              alt="Zen Background"
+              layout="fill"
+              objectFit="cover"
+              className="absolute inset-0 w-full h-full opacity-60"
+            />
+
+            {/* Timer UI */}
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold text-center text-white">Zen Mode</h1>
+
+              {time === initialTime && (
+                <p className="text-center text-gray-300 italic">Take a deep breath & begin...</p>
+              )}
+
+              <div className="flex items-center justify-center">
+                <span className="text-5xl font-bold text-white">{formatTime(time)}</span>
+              </div>
+            </div>
+
+          </div>,
+          document.body // 🔥 Forces the modal to appear on the full page
+        )}
+
+      {/* Start Button (Shown When Not Active) */}
+      {!isActive && (
+        <div className="relative z-10 rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300 bg-white">
+          <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
           <button
             onClick={toggleTimer}
-            className={`px-6 py-2 rounded-full font-semibold text-white ${
-              isActive ? "bg-red-500 hover:bg-red-600" : "bg-teal-500 hover:bg-teal-600"
-            } transition duration-300 ease-in-out`}
+            className="px-6 py-2 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 transition duration-300 w-full"
           >
-            {isActive ? "Pause" : "Start"}
-          </button>
-          <button
-            onClick={resetTimer}
-            className="px-6 py-2 rounded-full font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition duration-300 ease-in-out"
-          >
-            Reset
+            Start Zen Mode
           </button>
         </div>
-      </div>
+      )}
     </div>
   );
 };
