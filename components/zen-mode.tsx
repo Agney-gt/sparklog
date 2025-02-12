@@ -15,6 +15,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const hasTriggeredAlert = useRef(false);
   const supabase = createClientComponentClient();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,6 +50,12 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
       if (userId) {
         updateZenAlerts(userId);
       }
+
+      // Stop music when Zen Mode ends
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     }
 
     return () => {
@@ -78,7 +85,29 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
 
   const toggleTimer = () => {
     setIsActive(true);
+    if (audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+    }
   };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", () => {
+        if (isActive) {
+          audioRef.current!.currentTime = 0;
+          audioRef.current!.play();
+        }
+      });
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("ended", () => {});
+      }
+    };
+  }, [isActive]);
 
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -86,9 +115,10 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white transition-all duration-700 relative">
+      {/* Audio Element for Zen Music */}
+      <audio ref={audioRef} src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//zen-sound.mp3" loop />
 
       {/* Fullscreen Zen Mode Popup (Rendered via Portal) */}
       {isActive &&
@@ -115,7 +145,6 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
                 <span className="text-5xl font-bold text-white">{formatTime(time)}</span>
               </div>
             </div>
-
           </div>,
           document.body // 🔥 Forces the modal to appear on the full page
         )}
