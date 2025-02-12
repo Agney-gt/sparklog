@@ -1,64 +1,67 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card } from "@/components/ui/card"
-import { ReplyIcon, Hash, Scissors, HelpCircle, ImageIcon } from "lucide-react"
-import { ThreadPreview } from "@/components/thread/thread-preview"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { ReplyIcon, Hash, Scissors, HelpCircle, ImageIcon } from "lucide-react";
+import { ThreadPreview } from "@/components/thread/thread-preview";
 
 interface Tweet {
-  content: string
-  imageFile?: File
+  content: string;
+  imageFile?: File; // Ensuring it's either File or undefined
 }
 
 export function ThreadComposer() {
-  const [content, setContent] = useState("")
-  const [tweets, setTweets] = useState<Tweet[]>([])
-  const [currentImageFile, setCurrentImageFile] = useState<File | null>(null)
+  const [content, setContent] = useState("");
+  const [tweets, setTweets] = useState<Tweet[]>([]);
+  const [currentImageFile, setCurrentImageFile] = useState<File | null>(null);
 
   const handleAddTweet = () => {
-    if (content.trim() || currentImageFile) {
-      setTweets((prevTweets) => [
-        ...prevTweets,
-        { content, imageFile: currentImageFile || undefined },
-      ])
-      setContent("")
-      setCurrentImageFile(null)
-    }
-  }
+    if (!content.trim()) return; // Prevent adding empty tweets
+
+    const splitTweets = content.match(/.{1,160}/g) || []; // Split text into 160-char chunks
+    const newTweets = splitTweets.map((chunk, index) => ({
+      content: chunk,
+      imageFile: index === 0 ? currentImageFile || undefined : undefined, // Attach image only to first tweet
+    }));
+
+    setTweets((prevTweets) => [...prevTweets, ...newTweets]);
+    setContent("");
+    setCurrentImageFile(null);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setCurrentImageFile(e.target.files[0])
+      setCurrentImageFile(e.target.files[0]);
     }
-  }
+  };
 
   const handleSubmit = async () => {
     try {
-      const formData = new FormData()
+      const formData = new FormData();
 
       tweets.forEach((tweet, index) => {
-        formData.append(`tweets[${index}][content]`, tweet.content)
+        formData.append(`tweets[${index}][content]`, tweet.content);
         if (tweet.imageFile) {
-          formData.append(`tweets[${index}][imageFile]`, tweet.imageFile)
+          formData.append(`tweets[${index}][imageFile]`, tweet.imageFile);
         }
-      })
+      });
 
       const response = await fetch("/api/thread", {
         method: "POST",
-        body: formData, // Use FormData instead of JSON
-      })
+        body: formData, // Using FormData instead of JSON
+      });
 
-      if (!response.ok) throw new Error("Failed to post thread")
+      if (!response.ok) throw new Error("Failed to post thread");
 
-      const data = await response.json()
-      console.log("Thread posted:", data)
-      setTweets([])
+      const data = await response.json();
+      console.log("Thread posted:", data);
+      setTweets([]);
     } catch (error) {
-      console.error("Error posting thread:", error)
+      console.error("Error posting thread:", error);
     }
-  }
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -104,7 +107,7 @@ export function ThreadComposer() {
         )}
         <div className="flex justify-between mt-4">
           <div className="text-sm text-gray-500">{content.length} characters</div>
-          <Button onClick={handleAddTweet}>Add Tweet</Button>
+          <Button onClick={handleAddTweet}>Add Tweet(s)</Button>
         </div>
       </Card>
       <Card className="p-4">
@@ -116,5 +119,5 @@ export function ThreadComposer() {
         </div>
       </Card>
     </div>
-  )
+  );
 }

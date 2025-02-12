@@ -2,15 +2,37 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+// Function to split text into 160-character tweets
+function splitTweet(text: string, maxLength = 160): { content: string }[] {
+  const words = text.split(" ");
+  const tweets: { content: string }[] = [];
+  let currentTweet = "";
+
+  for (const word of words) {
+    if ((currentTweet + word).length > maxLength) {
+      tweets.push({ content: currentTweet.trim() });
+      currentTweet = word + " ";
+    } else {
+      currentTweet += word + " ";
+    }
+  }
+
+  if (currentTweet) tweets.push({ content: currentTweet.trim() });
+  return tweets;
+}
+
 export async function POST(request: Request) {
-  const cookieStore = cookies(); 
+  const cookieStore = cookies();
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
   try {
-    const { tweets } = await request.json();
+    const { text, imageFile } = await request.json();
 
-    if (!Array.isArray(tweets) || tweets.length === 0) {
-      return NextResponse.json({ error: "Invalid input: tweets must be a non-empty array." }, { status: 400 });
+    if (!text || typeof text !== "string" || text.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Invalid input: text must be a non-empty string." },
+        { status: 400 }
+      );
     }
 
     // Check if the user is authenticated
@@ -19,8 +41,14 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized: Please log in to post a thread." }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized: Please log in to post a thread." },
+        { status: 401 }
+      );
     }
+
+    // Split the text into multiple tweets (160 characters each)
+    const tweets = splitTweet(text);
 
     // Create a new thread
     const { data: threadData, error: threadError } = await supabase
@@ -34,37 +62,40 @@ export async function POST(request: Request) {
       throw new Error("Failed to create thread in the database.");
     }
 
-    // Upload images and insert tweets
-    const tweetPromises = tweets.map(async (tweet: { content: string; imageFile?: File }, index: number) => {
-      let image_url = null;
+    // Upload image (if provided) only for the first tweet
+    let image_url: string | null = null;
+    if (imageFile) {
+      const { data: imageData, error: imageError } = await supabase.storage
+        .from("tweet-images")
+        .upload(`${user.id}/${threadData.id}/0.jpg`, imageFile);
 
-      if (tweet.imageFile) {
-        const { data: imageData, error: imageError } = await supabase.storage
-          .from("tweet-images")
-          .upload(`${user.id}/${threadData.id}/${index}.jpg`, tweet.imageFile);
+      if (imageError) throw imageError;
 
-        if (imageError) throw imageError;
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("tweet-images").getPublicUrl(imageData.path);
 
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("tweet-images").getPublicUrl(imageData.path);
+      image_url = publicUrl;
+    }
 
-        image_url = publicUrl;
-      }
-
-      return supabase.from("tweets").insert({
+    // Insert tweets into the database
+    const tweetPromises = tweets.map((tweet, index) =>
+      supabase.from("tweets").insert({
         thread_id: threadData.id,
         content: tweet.content,
-        image_url,
+        image_url: index === 0 ? image_url : null, // Image only for first tweet
         order_in_thread: index,
-      });
-    });
+      })
+    );
 
     await Promise.all(tweetPromises);
 
     return NextResponse.json({ success: true, threadId: threadData.id });
   } catch (error) {
     console.error("Error posting thread:", error);
-    return NextResponse.json({ success: false, error: "Failed to post thread" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to post thread" },
+      { status: 500 }
+    );
   }
 }
