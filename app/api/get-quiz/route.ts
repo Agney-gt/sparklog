@@ -11,7 +11,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Missing itemId" }, { status: 400 });
     }
 
-    const cookieStore = await cookies();
+    const cookieStore = cookies(); // Use cookies directly
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     const { data, error } = await supabase
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
     }
 
-    const cookieStore = await cookies();
+    const cookieStore = cookies(); // Use cookies directly
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     // Fetch current skill points
