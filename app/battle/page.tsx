@@ -96,7 +96,7 @@ export default function TCGGame() {
       await fetch("/api/battle", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ HP: playerHealth, MP: playerMana }),
+        body: JSON.stringify({ HP: playerHealth+1, MP: playerMana+1 }),
       })
     } catch (error) {
       console.error("Failed to update player stats", error)
@@ -176,7 +176,7 @@ export default function TCGGame() {
         />
         <Progress value={playerHealth} max={100} className="w-56 h-4" />
         <Progress value={playerMana} max={50} className="w-56 h-4" />
-
+    <div style={{height}}></div>
         {/* Inventory Cards */}
         <div className="grid grid-cols-2 gap-6 mt-4 w-full max-w-2xl">
           <AnimatePresence>
