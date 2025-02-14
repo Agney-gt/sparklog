@@ -176,7 +176,7 @@ export default function TCGGame() {
         />
         <Progress value={playerHealth} max={100} className="w-56 h-4" />
         <Progress value={playerMana} max={50} className="w-56 h-4" />
-    <div style={{height}}></div>
+    <div style={{height:100}}></div>
         {/* Inventory Cards */}
         <div className="grid grid-cols-2 gap-6 mt-4 w-full max-w-2xl">
           <AnimatePresence>
