@@ -12,7 +12,8 @@ interface Tweet {
   imageFile?: File
 }
 
-const NGROK_URL = "https://d75c-2405-201-6802-1058-989c-2545-90f-dc63.ngrok-free.app"
+
+const MAX_TWEET_LENGTH = 160
 
 export function ThreadComposer() {
   const [content, setContent] = useState("")
@@ -20,9 +21,35 @@ export function ThreadComposer() {
   const [currentImageFile, setCurrentImageFile] = useState<File | null>(null)
   const [isPosting, setIsPosting] = useState(false)
 
+  const splitTweet = (text: string): string[] => {
+    const words = text.split(" ")
+    const tweets: string[] = []
+    let currentTweet = ""
+
+    words.forEach((word) => {
+      if ((currentTweet + " " + word).trim().length <= MAX_TWEET_LENGTH) {
+        currentTweet += (currentTweet ? " " : "") + word
+      } else {
+        tweets.push(currentTweet.trim())
+        currentTweet = word
+      }
+    })
+
+    if (currentTweet) {
+      tweets.push(currentTweet.trim())
+    }
+
+    return tweets
+  }
+
   const handleAddTweet = () => {
     if (content.trim() || currentImageFile) {
-      setTweets([...tweets, { content, imageFile: currentImageFile || undefined }])
+      const splitContent = splitTweet(content)
+      const newTweets: Tweet[] = splitContent.map((tweetContent, index) => ({
+        content: tweetContent,
+        imageFile: index === 0 && currentImageFile ? currentImageFile : undefined,
+      }))
+      setTweets([...tweets, ...newTweets])
       setContent("")
       setCurrentImageFile(null)
     }
@@ -36,15 +63,16 @@ export function ThreadComposer() {
 
   const handleSubmit = async () => {
     try {
+      if (tweets.length === 0) {
+        console.error("No tweets to post")
+        setIsPosting(false)
+        return
+      }
+
       setIsPosting(true)
       const formData = new FormData()
-      // Ensure there is at least one tweet before submitting
-       if (tweets.length === 0) {
-      console.error("No tweets to post")
-      return
-      }
-      // Send only the tweets
-      formData.append("text", tweets.map(tweet => tweet.content).join("\n\n")) // Combine tweets into one string
+
+      console.log("Tweets before submission:", tweets)
 
       tweets.forEach((tweet, index) => {
         formData.append(`tweets[${index}][content]`, tweet.content)
@@ -53,18 +81,30 @@ export function ThreadComposer() {
         }
       })
 
-      const response = await fetch(`${NGROK_URL}/api/thread`, {
+      console.log("Sending request to:", `/api/thread`)
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value)
+      })
+
+      const response = await fetch(`/api/thread`, {
         method: "POST",
         body: formData,
       })
 
-      if (!response.ok) throw new Error("Failed to post thread")
+      console.log("Response status:", response.status)
+      console.log("Response headers:", Object.fromEntries(response.headers))
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error("Error response:", errorText)
+        throw new Error(`Failed to post thread: ${response.status} ${response.statusText}`)
+      }
 
       const data = await response.json()
       console.log("Thread posted:", data)
       setTweets([])
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error details:", error)
     } finally {
       setIsPosting(false)
     }
