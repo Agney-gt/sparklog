@@ -35,6 +35,7 @@ export default function TCGGame() {
   const [damageAnimation, setDamageAnimation] = useState<{ player: boolean; boss: boolean }>({ player: false, boss: false })
   const [battleLog, setBattleLog] = useState<BattleLogEntry[]>([])
   const [turnCount, setTurnCount] = useState<number>(1)
+  const [canSetGameOver, setCanSetGameOver] = useState<boolean>(true) // Flag to control game over state
 
   const router = useRouter()
   const { toast } = useToast()
@@ -73,14 +74,19 @@ export default function TCGGame() {
   }, [])
 
   useEffect(() => {
-    if (bossHealth === 0) {
-      setWinner("Player")
-      setGameOver(true)
-    } else if (playerHealth === 0) {
-      setWinner("Boss")
-      setGameOver(true)
+    // Check for game over conditions only once per turn
+    if (canSetGameOver) {
+      if (bossHealth <= 0) {
+        setWinner("Player")
+        setGameOver(true)
+        setCanSetGameOver(false) // Prevent further game over state changes
+      } else if (playerHealth <= 0) {
+        setWinner("Boss")
+        setGameOver(true)
+        setCanSetGameOver(false) // Prevent further game over state changes
+      }
     }
-  }, [bossHealth, playerHealth])
+  }, [bossHealth, playerHealth, canSetGameOver])
 
   useEffect(() => {
     if (gameOver) {
@@ -96,7 +102,7 @@ export default function TCGGame() {
       await fetch("/api/battle", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ HP: playerHealth+1, MP: playerMana+1 }),
+        body: JSON.stringify({ HP: playerHealth + 1, MP: playerMana + 1 }),
       })
     } catch (error) {
       console.error("Failed to update player stats", error)
@@ -161,6 +167,13 @@ export default function TCGGame() {
     }, 1000)
   }
 
+  // Function to close the dialog
+  const closeDialog = () => {
+    setGameOver(false);
+    setWinner(null); // Reset winner state if needed
+    setCanSetGameOver(true); // Allow game over state to be set again
+  };
+
   return (
     <div className="flex justify-between items-start p-10 w-full h-screen bg-white text-black">
       {/* Player Section */}
@@ -176,7 +189,7 @@ export default function TCGGame() {
         />
         <Progress value={playerHealth} max={100} className="w-56 h-4" />
         <Progress value={playerMana} max={50} className="w-56 h-4" />
-    <div style={{height:100}}></div>
+        <div style={{ height: 100 }}></div>
         {/* Inventory Cards */}
         <div className="grid grid-cols-2 gap-6 mt-4 w-full max-w-2xl">
           <AnimatePresence>
@@ -237,6 +250,7 @@ export default function TCGGame() {
             <img src="/avatar.png" alt="Player" className="w-32 h-32 rounded-full" />
             <img src="/boss.png" alt="Boss" className="w-32 h-32 rounded-full" />
           </div>
+          <Button onClick={closeDialog} className="mt-4">Close</Button>
         </DialogContent>
       </Dialog>
     </div>
