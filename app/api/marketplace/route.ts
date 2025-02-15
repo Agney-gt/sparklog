@@ -113,7 +113,7 @@ export async function PATCH(request: Request) {
       // Fetch item details from 'items' table
       const { data: item, error: itemError } = await supabase
         .from('items')
-        .select('id, name, price')
+        .select('id, name, price, image_url')
         .eq('id', itemId)
         .single();
 
@@ -140,7 +140,7 @@ export async function PATCH(request: Request) {
         };
       } else {
         cost = item.price;
-        newPurchase = { id: item.id, name: item.name, price: item.price, type: 'item', date: new Date() };
+        newPurchase = { id: item.id, image:item.image_url, name: item.name, price: item.price, type: 'item', date: new Date() };
       }
     }
 
