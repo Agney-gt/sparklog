@@ -20,41 +20,69 @@ const npcs: NPC[] = [
 ]
 
 const dialogues = [[
-  { npc: "Ancient", text: "Ah, brave soul, you stand at the precipice of change, where fear taints the heart and chains the mind. In this realm, where knowledge is power, those in control weave illusions to bind us to their will, much like a spider ensnared in its own web. You must learn the art of self-disentanglement, for only then can you traverse the labyrinth of authority and escape their oppressive grasp." },
-  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
-  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
-  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
-  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
-  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
+  {
+    "npc": "Mentor Sage",
+    "text": "Greetings, seeker of clarity. You tread carefully, as though each step might awaken hidden dangers. Such is the way of those who have lived in realms of uncertainty, forever guarded and never truly at ease. Yet, wisdom lies not just in caution, but in understanding the paths of reason—both deductive and inductive."
+  },
+  {
+    "npc": "Anxious Traveler",
+    "text": "Mentor, I find myself trapped, oscillating between panic and paralysis when faced with stress. How can I navigate this maze of fear and find peace?"
+  },
+  {
+    "npc": "Mentor Sage",
+    "text": "To master your challenges, first understand Deductive Reasoning. This is the art of beginning with a general truth and applying it to specific instances. Consider this: All who walk through fire unscathed possess resilience. You are learning to walk through fires of stress. Therefore, you have the potential for resilience. Use this logic to construct a mental fortress against fear."
+  },
+  {
+    "npc": "Anxious Traveler",
+    "text": "And what of Inductive Reasoning, mentor? How does it aid me in my quest for calm?"
+  },
+  {
+    "npc": "Mentor Sage",
+    "text": "Inductive Reasoning is the path from specifics to general truths. Observe the quiet deer: In countless encounters, it senses danger and survives by retreating. From these observations, it learns that alertness ensures survival. Apply this to your life: Reflect on moments when calmness has led to clarity under stress and recognize the pattern of success in those moments. From these, derive a guiding principle for future encounters."
+  },
+  {
+    "npc": "Anxious Traveler",
+    "text": "But how do these methods help when the pressures feel overwhelming, and my mind clouds over with doubt?"
+  },
+  {
+    "npc": "Mentor Sage",
+    "text": "In moments of overwhelm, use Deductive Reasoning to remind yourself of universal truths you hold dear, such as the belief in your innate ability to learn and adapt. Use Inductive Reasoning to build confidence from past victories, no matter how small. Each success is a stone on which to stand firm against the tides of pressure. Thus, by embracing both reasoning paths, you illuminate the darkness of stress with the light of understanding."
+  }
 ],[
-  { npc: "Ancient", text: "Ah, brave soul, you stand at the precipice of change, where fear taints the heart and chains the mind. In this realm, where knowledge is power, those in control weave illusions to bind us to their will, much like a spider ensnared in its own web. You must learn the art of self-disentanglement, for only then can you traverse the labyrinth of authority and escape their oppressive grasp." },
-  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
-  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
-  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
-  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
-  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
-],[
-  { npc: "Ancient", text: "Ah, brave soul, you stand at the precipice of change, where fear taints the heart and chains the mind. In this realm, where knowledge is power, those in control weave illusions to bind us to their will, much like a spider ensnared in its own web. You must learn the art of self-disentanglement, for only then can you traverse the labyrinth of authority and escape their oppressive grasp." },
-  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
-  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
-  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
-  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
-  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
-],[
-  { npc: "Ancient", text: "Broooo" },
-  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
-  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
-  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
-  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
-  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
-],[
-  { npc: "Ancient", text: "Broooo" },
-  { npc: "Wanderer", text: "Wise Ancient, your words resonate with the echo of truth. Yet, how does one break free when the unknown lies cloaked in shadow, and the familiar, though perilous, whispers the comfort of certainty?" },
-  { npc: "Ancient", text: "Seek the essence of your courage and retrieve the Crystal of Insight, buried deep in the forest of your fears. It is not the absence of fear that grants freedom, but the wisdom to see through its veils and act in spite of it. This crystal holds the power to reveal the mirage of your bindings and guide you through the path of liberation." },
-  { npc: "Wanderer", text: "But Ancient, what if the path to this crystal is fraught with peril? What if I falter and fall, succumbing to the shadows that lurk?" },
-  { npc: "Ancient", text: "Heed this riddle, seeker of truth: 'The sun may set, yet it shall rise again, the seed must break to become the tree. So too must you, release the fear, and in the dark, find the light to see.' Each failure is but a stepping stone to wisdom, and the cosmos itself sings of cycles eternal, where every end is but a new beginning." },
-  { npc: "Wanderer", text: "Then let it be so! I shall embark on this quest, to face the shadows and claim the Crystal of Insight. With your guidance, Ancient, I will unravel the mysteries of my own mind and step boldly into the unknown." },
-]]
+  {
+    "npc": "Teacher",
+    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+  },
+  {
+    "npc": "Student",
+    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+  },
+  {
+    "npc": "Teacher",
+    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+  },
+  {
+    "npc": "Student",
+    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+  },
+  {
+    "npc": "Teacher",
+    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+  },
+  {
+    "npc": "Student",
+    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+  },
+  {
+    "npc": "Teacher",
+    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+  }
+],
+                   
+                   
+                   
+
+]
                    
                    
 
