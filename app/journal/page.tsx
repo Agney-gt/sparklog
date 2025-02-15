@@ -16,6 +16,7 @@ import CharacterProfile from '../profile/page'
 import MarketplacePage from '../marketplace/page'
 import { HabitCategoryPage } from '@/components/habits-category'
 import { ZenModeTimer } from '@/components/zen-mode'
+import TCGGame from '../battle/page'
 
 export default function Component() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
@@ -47,7 +48,8 @@ export default function Component() {
     { title: 'Profile', component: <CharacterProfile/> },
     { title: 'Archives', component: <MarketplacePage /> },
     {title:'Combat', component: <HabitCategoryPage category="bad"/>},
-    {title:'Recharge', component: <ZenModeTimer initialTime={600}/>}
+    {title:'Recharge', component: <ZenModeTimer initialTime={600}/>},
+    { title: 'Battle', component:<TCGGame/> }
 
   ]
 

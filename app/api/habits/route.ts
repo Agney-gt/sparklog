@@ -152,9 +152,14 @@ export async function PUT(request: Request) {
     const newBalance = userProgress.balance + reward;
     let newHP = userProgress.HP;
 
-    // Deduct HP if the habit status is "failed"
+    // ✅ Increase HP by 10 when habit is successful
+    if (status === "success") {
+      newHP = Math.min(100, userProgress.HP + 5); // HP can't exceed 100
+    }
+
+    // ✅ Decrease HP by 10 when habit fails
     if (status === "failed") {
-      newHP = Math.max(0, userProgress.HP - 10); // Ensure HP doesn't go below zero
+      newHP = Math.max(0, userProgress.HP - 10); // HP can't go below 0
     }
 
     // Update user progress
