@@ -79,92 +79,65 @@ const dialogues = [[
   }
 ],[
   {
-    "npc": "Teacher",
-    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+    "npc": "Ethereal Oracle",
+    "text": "In the realm where knowledge wields greater power than any sword, you find yourself amidst shadows cast by authority's oppressive hand. Fear not the unknown, for it is within the uncharted that true wisdom awaits. Embrace change as the serpent sheds its skin, revealing the vibrant life beneath old layers."
   },
   {
-    "npc": "Student",
-    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+    "npc": "Seeker",
+    "text": "Yet, O Oracle, the path of change appears fraught with peril. Here in this place of known sorrow, at least I am familiar with the pain. How do I dare to step beyond into the void, where failure might await to brand me unworthy?"
   },
   {
-    "npc": "Teacher",
-    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+    "npc": "Ethereal Oracle",
+    "text": "Consider the oak, mighty and unyielding, yet it is the reed that bends with the storm and survives. By remaining still, you choose the known chains over the freedom of potential. The risk of failure is the mortar that binds the pillars of growth. Fear not to stretch beyond the familiar, for even the stars were born from chaos and darkness."
   },
   {
-    "npc": "Student",
-    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+    "npc": "Seeker",
+    "text": "I fear that failure will be a testament to my inadequacy. How can one move forward when the mere thought of falling disquiets the soul?"
   },
   {
-    "npc": "Teacher",
-    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+    "npc": "Ethereal Oracle",
+    "text": "Learn from the fox, who treads the boundary of the forest, ever seeking new paths and opportunities. Failure is not the abyss but a teacher. Each misstep is a whisper of the wind guiding you back to strength. Inaction is the true peril, for it is in inaction that potential is squandered."
   },
   {
-    "npc": "Student",
-    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+    "npc": "Seeker",
+    "text": "Then shall I face the winds of change, not as a leaf adrift but as a sailor who masters the turbulent seas. Guide me, Oracle, towards the resilience needed to embrace the unknown."
   },
   {
-    "npc": "Teacher",
-    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+    "npc": "Ethereal Oracle",
+    "text": "Let the cosmos be your guide, where the dance of celestial bodies mirrors your journey. With each step into the unknown, you forge the path of your own destiny. Stand unafraid before the challenges of power and control, for it is through the crucible of experience that your true power will be realized. Embrace the journey, for it is yours alone to conquer."
   }
-],[
+],[ { "npc": "Sage of the Celestial Realms", "text": "In this dominion where knowledge reigns supreme above all else, you stand at the brink of your own greatness, yet a shadow of doubt lingers like the unwelcome curtain of night. Success, that shimmering beacon, beckons you forward, but you tremble at the thought of its unattainable permanence." }, { "npc": "Wary Adventurer", "text": "O Sage, when fortune smiles upon me, I am gripped by an overwhelming tide of unease, fearing that I might falter and squander the gifts I’ve been bestowed. How do I embrace success without dreading the imminent fall?" }, { "npc": "Sage of the Celestial Realms", "text": "Reflect upon the phoenix, ever reborn from the ashes of its own making. It does not mourn the flame nor fear the rebirth. Your success is not an ominous harbinger of downfall, but a testament to your capacity for renewal and elevation. Trust in your ability to navigate the rise, not just the fall." }, { "npc": "Wary Adventurer", "text": "Yet, even as I taste triumph, I brace for the inevitable descent. Each moment of joy is accompanied by a whisper of doubt—how can I cease this self-sabotage and finally allow myself to succeed?" }, { "npc": "Sage of the Celestial Realms", "text": "Consider the spider, who weaves its web with patience and precision, knowing full well that it may be torn apart yet again. Success is the web you weave through daily endeavors. When the winds tear at it, rebuild without fear. Understand that each strand is a testament to your resilience and perseverance." }, { "npc": "Wary Adventurer", "text": "So, to thrive is to accept both the sunlight and the storm, to build and rebuild without despair. I shall walk this path of success, accepting its trials as part of the sacred dance of growth." }, { "npc": "Sage of the Celestial Realms", "text": "Indeed, walk with pride and purpose. Let the cosmos guide your steps, knowing that each victory is a star in your constellation. Embrace this journey with courage and wisdom, for each step forward reveals the depth of your own potential. Fear not your brilliance; it is the light meant to illuminate your path." } ],
+[
   {
-    "npc": "Teacher",
-    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+    "npc": "Mystic Seer",
+    "text": "In this realm where the power of wisdom shines brighter than all, you find yourself amid the turmoil of self-sabotage, where serenity should reign. You forge chaos from peace, not from malice, but from a yearning for the known comfort of storms."
   },
   {
-    "npc": "Student",
-    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+    "npc": "Conflicted Soul",
+    "text": "O Seer of Timeless Wisdom, in times of tranquility, I am restless, and when stability graces my path, I find myself tearing down what I have built. How do I cease this madness and embrace the calm?"
   },
   {
-    "npc": "Teacher",
-    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+    "npc": "Mystic Seer",
+    "text": "Consider the river, ever flowing, never stagnant. It carves its path not through force but through persistence. Acknowledge that conflict arises not from the peaceful waters, but from those who refuse to let the current carry them. You must learn to flow with the river, trusting in the direction it leads you."
   },
   {
-    "npc": "Student",
-    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+    "npc": "Conflicted Soul",
+    "text": "Yet, in the embrace of calm, I feel out of place, like a rogue wave threatening to break the peace. How do I quell the urge to stir unrest in the still waters of my life?"
   },
   {
-    "npc": "Teacher",
-    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+    "npc": "Mystic Seer",
+    "text": "Observe the otter, who finds joy in both play and rest, adept in its aquatic world. It does not seek to disrupt, but thrives within the perpetual dance of tranquility and motion. Cultivate this balance, for peace is not the absence of motion, but the presence of harmony."
   },
   {
-    "npc": "Student",
-    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+    "npc": "Conflicted Soul",
+    "text": "So, I am to find solace in peace, to engage with life’s flow without creating unnecessary strife. I shall strive to cherish the calm, knowing it as a friend rather than a foe."
   },
   {
-    "npc": "Teacher",
-    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
-  }
-],[
-  {
-    "npc": "Teacher",
-    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
-  },
-  {
-    "npc": "Student",
-    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
-  },
-  {
-    "npc": "Teacher",
-    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
-  },
-  {
-    "npc": "Student",
-    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
-  },
-  {
-    "npc": "Teacher",
-    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
-  },
-  {
-    "npc": "Student",
-    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
-  },
-  {
-    "npc": "Teacher",
-    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+    "npc": "Mystic Seer",
+    "text": "Yes, tread softly upon the path of serenity. Let the cosmos whisper its secrets to you, teaching you the art of balance. Embrace both the gentle breeze and the tumultuous gale, for each has its place. Your journey is to harmonize with all aspects, creating a life of enduring peace and strength."
   }
 ],
+
 
                    
                    
