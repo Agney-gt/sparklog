@@ -77,7 +77,95 @@ const dialogues = [[
     "npc": "Teacher",
     "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
   }
+],[
+  {
+    "npc": "Teacher",
+    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+  },
+  {
+    "npc": "Student",
+    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+  },
+  {
+    "npc": "Teacher",
+    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+  },
+  {
+    "npc": "Student",
+    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+  },
+  {
+    "npc": "Teacher",
+    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+  },
+  {
+    "npc": "Student",
+    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+  },
+  {
+    "npc": "Teacher",
+    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+  }
+],[
+  {
+    "npc": "Teacher",
+    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+  },
+  {
+    "npc": "Student",
+    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+  },
+  {
+    "npc": "Teacher",
+    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+  },
+  {
+    "npc": "Student",
+    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+  },
+  {
+    "npc": "Teacher",
+    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+  },
+  {
+    "npc": "Student",
+    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+  },
+  {
+    "npc": "Teacher",
+    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+  }
+],[
+  {
+    "npc": "Teacher",
+    "text": "In the world of knowledge, we are faced with challenges that test not only our intellect but our resilience. Deductive reasoning, my student, is akin to walking a well-trodden path. It begins with established truths and leads us to conclusions that are logical and certain. When authority imposes unreasonable tasks, utilize deduction to dissect their demands, separating what is necessary from what is merely noise."
+  },
+  {
+    "npc": "Student",
+    "text": "But what if the challenges I face are not so clear, Master? I often find myself overwhelmed by stress, unsure of the steps to take."
+  },
+  {
+    "npc": "Teacher",
+    "text": "In times of uncertainty, inductive reasoning becomes your guide. Like the bird that learns the rhythm of seasons by observing the world around it, you must gather experiences, look for patterns, and form hypotheses. Inductive reasoning allows you to draw general conclusions from specific instances of stress, gradually piecing together a method to handle chaos."
+  },
+  {
+    "npc": "Student",
+    "text": "Yet, how do I apply this reasoning when stress takes hold and my thoughts scatter like leaves in the wind?"
+  },
+  {
+    "npc": "Teacher",
+    "text": "Begin by acknowledging the stress, not as an enemy, but as a source of information. Use deductive reasoning to trace its roots and understand its triggers. Then, employ inductive reasoning to identify what has eased such burdens before. Combine these insights, and you will develop a strategy to manage stress before it overpowers you."
+  },
+  {
+    "npc": "Student",
+    "text": "I see now, Master, that reasoning is not simply a tool for the mind but a shield for the heart. With practice, I can confront stress with grace and insight."
+  },
+  {
+    "npc": "Teacher",
+    "text": "Indeed, dear pupil. Master the art of reasoning, and you will find that stress is but a challenge like any other—one that can be understood, managed, and ultimately overcome. Let your reasoning guide you, and you will navigate even the most turbulent of storms with clarity and composure of a turtle - taking a step back to observe."
+  }
 ],
+
                    
                    
                    
