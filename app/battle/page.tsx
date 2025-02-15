@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -37,7 +36,6 @@ export default function TCGGame() {
   const [turnCount, setTurnCount] = useState<number>(1)
   const [canSetGameOver, setCanSetGameOver] = useState<boolean>(true) // Flag to control game over state
 
-  const router = useRouter()
   const { toast } = useToast()
 
   // Array of boss dialogues
@@ -62,6 +60,7 @@ export default function TCGGame() {
         const response = await fetch("/api/battle")
         const data = await response.json()
         if (response.ok) {
+          
           setPlayerHealth(data.HP)
           setPlayerMana(data.MP)
           setInventory(data.inventory || [])
@@ -79,10 +78,14 @@ export default function TCGGame() {
       if (bossHealth <= 0) {
         setWinner("Player")
         setGameOver(true)
+        setBossHealth(1);
+        
         setCanSetGameOver(false) // Prevent further game over state changes
       } else if (playerHealth <= 0) {
         setWinner("Boss")
+        setPlayerHealth(1);
         setGameOver(true)
+     
         setCanSetGameOver(false) // Prevent further game over state changes
       }
     }
@@ -92,17 +95,16 @@ export default function TCGGame() {
     if (gameOver) {
       updatePlayerStats()
       setTimeout(() => {
-        router.push("/")
       }, 3000)
     }
-  }, [gameOver, router])
+  }, [gameOver])
 
   async function updatePlayerStats() {
     try {
       await fetch("/api/battle", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ HP: playerHealth + 1, MP: playerMana + 1 }),
+        body: JSON.stringify({ HP: playerHealth, MP: playerMana }),
       })
     } catch (error) {
       console.error("Failed to update player stats", error)
