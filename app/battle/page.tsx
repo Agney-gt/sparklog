@@ -147,12 +147,12 @@ export default function TCGGame() {
 
     setTimeout(() => {
       if (bossHealth > 0) {
-        const bossDamage = Math.floor(Math.random() * 15) + 5
+        const bossDamage = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] % 15) + 5;
         setPlayerHealth((prev) => Math.max(prev - bossDamage, 0))
         setDamageAnimation({ ...damageAnimation, player: true })
 
         // Randomly select a boss dialogue
-        const bossDialogue = bossDialogues[Math.floor(Math.random() * bossDialogues.length)]
+        const bossDialogue = bossDialogues[Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] % bossDialogues.length)];
 
         setBattleLog((prev) => [
           ...prev,
