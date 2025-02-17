@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useToast } from "@/hooks/use-toast"
 
@@ -27,7 +27,6 @@ export default function TCGGame() {
   const [playerHealth, setPlayerHealth] = useState<number>(100)
   const [playerMana, setPlayerMana] = useState<number>(50)
   const [inventory, setInventory] = useState<CardType[]>([])
-  const [currentCardIndex, setCurrentCardIndex] = useState<number>(0) // Track the current card index
   const [cardPlayed, setCardPlayed] = useState<boolean>(false)
   const [gameOver, setGameOver] = useState<boolean>(false)
   const [winner, setWinner] = useState<"Player" | "Boss" | null>(null)
@@ -61,6 +60,7 @@ export default function TCGGame() {
         const response = await fetch("/api/battle")
         const data = await response.json()
         if (response.ok) {
+          
           setPlayerHealth(data.HP)
           setPlayerMana(data.MP)
           setInventory(data.inventory || [])
@@ -79,11 +79,13 @@ export default function TCGGame() {
         setWinner("Player")
         setGameOver(true)
         setBossHealth(1);
+        
         setCanSetGameOver(false) // Prevent further game over state changes
       } else if (playerHealth <= 0) {
         setWinner("Boss")
         setPlayerHealth(1);
         setGameOver(true)
+     
         setCanSetGameOver(false) // Prevent further game over state changes
       }
     }
@@ -137,41 +139,35 @@ export default function TCGGame() {
     }
   }
 
-  const endTurn = async () => {
-    if (!playerTurn) return;
-    setPlayerTurn(false);
-    setCardPlayed(false);
-    setTurnCount((prev) => prev + 1);
-  
-    // Update player stats before the boss attacks
-    await updatePlayerStats();
-  
+  const endTurn = () => {
+    if (!playerTurn) return
+    setPlayerTurn(false)
+    setCardPlayed(false)
+    setTurnCount((prev) => prev + 1)
+
     setTimeout(() => {
       if (bossHealth > 0) {
         const bossDamage = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] % 15) + 5;
-        setPlayerHealth((prev) => Math.max(prev - bossDamage, 0));
-        setDamageAnimation({ ...damageAnimation, player: true });
-  
+        setPlayerHealth((prev) => Math.max(prev - bossDamage, 0))
+        setDamageAnimation({ ...damageAnimation, player: true })
+
         // Randomly select a boss dialogue
         const bossDialogue = bossDialogues[Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] % bossDialogues.length)];
-  
+
         setBattleLog((prev) => [
           ...prev,
           { type: "boss", message: `Turn ${turnCount}: Boss attacked, dealt ${bossDamage} damage. "${bossDialogue}"` },
-        ]);
-  
+        ])
+
         toast({
           title: "Boss Attack!",
           description: `The boss dealt ${bossDamage} damage! "${bossDialogue}"`,
           variant: "destructive",
-        });
+        })
       }
-      
-      // Move to the next card
-      setCurrentCardIndex((prev) => Math.min(prev + 1, inventory.length - 1)); // Increment index, but don't exceed inventory length
-      setPlayerTurn(true);
-    }, 1000);
-  };
+      setPlayerTurn(true)
+    }, 1000)
+  }
 
   // Function to close the dialog
   const closeDialog = () => {
@@ -196,13 +192,17 @@ export default function TCGGame() {
         <Progress value={playerHealth} max={100} className="w-56 h-4" />
         <Progress value={playerMana} max={50} className="w-56 h-4" />
         <div style={{ height: 100 }}></div>
-        
-        {/* Display all previous cards in one row */}
-        <div className="flex space-x-4 overflow-x-hidden overflow-y-hidden">
-          {inventory.map((card, index) => (
-            index < currentCardIndex ? (
+        {/* Inventory Cards */}
+        <div className="grid grid-cols-2 gap-6 mt-4 w-full max-w-2xl">
+          <AnimatePresence>
+            {inventory.map((card) => (
               <motion.div key={card.id} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Card className="border-2 p-6 text-center w-30 h-80 opacity-50"> {/* Previous cards greyed out */}
+                <Card
+                  className={`cursor-pointer border-2 p-6 text-center w-60 h-80 ${
+                    cardPlayed ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  onClick={() => playCard(card)}
+                >
                   <CardContent className="flex flex-col justify-between h-full">
                     <img src={card.image || "/placeholder.svg"} alt={card.name} className="w-full h-36 object-cover mb-4 rounded-md" />
                     <p className="text-xl font-bold">{card.name}</p>
@@ -211,26 +211,9 @@ export default function TCGGame() {
                   </CardContent>
                 </Card>
               </motion.div>
-            ) : null
-          ))}
+            ))}
+          </AnimatePresence>
         </div>
-
-        {/* Display the current card in the next row */}
-        {inventory.length > 0 && (
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Card
-              className={`cursor-pointer border-2 p-6 text-center w-60 h-100 ${cardPlayed ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={() => playCard(inventory[currentCardIndex])}
-            >
-              <CardContent className="flex flex-col justify-between h-full">
-                <img src={inventory[currentCardIndex].image || "/placeholder.svg"} alt={inventory[currentCardIndex].name} className="w-full h-36 object-cover mb-4 rounded-md" />
-                <p className="text-xl font-bold">{inventory[currentCardIndex].name}</p>
-                <p className="text-lg text-gray-800">Damage: {inventory[currentCardIndex].damage || 10}</p>
-                <p className="text-lg text-blue-600">Mana Cost: {inventory[currentCardIndex].manaCost || 5}</p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
 
         <Button onClick={endTurn} className="mt-6 px-8 py-4 text-xl">End Turn</Button>
       </div>
