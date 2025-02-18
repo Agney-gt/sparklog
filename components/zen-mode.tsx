@@ -51,7 +51,6 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
         updateZenAlerts(userId);
       }
 
-      // Stop music when Zen Mode ends
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
@@ -116,7 +115,16 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white transition-all duration-700 relative">
+    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+      {/* Background Video */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        src="/zen.mp4"
+        autoPlay
+        loop
+        muted
+      />
+
       {/* Audio Element for Zen Music */}
       <audio ref={audioRef} src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//zen-sound.mp3" loop />
 
@@ -146,7 +154,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
               </div>
             </div>
           </div>,
-          document.body // 🔥 Forces the modal to appear on the full page
+          document.body
         )}
 
       {/* Start Button (Shown When Not Active) */}
@@ -157,7 +165,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
             onClick={toggleTimer}
             className="px-6 py-2 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 transition duration-300 w-full"
           >
-            Start Zen Mode
+            Try Now
           </button>
         </div>
       )}
