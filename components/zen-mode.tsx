@@ -103,7 +103,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
 
     return () => {
       if (audioRef.current) {
-        audioRef.current.removeEventListener("ended", () => {});
+        audioRef.current.removeEventListener("ended", () => { });
       }
     };
   }, [isActive]);
@@ -158,17 +158,23 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
         )}
 
       {/* Start Button (Shown When Not Active) */}
+      {/* Start Button and Card (Top-Left) */}
       {!isActive && (
-        <div className="relative z-10 rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300 bg-white">
-          <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
+        <div className="absolute top-4 left-4 z-10">
+          {/* Start Button */}
+
+
           <button
             onClick={toggleTimer}
-            className="px-6 py-2 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 transition duration-300 w-full"
+            className="px-4 py-2 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 transition duration-300 mb-2"
           >
             Try Now
           </button>
+
         </div>
+
       )}
+
     </div>
   );
 };
