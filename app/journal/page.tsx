@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Maximize2, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import Banner from "@/components/banner"
 import LevelProgress from '@/components/level-progress'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
