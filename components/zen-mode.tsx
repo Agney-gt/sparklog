@@ -1,10 +1,9 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Clock } from "lucide-react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 
 interface ZenModeTimerProps {
   initialTime: number; // in seconds
@@ -16,6 +15,7 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const hasTriggeredAlert = useRef(false);
   const supabase = createClientComponentClient();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,6 +50,11 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
       if (userId) {
         updateZenAlerts(userId);
       }
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     }
 
     return () => {
@@ -78,14 +83,30 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   };
 
   const toggleTimer = () => {
-    setIsActive(!isActive);
+    setIsActive(true);
+    if (audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+    }
   };
 
-  const resetTimer = () => {
-    setTime(initialTime);
-    setIsActive(false);
-    hasTriggeredAlert.current = false;
-  };
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", () => {
+        if (isActive) {
+          audioRef.current!.currentTime = 0;
+          audioRef.current!.play();
+        }
+      });
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("ended", () => { });
+      }
+    };
+  }, [isActive]);
 
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -94,46 +115,66 @@ export const ZenModeTimer: React.FC<ZenModeTimerProps> = ({ initialTime }) => {
   };
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-screen transition-all duration-700 relative ${
-        isActive ? "bg-black" : "bg-white"
-      }`}
-    >
-      {/* Zen Background Image */}
-      <Image
-        src="/background.png" // Image in the public folder
-        alt="Zen Background"
-        layout="fill"
-        objectFit="cover"
-        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ${
-          isActive ? "opacity-100" : "opacity-0"
-        }`}
+    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+      {/* Background Video */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        src="/zen.mp4"
+        autoPlay
+        loop
+        muted
       />
 
-      {/* Timer UI */}
-      <div className="relative z-10 rounded-lg shadow-xl p-8 max-w-md w-full space-y-6 border border-gray-300 bg-white bg-opacity-90">
-        <h1 className="text-3xl font-bold text-center text-gray-800">Zen Mode</h1>
-        <div className="flex items-center justify-center space-x-4">
-          <Clock className="w-8 h-8 text-gray-700" />
-          <span className="text-5xl font-bold text-gray-700">{formatTime(time)}</span>
-        </div>
-        <div className="flex justify-center space-x-4">
+      {/* Audio Element for Zen Music */}
+      <audio ref={audioRef} src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//zen-sound.mp3" loop />
+
+      {/* Fullscreen Zen Mode Popup (Rendered via Portal) */}
+      {isActive &&
+        createPortal(
+          <div className="fixed inset-0 flex items-center justify-center z-[9999] bg-black bg-opacity-90">
+            {/* Background Image */}
+            <Image
+              src="https://eobemzviqxxlcrwuygkr.supabase.co/storage/v1/object/public/sparklog//blackbackground.jpg"
+              alt="Zen Background"
+              layout="fill"
+              objectFit="cover"
+              className="absolute inset-0 w-full h-full opacity-60"
+            />
+
+            {/* Timer UI */}
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold text-center text-white">Zen Mode</h1>
+
+              {time === initialTime && (
+                <p className="text-center text-gray-300 italic">Take a deep breath & begin...</p>
+              )}
+
+              <div className="flex items-center justify-center">
+                <span className="text-5xl font-bold text-white">{formatTime(time)}</span>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* Start Button (Shown When Not Active) */}
+      {/* Start Button and Card (Top-Left) */}
+      {!isActive && (
+        <div className="absolute top-4 left-4 z-10">
+          {/* Start Button */}
+
+
           <button
             onClick={toggleTimer}
-            className={`px-6 py-2 rounded-full font-semibold text-white ${
-              isActive ? "bg-red-500 hover:bg-red-600" : "bg-teal-500 hover:bg-teal-600"
-            } transition duration-300 ease-in-out`}
+            className="px-4 py-2 rounded-full font-semibold text-white bg-teal-500 hover:bg-teal-600 transition duration-300 mb-2"
           >
-            {isActive ? "Pause" : "Start"}
+            Try Now
           </button>
-          <button
-            onClick={resetTimer}
-            className="px-6 py-2 rounded-full font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition duration-300 ease-in-out"
-          >
-            Reset
-          </button>
+
         </div>
-      </div>
+
+      )}
+
     </div>
   );
 };
