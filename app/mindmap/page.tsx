@@ -136,7 +136,9 @@ export default function Home() {
           <iframe
             
           >
-              
+            src={`https://www.youtube.com/embed/${inputValue.split("=")[1]}`}
+            allowFullScreen
+            className="justify-center w-full h-full"
 
           </iframe>
         </div>
