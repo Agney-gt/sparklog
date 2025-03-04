@@ -133,14 +133,12 @@ export default function Home() {
                     title="What’s new in Material Design for the web (Chrome Dev Summit 2019)"
                 />
               <YouTubeEmbed videoid={`${inputValue.split("=")[1]}`} height={5} />
-          <iframe
-            
-          >
+              <iframe
             src={`https://www.youtube.com/embed/${inputValue.split("=")[1]}`}
             allowFullScreen
             className="justify-center w-full h-full"
-
-          </iframe>
+          ></iframe>
+          
         </div>
 
         )}
