@@ -6,12 +6,23 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { YouTubeEmbed } from '@next/third-parties/google'
-
+import throttle from "lodash/throttle";
 
 export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const editorRef = useRef<EditorView | null>(null);
+    const viewRef = useRef(null);
+    const handleSave = () => {
+      if (editorRef.current) {
+        requestAnimationFrame(() => {
+          if (editorRef.current) {
+            setHtmlContent(editorRef.current.state.doc.toString());
+          }
+        });
+      }
+    };
     // create an array of html urls. Each successive request from clients should fetch the next url in the array
     // Create a container for the editor
     
@@ -34,25 +45,20 @@ export default function Home() {
   }, []);
    // Log htmlContent when it changes
    useEffect(() => {
-    const view = new EditorView({
+    editorRef.current = new EditorView({
       parent: document.body,
       doc: htmlContent,
-      extensions: [basicSetup, html(),EditorView.updateListener.of((update) => {
-        if (update.docChanged) {
-          // Update the HTML content when the editor content changes
-          setHtmlContent(update.state.doc.toString());
-        }
-      }),],
+      extensions: [basicSetup, html()],
       
       
     });
     // Cleanup the editor on unmount
     return () => {
-      view.destroy();
+      editorRef.current?.destroy();
       
     }; // This will log the updated htmlContent
-  }, [htmlContent]); // Runs every time htmlContent changes
-    const handleSubmit = async () => {
+  }); // Runs every time htmlContent changes
+  const handleSubmit = async () => {
       setLoading(true);
       <Loader2 className="animate-spin"/>
       console.log("submit");
@@ -140,6 +146,8 @@ export default function Home() {
         
         
     </div>
+    <Button variant="outline" onClick={enterFullscreen}>Go Fullscreen</Button>
+      
     <iframe
         title="HTML Preview"
         style={{ width: "80%", height: "700px", border: "1px solid #ccc" }}
@@ -149,7 +157,7 @@ export default function Home() {
         ref={iframeRef}
         
       ></iframe>   
-      <Button variant="outline" onClick={enterFullscreen}>Go Fullscreen</Button>
+      <Button variant="outline" onClick={handleSave}>Save Changes</Button>
     </div>
       
     );
