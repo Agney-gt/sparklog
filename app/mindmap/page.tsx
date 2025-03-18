@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { YouTubeEmbed } from '@next/third-parties/google'
-import throttle from "lodash/throttle";
+
 
 export default function Home() {
     const [htmlContent, setHtmlContent] = useState("12");
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const editorRef = useRef<EditorView | null>(null);
-    const viewRef = useRef(null);
+   
     const handleSave = () => {
       if (editorRef.current) {
         requestAnimationFrame(() => {
